@@ -22,12 +22,11 @@ import android.util.Log;
 
 import com.dragon4.owo.ar_trace.ARCore.ARMarker;
 import com.dragon4.owo.ar_trace.ARCore.MixView;
+import com.dragon4.owo.ar_trace.ARCore.SocialARMarker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -118,7 +117,7 @@ public class Json extends DataHandler {
                         case DOCUMENT:
                         case VIDEO:
                         case IMAGE:
-                            ma = processDocumentObject(jo);
+                            //ma = processDocumentObject(jo);
                             break;
 
                     }
@@ -134,6 +133,31 @@ public class Json extends DataHandler {
         }
         // 모든 마커가 추가된 리스트를 리턴
         return markers;
+    }
+
+    public ARMarker processCAFEJSONObject(JSONObject jo)  throws JSONException {
+        ARMarker ma = null;
+
+        // 형식에 맞는지 검사. 타이틀과 위도, 경도, 고도 태그를 찾는다
+        if (jo.has("x") && jo.has("y") && jo.has("name")) {
+
+            String linkTemp = null;
+            linkTemp = jo.getString("id");
+            String linkbasic = "http://map.naver.com/local/siteview.nhn?code=" + linkTemp.substring(1);
+            Log.i("linkbasic",linkbasic);
+
+            // 할당된 값들로 마커 생성, // 일단은 경도, 위도, 이름만.
+            // 맨뒤에값은 플래그 일단 Flag 0 는 카페정보
+            // link 이거 url
+            ma = new SocialARMarker(
+                    jo.getString("name"),
+                    jo.getDouble("y"),
+                    jo.getDouble("x"),
+                    0,
+                    linkbasic,
+                    DataSource.DATASOURCE.CAFE, "CAFE");
+        }
+        return ma;    // 마커 리턴
     }
 
     public ARMarker processBusJSONObject(JSONObject jo) throws JSONException {
@@ -303,157 +327,63 @@ public class Json extends DataHandler {
         return ma;    // 마커 리턴
     }
 
-    private ARMarker processDocumentObject(JSONObject jo) throws JSONException {
-
-        ARMarker ma = null;
-        int contentType = jo.getInt("contentType");
-        DataSource.DATASOURCE thisDatasource = DataSource.DATASOURCE.DOCUMENT;
-
-        long documentCreateDate = jo.getJSONObject("createDate").getLong("time");
-        Date createdate = new Date( documentCreateDate );
-        long documentEditDate = jo.getJSONObject("updateDate").getLong("time");
-        Date editDdate = new Date( documentEditDate );
-
-        String contentUrl = null;
-        List<Comment> comments = new ArrayList<Comment>();
-
-        if(contentType == 1)
-            thisDatasource = DataSource.DATASOURCE.IMAGE;
-
-        else if(contentType == 2)
-            thisDatasource = DataSource.DATASOURCE.VIDEO;
-
-        if(jo.has("contentUrl"))
-            contentUrl = jo.getString("contentUrl");
-
-        if(jo.has("commentList")) {
-            JSONArray commentArray = jo.getJSONArray("commentList");
-            Log.i("댓글 목록이다.",commentArray.toString());
-            for(int i = 0 ; i < commentArray.length(); i++) {
-                Comment loadComment = new Comment();
-                JSONObject jobj = commentArray.getJSONObject(i);
-                loadComment.setCommentId(jobj.getInt("commentId"));
-                loadComment.setContent(jobj.getString("content"));
-                long commentEditDate = jobj.getJSONObject("createDate").getLong("time");
-                Date commentDdate = new Date( commentEditDate );
-                loadComment.setCreateDate(commentDdate);
-                loadComment.setUserId(jobj.getString("userId"));
-                loadComment.setUserName(jobj.getString("userName"));
-                loadComment.setUserImageUrl(jobj.getString("userImageUrl"));
-                comments.add(loadComment);
-
-            }
-        }
-
-        ma = new DocumentARMarker(jo.getString("content"),jo.getDouble("lat"),jo.getDouble("lon"),0,contentUrl,thisDatasource,jo.getInt("documentId"),jo.getString("userId"),contentType,
-                jo.getInt("popularity"),jo.getInt("responseWithme"),jo.getInt("responseSeeyou"),jo.getInt("responseNotgood"),jo.getInt("commentNum"),jo.getInt("readNum"),createdate,
-                editDdate,comments);
-
-
-        return ma;
-
-    }
-
-
-    public ARMarker processCAFEJSONObject(JSONObject jo)  throws JSONException {
-        ARMarker ma = null;
-
-       // 형식에 맞는지 검사. 타이틀과 위도, 경도, 고도 태그를 찾는다
-       if (jo.has("x") && jo.has("y") && jo.has("name")) {
-
-           String linkTemp = null;
-           linkTemp = jo.getString("id");
-           String linkbasic = "http://map.naver.com/local/siteview.nhn?code=" + linkTemp.substring(1);
-           Log.i("linkbasic",linkbasic);
-
-           // 할당된 값들로 마커 생성, // 일단은 경도, 위도, 이름만.
-           // 맨뒤에값은 플래그 일단 Flag 0 는 카페정보
-           // link 이거 url
-           ma = new SocialARMarker(
-                   jo.getString("name"),
-                   jo.getDouble("y"),
-                   jo.getDouble("x"),
-                   0,
-                   linkbasic,
-                   DataSource.DATASOURCE.CAFE, "CAFE");
-       }
-       return ma;    // 마커 리턴
-   }
+    //private ARMarker processDocumentObject(JSONObject jo) throws JSONException {
+//
+    //    ARMarker ma = null;
+    //    int contentType = jo.getInt("contentType");
+    //    DataSource.DATASOURCE thisDatasource = DataSource.DATASOURCE.DOCUMENT;
+//
+    //    long documentCreateDate = jo.getJSONObject("createDate").getLong("time");
+    //    Date createdate = new Date( documentCreateDate );
+    //    long documentEditDate = jo.getJSONObject("updateDate").getLong("time");
+    //    Date editDdate = new Date( documentEditDate );
+//
+    //    String contentUrl = null;
+    //    List<Comment> comments = new ArrayList<Comment>();
+//
+    //    if(contentType == 1)
+    //        thisDatasource = DataSource.DATASOURCE.IMAGE;
+//
+    //    else if(contentType == 2)
+    //        thisDatasource = DataSource.DATASOURCE.VIDEO;
+//
+    //    if(jo.has("contentUrl"))
+    //        contentUrl = jo.getString("contentUrl");
+//
+    //    if(jo.has("commentList")) {
+    //        JSONArray commentArray = jo.getJSONArray("commentList");
+    //        Log.i("댓글 목록이다.",commentArray.toString());
+    //        for(int i = 0 ; i < commentArray.length(); i++) {
+    //            Comment loadComment = new Comment();
+    //            JSONObject jobj = commentArray.getJSONObject(i);
+    //            loadComment.setCommentId(jobj.getInt("commentId"));
+    //            loadComment.setContent(jobj.getString("content"));
+    //            long commentEditDate = jobj.getJSONObject("createDate").getLong("time");
+    //            Date commentDdate = new Date( commentEditDate );
+    //            loadComment.setCreateDate(commentDdate);
+    //            loadComment.setUserId(jobj.getString("userId"));
+    //            loadComment.setUserName(jobj.getString("userName"));
+    //            loadComment.setUserImageUrl(jobj.getString("userImageUrl"));
+    //            comments.add(loadComment);
+//
+    //        }
+    //    }
+//
+    //    ma = new DocumentARMarker(jo.getString("content"),jo.getDouble("lat"),jo.getDouble("lon"),0,contentUrl,thisDatasource,jo.getInt("documentId"),jo.getString("userId"),contentType,
+    //            jo.getInt("popularity"),jo.getInt("responseWithme"),jo.getInt("responseSeeyou"),jo.getInt("responseNotgood"),jo.getInt("commentNum"),jo.getInt("readNum"),createdate,
+    //            editDdate,comments);
+//
+//
+    //    return ma;
+//
+    //}
+//
 
 
-    // html 엔트리의 해쉬맵
-    private static HashMap<String, String> htmlEntities;
 
-    static {
-        htmlEntities = new HashMap<String, String>();
-        htmlEntities.put("&lt;", "<");
-        htmlEntities.put("&gt;", ">");
-        htmlEntities.put("&amp;", "&");
-        htmlEntities.put("&quot;", "\"");
-        htmlEntities.put("&agrave;", "à");
-        htmlEntities.put("&Agrave;", "À");
-        htmlEntities.put("&acirc;", "â");
-        htmlEntities.put("&auml;", "ä");
-        htmlEntities.put("&Auml;", "Ä");
-        htmlEntities.put("&Acirc;", "Â");
-        htmlEntities.put("&aring;", "å");
-        htmlEntities.put("&Aring;", "Å");
-        htmlEntities.put("&aelig;", "æ");
-        htmlEntities.put("&AElig;", "Æ");
-        htmlEntities.put("&ccedil;", "ç");
-        htmlEntities.put("&Ccedil;", "Ç");
-        htmlEntities.put("&eacute;", "é");
-        htmlEntities.put("&Eacute;", "É");
-        htmlEntities.put("&egrave;", "è");
-        htmlEntities.put("&Egrave;", "È");
-        htmlEntities.put("&ecirc;", "ê");
-        htmlEntities.put("&Ecirc;", "Ê");
-        htmlEntities.put("&euml;", "ë");
-        htmlEntities.put("&Euml;", "Ë");
-        htmlEntities.put("&iuml;", "ï");
-        htmlEntities.put("&Iuml;", "Ï");
-        htmlEntities.put("&ocirc;", "ô");
-        htmlEntities.put("&Ocirc;", "Ô");
-        htmlEntities.put("&ouml;", "ö");
-        htmlEntities.put("&Ouml;", "Ö");
-        htmlEntities.put("&oslash;", "ø");
-        htmlEntities.put("&Oslash;", "Ø");
-        htmlEntities.put("&szlig;", "ß");
-        htmlEntities.put("&ugrave;", "ù");
-        htmlEntities.put("&Ugrave;", "Ù");
-        htmlEntities.put("&ucirc;", "û");
-        htmlEntities.put("&Ucirc;", "Û");
-        htmlEntities.put("&uuml;", "ü");
-        htmlEntities.put("&Uuml;", "Ü");
-        htmlEntities.put("&nbsp;", " ");
-        htmlEntities.put("&copy;", "\u00a9");
-        htmlEntities.put("&reg;", "\u00ae");
-        htmlEntities.put("&euro;", "\u20a0");
-    }
 
-    // HTML 아스키 값들을 다시 복원. 변환할 소스와 시작점을 인자로 받는다
-    public String unescapeHTML(String source, int start) {
-        int i, j;    // 임시 변수
 
-        // &와 ;의 위치로 값들을 읽는다
-        i = source.indexOf("&", start);
-        if (i > -1) {
-            j = source.indexOf(";", i);
-            if (j > i) {
-                // 검색된 위치에서 값을 읽어옴
-                String entityToLookFor = source.substring(i, j + 1);
-                String value = (String) htmlEntities.get(entityToLookFor);
 
-                // 값이 있을 시 복원작업 시작. 재귀호출 이용
-                if (value != null) {
-                    source = new StringBuffer().append(source.substring(0, i))
-                            .append(value).append(source.substring(j + 1))
-                            .toString();
-                    return unescapeHTML(source, i + 1); // recursive call
-                }
-            }
-        }
-        return source;    // 복원된 소스 리턴
-    }
+
 }
 

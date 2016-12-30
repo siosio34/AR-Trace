@@ -1,9 +1,10 @@
 package com.dragon4.owo.ar_trace.ARCore;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
-import com.youngje.tgwing.accommodations.R;
+import com.dragon4.owo.ar_trace.R;
 
 
 public class MixareActivity extends Activity {
@@ -13,5 +14,10 @@ public class MixareActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout
                 .activity_armain);
+
+        Intent arIntent = new Intent(MixareActivity.this,MixView.class);
+        startActivity(arIntent);
+
+
     }
 }

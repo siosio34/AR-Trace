@@ -18,31 +18,22 @@
  */
 package com.dragon4.owo.ar_trace.ARCore;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Looper;
-import android.os.Message;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
-import com.youngje.tgwing.accommodations.ARAccomdation.ReadDocumentActivity;
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.data.DataSource;
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.reality.PhysicalPlace;
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.render.Matrix;
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.render.MixVector;
-import com.youngje.tgwing.accommodations.Util.HttpHandler;
+import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
+import com.dragon4.owo.ar_trace.ARCore.reality.PhysicalPlace;
+import com.dragon4.owo.ar_trace.ARCore.render.Matrix;
+import com.dragon4.owo.ar_trace.ARCore.render.MixVector;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 
 // 현재의 상태에 관한 클래스
@@ -73,37 +64,8 @@ public class MixState {
     public boolean handleEvent(MixContext ctx, String onPress, String title, PhysicalPlace log) {
 
         DialogSelectOption(ctx, title, log, onPress);
-
-
-        //DialogSelectOption(ctx, title, log, onPress);
         return true;
     }
-
-    public boolean handleEventDocumentAr(MixContext ctx, DocumentARMarker documentMarker) {
-
-        Intent readDocumentIntent = new Intent(ctx, ReadDocumentActivity.class);
-        DocumentARMarker.selectedMarker = documentMarker;
-        ctx.startActivity(readDocumentIntent);
-
-        return true;
-    }
-
-
-
-    // 이벤트 처리
-   // public boolean handleEvent2(MixContext ctx, DocumentARMarker documentMarker) {
-   //
-//
-   //     boolean evtHandled= false;
-   //     Intent readDocumentIntent = new Intent(ctx, ReadDocumentActivity.class);
-   //     DocumentARMarker.selectedMarker = documentMarker;
-   //     ctx.startActivity(readDocumentIntent);
-//
-   //     evtHandled = true;
-//
-   //     //DialogSelectOption(ctx, title, log, onPress);
-   //     return evtHandled;
-   // }
 
     public void DialogSelectOption(final MixContext ctx, final String markerTitle, final PhysicalPlace log, final String onPress) {
         final String items[] = {"상세 정보 보기", "네비게이션" };
@@ -121,34 +83,24 @@ public class MixState {
                         if (id == 0) {
                             try {
                                 ctx.loadMixViewWebPage(onPress);
-
                             } catch (Exception e) {
-
                             }
                         } else if (id == 1) {
                             // 네비게이션
                             final Intent naviBroadReceiver = new Intent();
                             naviBroadReceiver.setAction("NAVI");
 
-                            Log.i("계속된다","으어계속된다");
-
                             loopThread = new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    // enterNaviEnd 초기엔 펄스 누르면 네비 종료 버튼 누르면 트루
                                     while (!Thread.currentThread().isInterrupted() && !MixState.enterNaviEnd) {
                                         try {
-                                            Log.i("계속된다", "으어계속된다");
 
                                             String url = DataSource.createNaverMapRequestURL(ctx.getCurrentLocation().getLongitude(), ctx.getCurrentLocation().getLatitude(), log.getLongitude(), log.getLatitude());
                                             String result = "";
                                             String guide = "";
-
                                             result = new HttpHandler().execute(url).get();
-                                            Log.i("result!!", result);
-
                                             guide = parsingNaverNaviJson(result);
-                                            Log.i("guide!!", guide);
 
                                             if (!guide.equals("end")) {
                                                 // 브로드 캐스트 리시버로 전달하는 부분
@@ -207,15 +159,11 @@ public class MixState {
             temp = firstRoute.getJSONObject("guide").getString("name");
             Log.i("temp",temp);
 
-
-
         }
 
         return temp;
 
     }
-
-
     // 현재의 방위각을 리턴
     public float getCurBearing() {
         return curBearing;
@@ -249,35 +197,5 @@ public class MixState {
         looking.prod(rotationM);
         this.curPitch = -MixUtils.getAngle(0, 0, looking.y, looking.z);
     }
-
-
-
-    //class NonUIThreadHandler extends Handler {
-//
-    //    public void handleMessage(Message msg) {
-    //        switch(msg.what) {
-    //            case MSG_TOAST_THREAD:
-    //                myToast.setText((String) msg.obj);
-    //                myToast.show();
-    //        }
-    //    }
-//
-    //    @Override
-    //    public void publish(LogRecord logRecord) {
-//
-    //    }
-//
-    //    @Override
-    //    public void flush() {
-//
-    //    }
-//
-    //    @Override
-    //    public void close() throws SecurityException {
-//
-    //    }
-    //}
-
-
 
 }

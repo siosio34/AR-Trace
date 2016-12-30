@@ -26,7 +26,6 @@ import android.graphics.Color;
 
 import com.dragon4.owo.ar_trace.R;
 
-
 // 데이터 소스를 실질적으로 다루는 클래스
 public class DataSource {
 
@@ -72,19 +71,19 @@ public class DataSource {
     // 리소스로부터 각 아이콘 생성
     public static void createIcons(Resources res) {
 
-        cafeIcon = BitmapFactory.decodeResource(res, R.drawable.icon_cafe);
-        busIcon = BitmapFactory.decodeResource(res,R.drawable.icon_metro);
-        restraurantIcon = BitmapFactory.decodeResource(res,R.drawable.icon_store);
-        convenienceIcon = BitmapFactory.decodeResource(res,R.drawable.icon_convenition);
-        bankIcon = BitmapFactory.decodeResource(res,R.drawable.icon_bank);
-        hospitalIcon = BitmapFactory.decodeResource(res,R.drawable.icon_hospital);
-        accommodationIcon = BitmapFactory.decodeResource(res,R.drawable.icon_hotel);
-
-        // TODO: 2016. 12. 11. icon 들 변경해야됨...
-        // 이미지 영상, 비디오 이미지 구해야됨 크기는 40 * 60 정도
-        documentIcon = BitmapFactory.decodeResource(res, R.drawable.ar_document_document_marker);
-        imageIcon = BitmapFactory.decodeResource(res,R.drawable.ar_document_image_marker);
-        videoIcon = BitmapFactory.decodeResource(res,R.drawable.ar_document_vidoe_marker);
+       // cafeIcon = BitmapFactory.decodeResource(res, R.drawable.icon_cafe);
+       // busIcon = BitmapFactory.decodeResource(res,R.drawable.icon_metro);
+       // restraurantIcon = BitmapFactory.decodeResource(res,R.drawable.icon_store);
+       // convenienceIcon = BitmapFactory.decodeResource(res,R.drawable.icon_convenition);
+       // bankIcon = BitmapFactory.decodeResource(res,R.drawable.icon_bank);
+       // hospitalIcon = BitmapFactory.decodeResource(res,R.drawable.icon_hospital);
+       // accommodationIcon = BitmapFactory.decodeResource(res,R.drawable.icon_hotel);
+//
+       // // TODO: 2016. 12. 11. icon 들 변경해야됨...
+       // // 이미지 영상, 비디오 이미지 구해야됨 크기는 40 * 60 정도
+       // documentIcon = BitmapFactory.decodeResource(res, R.drawable.ar_document_document_marker);
+       // imageIcon = BitmapFactory.decodeResource(res,R.drawable.ar_document_image_marker);
+       // videoIcon = BitmapFactory.decodeResource(res,R.drawable.ar_document_vidoe_marker);
 
     }
 

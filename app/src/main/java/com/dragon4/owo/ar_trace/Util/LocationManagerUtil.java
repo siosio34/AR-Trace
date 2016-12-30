@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
  * Created by joyeongje on 2016. 12. 29..
  */
 
+/*
 public class LocationManagerUtil {
 
     private LocationManager lm;
@@ -82,3 +83,5 @@ public class LocationManagerUtil {
    // }
 
 }
+
+*/

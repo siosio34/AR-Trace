@@ -46,6 +46,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -64,7 +65,6 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -86,13 +86,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.youngje.tgwing.accommodations.ARAccomdation.UserProfileActivity;
-import com.youngje.tgwing.accommodations.ARAccomdation.WriteDocumentActivity;
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.data.DataHandler;
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.data.DataSource;
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.gui.PaintScreen;
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.render.Matrix;
-import com.youngje.tgwing.accommodations.R;
+
+import com.dragon4.owo.ar_trace.ARCore.data.DataHandler;
+import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
+import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
+import com.dragon4.owo.ar_trace.ARCore.render.Matrix;
+import com.dragon4.owo.ar_trace.R;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -108,16 +107,11 @@ public class MixView extends Activity implements SensorEventListener, LocationLi
 
     private Sensor orientationSensor;
     private SensorManager sensorMgr_ori;
-    private TextView oriTV = null;
-    private TextView accTV = null;
-
-  //  public static boolean arr[] = new boolean[12];
 
     public double mapLat = 0;
     public double mapLog = 0;
     public static double gpsLat = 0;//gps에서 수시로 받아오는 값
     public static double gpsLong = 0;
-    public boolean onNavigate = true;
 
     // 카메라 스크린과 증강된 뷰
     private CameraSurface camScreen;
@@ -272,6 +266,7 @@ public class MixView extends Activity implements SensorEventListener, LocationLi
         alert.show();    // 얼럿 다이얼로그 호출
     }
 
+    /*
     public void navercategoryClicked(View v) throws ExecutionException, InterruptedException {
 
         if (dataView.isFrozen())
@@ -329,8 +324,8 @@ public class MixView extends Activity implements SensorEventListener, LocationLi
 
         if (datasource == null)
             Toast.makeText(mixContext, "지원하는 데이터소스없음", Toast.LENGTH_SHORT).show();
-        else {
 
+        else {
             mixContext.toogleDataSource(datasource);
             //mixContext.setDataSource(datasource,true);
         }
@@ -353,6 +348,7 @@ public class MixView extends Activity implements SensorEventListener, LocationLi
             }
         }
     };
+    */
 
 
     // 뷰 생성시
@@ -424,11 +420,11 @@ public class MixView extends Activity implements SensorEventListener, LocationLi
                     Gravity.BOTTOM));
 
             LayoutInflater inflater = getLayoutInflater();
-            View upMenu = inflater.inflate(R.layout.layout_ar_top_menu, null);
+            //View upMenu = inflater.inflate(R.layout.layout_ar_top_menu, null);
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            addContentView(upMenu, params);
+            //addContentView(upMenu, params);
 
 
             // 초기 세팅된 상태가 아니라면
@@ -446,27 +442,6 @@ public class MixView extends Activity implements SensorEventListener, LocationLi
                 isInited = true;    // 세팅 플래그 true
             }
 
-			/*애플리케이션이 처음 실행 되었을때 체크*/
-            if (settings.getBoolean("firstAccess", false) == false) {
-                // 얼럿 다이얼로그를 생성하여
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-                // 라이센스 관련 메세지를 출력
-                builder1.setMessage(getString(DataView.LICENSE_TEXT));
-                // 닫기 버튼 처리
-                builder1.setNegativeButton(getString(DataView.CLOSE_BUTTON), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-
-                // 얼럿 다이얼로그 세팅 및 표시
-                AlertDialog alert1 = builder1.create();
-                alert1.setTitle(getString(DataView.LICENSE_TITLE));
-                alert1.show();
-                editor.putBoolean("firstAccess", true);
-                editor.commit();    // 변경 사항이 완료되었으면 commit
-            }
-
             // 정확한 위치를 찾지 못했을 경우(GPS 관련)
             if (mixContext.isActualLocation() == false) {
                 Toast.makeText(this, getString(DataView.CONNECTION_GPS_DIALOG_TEXT), Toast.LENGTH_LONG).show();
@@ -476,43 +451,9 @@ public class MixView extends Activity implements SensorEventListener, LocationLi
             doError(ex);    // 예외 발생시 에러 처리
         }
 
-        // TODO: 2016. 12. 11. 내글 보기랑 뒤로가기 추가.
-        // TODO: 2016. 12. 11. 이미지들 추가해야됨.
-
-        backButton = (ImageView) findViewById(R.id.back_button);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
-        myDocumentButton = (ImageView)findViewById(R.id.navi_button);
-        myDocumentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent userDocumentIntet = new Intent(MixView.this, UserProfileActivity.class);
-                startActivity(userDocumentIntet);
-            }
-        });
-
-
-        writeDoucumentButton = (ImageView)findViewById(R.id.write_location_button);
-        writeDoucumentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent writeDocumentIntet = new Intent(MixView.this, WriteDocumentActivity.class);
-                Location temp = mixContext.getCurrentGPSInfo();
-                writeDocumentIntet.putExtra("lat",temp.getLatitude());
-                writeDocumentIntet.putExtra("lon",temp.getLongitude());
-                startActivity(writeDocumentIntet);
-
-            }
-        });
-
-        IntentFilter naviBraodFilter = new IntentFilter();
-        naviBraodFilter.addAction("NAVI");
-        registerReceiver(naviRecevicer, naviBraodFilter);
+       // IntentFilter naviBraodFilter = new IntentFilter();
+       // naviBraodFilter.addAction("NAVI");
+       // registerReceiver(naviRecevicer, naviBraodFilter);
 
     }
 
@@ -521,7 +462,7 @@ public class MixView extends Activity implements SensorEventListener, LocationLi
         // 검색 버튼을 눌렀을 경우
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);    // 쿼리 생성
-            doMixSearch(query);    // 마커로부터 검색
+          //  doMixSearch(query);    // 마커로부터 검색
         }
     }
 
@@ -533,36 +474,36 @@ public class MixView extends Activity implements SensorEventListener, LocationLi
     }
 
     // 검색 버튼을 눌렀을 경우 수행될 검색
-    private void doMixSearch(String query) {
-        DataHandler jLayer = dataView.getDataHandler();    // 데이터 핸들러 등록
-
-        // 데이터 뷰가 얼어있지 않다면 리스트뷰와 맵으로부터 마커 리스트를 읽는다
-        if (!dataView.isFrozen()) {
-            // MixListView.originalMarkerList = jLayer.getMarkerList();
-
-        }
-
-        // 검색 결과를 저장 할 리스트
-        ArrayList<ARMarker> searchResults = new ArrayList<ARMarker>();
-
-        // 검색된 항목이 1개 이상 있을 경우
-        if (jLayer.getMarkerCount() > 0) {
-            // 검색된 항목들을 결과 리스트에 추가
-            for (int i = 0; i < jLayer.getMarkerCount(); i++) {
-                ARMarker ma = jLayer.getMarker(i);
-                if (ma.getTitle().toLowerCase().indexOf(query.toLowerCase()) != -1) {
-                    searchResults.add(ma);
-					/*타이틀에 상응하는 웹사이트들*/
-                }
-            }
-        }
-        // 결과 리스트에 하나라도 값이 있을 경우
-        if (searchResults.size() > 0) {
-            dataView.setFrozen(true);    // 데이터 뷰를 얼리고
-            jLayer.setMarkerList(searchResults);    // 결과를 핸들러에 할당
-        } else    // 결과가 없을 경우엔 토스트 출력
-            Toast.makeText(this, getString(DataView.SEARCH_FAILED_NOTIFICATION), Toast.LENGTH_LONG).show();
-    }
+    //private void doMixSearch(String query) {
+    //    DataHandler jLayer = dataView.getDataHandler();    // 데이터 핸들러 등록
+//
+    //    // 데이터 뷰가 얼어있지 않다면 리스트뷰와 맵으로부터 마커 리스트를 읽는다
+    //    if (!dataView.isFrozen()) {
+    //        // MixListView.originalMarkerList = jLayer.getMarkerList();
+//
+    //    }
+//
+    //    // 검색 결과를 저장 할 리스트
+    //    ArrayList<ARMarker> searchResults = new ArrayList<ARMarker>();
+//
+    //    // 검색된 항목이 1개 이상 있을 경우
+    //    if (jLayer.getMarkerCount() > 0) {
+    //        // 검색된 항목들을 결과 리스트에 추가
+    //        for (int i = 0; i < jLayer.getMarkerCount(); i++) {
+    //            ARMarker ma = jLayer.getMarker(i);
+    //            if (ma.getTitle().toLowerCase().indexOf(query.toLowerCase()) != -1) {
+    //                searchResults.add(ma);
+	//				/*타이틀에 상응하는 웹사이트들*/
+    //            }
+    //        }
+    //    }
+    //    // 결과 리스트에 하나라도 값이 있을 경우
+    //    if (searchResults.size() > 0) {
+    //        dataView.setFrozen(true);    // 데이터 뷰를 얼리고
+    //        jLayer.setMarkerList(searchResults);    // 결과를 핸들러에 할당
+    //    } else    // 결과가 없을 경우엔 토스트 출력
+    //        Toast.makeText(this, getString(DataView.SEARCH_FAILED_NOTIFICATION), Toast.LENGTH_LONG).show();
+    //}
 
     // 중단 되었을 경우
     @Override
@@ -786,86 +727,6 @@ public class MixView extends Activity implements SensorEventListener, LocationLi
         }
     }
 
-    // 옵션 메뉴의 생성
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        // 메뉴 버튼을 눌렀을 때 출력될 메뉴를 설정한다.
-
-        int base = Menu.FIRST;
-		/*define the first*/
-        MenuItem item1 = menu.add(base, base, base, getString(DataView.MENU_ITEM_1));
-        MenuItem item2 = menu.add(base, base + 1, base + 1, getString(DataView.MENU_ITEM_2));
-        MenuItem item3 = menu.add(base, base + 2, base + 2, getString(DataView.MENU_ITEM_4));
-
-        return true;
-    }
-
-    // 옵션 메뉴가 선택 되었을 경우의 처리
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-		/*Data sources*/
-            case 1:
-                // 데이터 뷰가 작동시
-                if (!dataView.isLauncherStarted()) {
-                    // 데이터 소스 리스트를 지정
-                    MixListView.setList(1);
-                    Intent intent = new Intent(MixView.this, MixListView.class);
-                    // 설정된 인텐트로 서브 액티비티를 만든다. 두번째 인자는 요청코드 번호
-                    startActivityForResult(intent, 40);
-                } else {    // 아닐 시 토스트를 생성해 불가능을 알린다
-                    Toast.makeText(this, getString(DataView.OPTION_NOT_AVAILABLE_STRING_ID), Toast.LENGTH_LONG).show();
-                }
-                break;
-
-		/*List view*/
-            case 2:
-                // 리스트 뷰의 리스트(각 소스의 내용들)를 지정
-                MixListView.setList(2);
-			/*대안의 리스트뷰에 표시할 타이틀 리스트가 비어있지 않을 경우*/
-                if (dataView.getDataHandler().getMarkerCount() > 0) {
-                    Intent intent1 = new Intent(MixView.this, MixListView.class);
-                    // 설정된 인텐트로 서브 액티비티를 만든다
-                    startActivityForResult(intent1, 42);
-                }
-			/*리스트가 비어있을 경우*/
-                else {
-                    Toast.makeText(this, DataView.EMPTY_LIST_STRING_ID, Toast.LENGTH_LONG).show();
-                }
-                break;
-
-		/*Search*/
-            case 5:
-                // 검색 처리를 한다
-                onSearchRequested();
-                break;
-
-		/*GPS Information*/
-            case 6:
-                // 현재 GPS정보를 읽어오고
-                Location currentGPSInfo = mixContext.getCurrentGPSInfo();
-                // 얼럿 다이얼로그 빌더를 생성,
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                // 각 값들을 보여줄 메세지를 세팅한다
-                builder.setMessage(getString(DataView.GENERAL_INFO_TEXT) + "\n\n" +
-                        getString(DataView.GPS_LONGITUDE) + currentGPSInfo.getLongitude() + "\n" +
-                        getString(DataView.GPS_LATITUDE) + currentGPSInfo.getLatitude() + "\n" +
-                        getString(DataView.GPS_ALTITUDE) + currentGPSInfo.getAltitude() + "m\n" +
-                        getString(DataView.GPS_SPEED) + currentGPSInfo.getSpeed() + "km/h\n" +
-                        getString(DataView.GPS_ACCURACY) + currentGPSInfo.getAccuracy() + "m\n" +
-                        getString(DataView.GPS_LAST_FIX) + new Date(currentGPSInfo.getTime()).toString() + "\n");
-                // 닫기 버튼의 처리
-                builder.setNegativeButton(getString(DataView.CLOSE_BUTTON), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-
-
-        }
-        return true;
-    }
 
     // 줌 레벨을 계산
     public float calcZoomLevel() {
@@ -909,8 +770,6 @@ public class MixView extends Activity implements SensorEventListener, LocationLi
         downloadThread.start();
 
     }
-
-
 
     // 시크바 체인지 리스너. 줌 레벨 설정시의 줌 바를 처리하기 위함
     private SeekBar.OnSeekBarChangeListener myZoomBarOnSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
@@ -1041,33 +900,6 @@ public class MixView extends Activity implements SensorEventListener, LocationLi
         }
     }
 
-    // 키 다운에 관한 처리. 실제 단말기에선 필요가 없을듯?
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        try {
-            killOnError();
-
-            if (keyCode == KeyEvent.KEYCODE_BACK) {
-                if (dataView.isDetailsView()) {
-                    dataView.keyEvent(keyCode);
-                    dataView.setDetailsView(false);
-                    return true;
-                } else {
-                    return super.onKeyDown(keyCode, event);
-                }
-            } else if (keyCode == KeyEvent.KEYCODE_MENU) {
-                return super.onKeyDown(keyCode, event);
-            } else {
-                dataView.keyEvent(keyCode);
-                return false;
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return super.onKeyDown(keyCode, event);
-        }
-    }
-
     // 위치제공자가 불능의 경우
     public void onProviderDisabled(String provider) {
         isGpsEnabled = locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -1154,11 +986,6 @@ public class MixView extends Activity implements SensorEventListener, LocationLi
  * @author daniele
  */
 
-/**
- * @author daniele
- *
- */
-
 // 카메라 뷰(카메라 서페이스) 클래스
 class CameraSurface extends SurfaceView implements SurfaceHolder.Callback {
     MixView app;    // 메인 뷰
@@ -1198,6 +1025,7 @@ class CameraSurface extends SurfaceView implements SurfaceHolder.Callback {
             }
 
             camera = Camera.open();    // 카메라 오픈
+            camera.setDisplayOrientation(90);
             camera.setPreviewDisplay(holder);    // 서페이스 홀더에 영상을 출력할 곳 지정
         } catch (Exception ex) {
             try {    // 예외 발생시 카메라 정지 및 해제
@@ -1367,9 +1195,6 @@ class AugmentedView extends View {
                 String startKM, endKM;
                 endKM = "80km";
                 startKM = "0km";
-				/*if(MixListView.getDataSource().equals("Twitter")){
-					startKM = "1km";
-				}*/
 
                 // 거리 정보 텍스트 출력
                 canvas.drawText(startKM, canvas.getWidth() / 100 * 4, canvas.getHeight() / 100 * 85, zoomPaint);

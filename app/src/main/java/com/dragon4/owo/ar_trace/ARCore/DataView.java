@@ -34,19 +34,19 @@ import android.location.Location;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.youngje.tgwing.accommodations.R;
-
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.data.DataHandler;
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.data.DataSource;
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.gui.PaintScreen;
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.gui.RadarPoints;
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.gui.ScreenLine;
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.render.Camera;
+import com.dragon4.owo.ar_trace.ARCore.data.DataHandler;
+import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
+import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
+import com.dragon4.owo.ar_trace.ARCore.gui.ScreenLine;
+import com.dragon4.owo.ar_trace.ARCore.render.Camera;
+import com.dragon4.owo.ar_trace.R;
 
 
 /**
- * @author daniele
+ * @author daniele & edit youngje
  */
+
+
 public class DataView {
 
     /**
@@ -109,7 +109,6 @@ public class DataView {
     /*if in the listview option for a specific title no website is provided*/
     public static final int NO_WEBINFO_AVAILABLE = R.string.no_website_available;
 
-    public static final int LICENSE_TEXT = R.string.license;
     public static final int LICENSE_TITLE = R.string.license_title;
     public static final int CLOSE_BUTTON = R.string.close_button;
 
@@ -138,9 +137,6 @@ public class DataView {
 
     // UI에서 일어날 이벤트들의 리스트
     private ArrayList<UIEvent> uiEvents = new ArrayList<UIEvent>();
-
-    // 레이더 관련 변수들
-    private RadarPoints radarPoints = new RadarPoints();
 
     private ScreenLine lrl = new ScreenLine();
     private ScreenLine rrl = new ScreenLine();
@@ -219,15 +215,8 @@ public class DataView {
 
             // 인자로 받은 넓이, 높이로 카메라 객체를 생성하고
             cam = new Camera(width, height, true);
-            cam.setViewAngle(Camera.DEFAULT_VIEW_ANGLE);    // 뷰의 각도를 설정한다
+            //cam.setViewAngle(Camera.DEFAULT_VIEW_ANGLE);    // 뷰의 각도를 설정한다
 
-            // 레이더의 선을 긋기 위함
-            lrl.set(0, -RadarPoints.RADIUS);
-            lrl.rotate(Camera.DEFAULT_VIEW_ANGLE / 2);
-            lrl.add(rx + RadarPoints.RADIUS, ry + RadarPoints.RADIUS);
-            rrl.set(0, -RadarPoints.RADIUS);
-            rrl.rotate(-Camera.DEFAULT_VIEW_ANGLE / 2);
-            rrl.add(rx + RadarPoints.RADIUS, ry + RadarPoints.RADIUS);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -357,38 +346,7 @@ public class DataView {
             }
         }
 
-	/* 레이더를 그림 */
-        String dirTxt = "";    // 방향 등의 정보를 나타낼 텍스트
-        int bearing = (int) state.getCurBearing();    // 현재의 방위각을 읽음
-        int range = (int) (state.getCurBearing() / (360f / 16f));    // 범위를 계산
 
-        //TODO: XML 파일로부터 스트링 값들을 읽게함
-
-        // 레인지 값에 따라 방향을 설정
-        if (range == 15 || range == 0) dirTxt = "N";
-        else if (range == 1 || range == 2) dirTxt = "NE";
-        else if (range == 3 || range == 4) dirTxt = "E";
-        else if (range == 5 || range == 6) dirTxt = "SE";
-        else if (range == 7 || range == 8) dirTxt = "S";
-        else if (range == 9 || range == 10) dirTxt = "SW";
-        else if (range == 11 || range == 12) dirTxt = "W";
-        else if (range == 13 || range == 14) dirTxt = "NW";
-
-        // 레이더의 뷰는 데이터 뷰
-        radarPoints.view = this;
-        // 설정된 값들로 레이더를 그린다
-        dw.paintObj(radarPoints, rx, ry, -state.getCurBearing(), 1);
-        dw.setFill(false);
-        dw.setColor(Color.argb(150, 50, 50, 50));
-        dw.paintLine(lrl.x, lrl.y, rx + RadarPoints.RADIUS, ry + RadarPoints.RADIUS);
-        dw.paintLine(rrl.x, rrl.y, rx + RadarPoints.RADIUS, ry + RadarPoints.RADIUS);
-        dw.setColor(Color.rgb(255, 255, 255));
-        dw.setFontSize(12);
-
-
-        // 레이더에 출력될 텍스트 설정
-        radarText(dw, MixUtils.formatDist(radius * 1000), rx + RadarPoints.RADIUS, ry + RadarPoints.RADIUS * 2 - 10, false);
-        radarText(dw, "" + bearing + ((char) 176) + " " + dirTxt, rx + RadarPoints.RADIUS, ry - 5, true);
 
 		/* 다음 UI 이벤트를 받는다 */
         UIEvent evt = null;
@@ -401,9 +359,6 @@ public class DataView {
         // 이벤트의 처리
         if (evt != null) {
             switch (evt.type) {
-                case UIEvent.KEY:
-                    handleKeyEvent((KeyEvent) evt);
-                    break;
                 case UIEvent.CLICK:
                     handleClickEvent((ClickEvent) evt);
                     break;
@@ -412,31 +367,6 @@ public class DataView {
         state.nextLStatus = MixState.PROCESSING;    // 다음 상태는 처리중으로
     }
 
-    // 키패드의 이벤트 설정
-    private void handleKeyEvent(KeyEvent evt) {
-        /** Adjust marker position with keypad */
-        final float CONST = 10f;
-        switch (evt.keyCode) {
-            case KEYCODE_DPAD_LEFT:
-                addX -= CONST;
-                break;
-            case KEYCODE_DPAD_RIGHT:
-                addX += CONST;
-                break;
-            case KEYCODE_DPAD_DOWN:
-                addY += CONST;
-                break;
-            case KEYCODE_DPAD_UP:
-                addY -= CONST;
-                break;
-            case KEYCODE_DPAD_CENTER:
-                frozen = !frozen;
-                break;
-            case KEYCODE_CAMERA:
-                frozen = !frozen;
-                break;    // freeze the overlay with the camera button
-        }
-    }
 
     // 클릭 이벤트 제어
     boolean handleClickEvent(ClickEvent evt) {

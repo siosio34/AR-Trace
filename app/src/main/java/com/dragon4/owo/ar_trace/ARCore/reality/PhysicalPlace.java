@@ -18,13 +18,12 @@
  */
 package com.dragon4.owo.ar_trace.ARCore.reality;
 
-
-
 import android.location.Location;
+
+import com.dragon4.owo.ar_trace.ARCore.render.MixVector;
 
 import java.io.Serializable;
 
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.render.MixVector;
 
 // 물리적 공간 클래스
 public class PhysicalPlace implements Serializable{

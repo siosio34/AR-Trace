@@ -17,14 +17,16 @@
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
 
+
+
 package com.dragon4.owo.ar_trace.ARCore;
 
 
 import android.graphics.Bitmap;
 import android.location.Location;
 
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.data.DataSource;
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.gui.PaintScreen;
+import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
+import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
 
 
 // 소셜 마커 클래스. 마커에서 확장(상속)

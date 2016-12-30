@@ -11,19 +11,43 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA"/>
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.MainActivity">
+        <activity android:name=".ARCore.MixareActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ARCore.MixView"
+            android:launchMode="singleTop"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:mimeType="application/mixare-json"
+                    android:scheme="http" />
+                <data
+                    android:mimeType="application/mixare-json"
+                    android:scheme="content" />
+                <data
+                    android:mimeType="application/mixare-json"
+                    android:scheme="file" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ARCore.BaseActivity"/>
+
     </application>
 
 </manifest>

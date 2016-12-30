@@ -7,7 +7,7 @@ import android.app.ProgressDialog;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 
-import com.youngje.tgwing.accommodations.R;
+import com.dragon4.owo.ar_trace.R;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -17,7 +17,7 @@ public class BaseActivity extends AppCompatActivity {
     public void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getString(R.string.loading));
+        //    mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setIndeterminate(true);
         }
 

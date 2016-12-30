@@ -20,6 +20,8 @@ package com.dragon4.owo.ar_trace.ARCore;
 
 import android.util.Log;
 
+import java.util.Date;
+
 // 유틸 클래스
 class MixUtils {
 	// JSON 데이터의 파싱 작업을 수행
@@ -68,5 +70,22 @@ class MixUtils {
 		angle = (tmpv_y < 0) ? angle * -1 : angle;
 
 		return angle;
+	}
+
+	public static String getDateString(Date createDate) {
+		long timeDiff = System.currentTimeMillis() - createDate.getTime();
+
+		if(timeDiff < 60000)
+			return "방금";
+		else if(timeDiff < 3600000)
+			return (timeDiff/(60000))+"분 전";
+		else if(timeDiff < 86400000)
+			return (timeDiff/(3600000))+"시간 전";
+		else if(timeDiff < 2592000000L)
+			return (timeDiff/(86400000))+"일 전";
+		else if(timeDiff >= 31104000000L)
+			return (timeDiff/(2592000000L))+"달 전";
+		else
+			return (timeDiff/(31104000000L))+"년 전";
 	}
 }

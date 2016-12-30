@@ -44,8 +44,6 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
-
-
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -64,8 +62,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.data.DataSource;
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.render.Matrix;
+import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
+import com.dragon4.owo.ar_trace.ARCore.render.Matrix;
 
 // 컨텍스트랩퍼를 확장하는 컨텍스트 클래스
 public class MixContext extends ContextWrapper {
@@ -110,7 +108,6 @@ public class MixContext extends ContextWrapper {
             // 선택된 데이터소스의 해쉬맵을 프레퍼런스 세팅값에 따라 설정
            selectedDataSources.put(source, settings.getBoolean(source.toString(), false));
             // 쉐어드 프리퍼런스에 해당키에 데이터가있으면 값넣어주고 아니면 false 리턴
-
 
             // 한개라도 선택된 것이 있다면 플래그를 true
             if (selectedDataSources.get(source))
@@ -304,65 +301,6 @@ public class MixContext extends ContextWrapper {
         return sb.toString();    // 완성된 스트링을 리턴
     }
 
-    // POST 형식으로 데이터를 받아 인풋 스트림을 리턴한다
-    public InputStream getHttpPOSTInputStream(String urlStr,
-                                              String params) throws Exception {
-
-        // 사용될 인풋, 아웃풋 스트림과 커넥션 객체
-        InputStream is = null;
-        OutputStream os = null;
-        HttpURLConnection conn = null;
-
-        // 컨텐트의 경우
-        if (urlStr.startsWith("content://"))
-            return getContentInputStream(urlStr, params);
-
-        try {
-            URL url = new URL(urlStr);    // 준비된 스트링으로 URL 생성
-            // 커넥션 설정
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(10000);
-            conn.setConnectTimeout(10000);
-
-            // 파라메터 값이 null 이 아닐 때
-            if (params != null) {
-                conn.setDoOutput(true);
-                os = conn.getOutputStream();    // 커넥션 객체로부터 아웃풋 스트림을 읽고
-                OutputStreamWriter wr = new OutputStreamWriter(os);    // 라이터를 생성
-                wr.write(params);    // 파라메터에 기록
-                wr.close();
-            }
-
-            is = conn.getInputStream();    // 커넥션 객체로부터 인풋 스트림을 읽어옴
-
-            return is;    // 읽어온 인풋 스트림을 리턴
-        } catch (Exception ex) {
-            // 예외 처리
-            try {
-                is.close();
-            } catch (Exception ignore) {
-
-            }
-            try {
-                os.close();
-            } catch (Exception ignore) {
-
-            }
-            try {
-                conn.disconnect();
-            } catch (Exception ignore) {
-            }
-
-            // 405 에러 시에는 GET형식으로
-            if (conn != null && conn.getResponseCode() == 405) {
-                return getHttpGETInputStream(urlStr);
-            } else {
-
-                throw ex;
-            }
-        }
-    }
-
     // 컨텐트 인풋 스트림을 리턴
     public InputStream getContentInputStream(String urlStr, String params)
             throws Exception {
@@ -499,9 +437,7 @@ public class MixContext extends ContextWrapper {
 
     // 데이터 소스의 선택 여부를 토글
     public void toogleDataSource(DataSource.DATASOURCE source) {
-
         setDataSource(source, !selectedDataSources.get(source));
-
     }
 
     // 선택된 데이터 소스 리스트를 스트링 형태로 리턴

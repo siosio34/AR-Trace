@@ -34,9 +34,8 @@ import org.xml.sax.InputSource;
 
 import android.util.Log;
 
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.data.DataSource;
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.data.Json;
-import com.youngje.tgwing.accommodations.ARAccomdation.mixare.data.XMLHandler;
+import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
+import com.dragon4.owo.ar_trace.ARCore.data.Json;
 
 // 다운로드 관리자 클래스. 스레드로 관리
 public class DownloadManager implements Runnable {
@@ -165,7 +164,6 @@ public class DownloadManager implements Runnable {
 
 				// JSON 데이터를 로드한다
 				try {
-
 					Log.v(MixView.TAG, "try to load JSON data");
 
 					// JSON 형태의 스트링으로 JSON 객체를 생성
@@ -173,9 +171,7 @@ public class DownloadManager implements Runnable {
 					//JSONArray root = new JSONArray(tmp);
 					JSONObject root = new JSONObject(tmp);
 
-
 					Log.d(MixView.TAG, "loading JSON data");
-
 
 					// JSON 객체와 포맷으로 마커를 생성한다
 					List<ARMarker> ARMarkers = layer.load(root,request.format);
@@ -192,31 +188,6 @@ public class DownloadManager implements Runnable {
 					// 예외 발생시. JSON 데이터가 아니라 판단하고 XML로 읽는다
 					Log.v(MixView.TAG, "no JSON data");
 					Log.v(MixView.TAG, "try to load XML data");
-
-					try {
-						// XML 파싱에 사용될 도큐먼트 빌더
-						DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-
-						// 스트링 형태로 변환된 스트림을 빌더를 이용해 파싱한다
-						Document doc = builder.parse(new InputSource(new StringReader(tmp)));
-						//Document doc = builder.parse(is);
-						//Document doc = builder.parse(is);
-
-						XMLHandler xml = new XMLHandler();	// XML을 다룰 객체
-
-						Log.i(MixView.TAG, "loading XML data");	
-						
-						// 도큐먼트로부터 파싱된 XML을 읽어 마커를 생성한다
-						List<ARMarker> ARMarkers = xml.load(doc);
-						result.setARMarkers(ARMarkers);	// 다운로드 결과에 마커를 할당
-
-						// 인자로 받은 리퀘스트로부터 포맷과 소스를 할당한다
-						result.format = request.format;
-						result.error = false;
-						result.errorMsg = null;
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}				
 				}
 				ctx.returnHttpInputStream(is);	// 인풋 스트림을 돌려보냄(닫음)
 				is = null;
