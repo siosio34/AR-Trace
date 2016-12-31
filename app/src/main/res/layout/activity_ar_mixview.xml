@@ -38,6 +38,7 @@
             android:layout_marginRight="30dp"
             android:layout_gravity="center_vertical">
             <EditText
+                android:id="@+id/ar_mixview_search_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"

@@ -68,16 +68,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.View;
+import android.view.*;
+import android.view.KeyEvent;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -449,6 +445,17 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                             });
 //                    searchbar.setVisibility(View.GONE);
                     parentButtonView.setVisibility(View.VISIBLE);
+                }
+            });
+
+            EditText searchText = (EditText)mainArView.findViewById(R.id.ar_mixview_search_text);
+            searchText.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                    if(keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
+
+                    }
+                    return false;
                 }
             });
 
