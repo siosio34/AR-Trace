@@ -6,8 +6,8 @@
     <!-- 여기에 구현하면됨 -->
     <LinearLayout
         android:id="@+id/ar_mixview_naverview"
-        android:layout_width="104dp"
-        android:layout_height="104dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:layout_alignParentRight="true"
@@ -28,16 +28,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp" />
+            android:layout_marginRight="6dp"
+            android:layout_gravity="center_vertical" />
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginRight="30dp">
+            android:layout_marginRight="30dp"
+            android:layout_gravity="center_vertical">
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#66FFFFFF" />
+                android:padding="5dp"
+                android:background="#BBFFFFFF"
+                android:inputType="textNoSuggestions"
+                android:layout_centerInParent="true"/>
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
