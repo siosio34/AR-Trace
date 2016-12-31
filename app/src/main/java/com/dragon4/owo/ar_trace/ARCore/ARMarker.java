@@ -68,8 +68,6 @@ abstract public class ARMarker implements Comparable<ARMarker> {
 	protected Label txtLab = new Label();    // Label 클래스는 하단에서 정의한다
 	protected TextObj textBlock;
 
-	public static List<ARMarker> markersList= new ArrayList<>();
-
 	private String description = "";
 
 	// 생성자. 타이틀과 위도, 경고, 고도값, 링크될 주소와 데이터 소스를 인자로 받는다 

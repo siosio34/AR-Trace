@@ -143,10 +143,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     private Matrix m3 = new Matrix();
     private Matrix m4 = new Matrix();
 
-    private ImageView backButton;
-    private ImageView myDocumentButton;
-    private ImageView writeDoucumentButton;
-
     private SeekBar myZoomBar;    // 줌 배율을 설정하기 위함
     private WakeLock mWakeLock;    // 화면이 점멸되지 않게 하기 위함
 
@@ -478,16 +474,15 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                     }
                 }
             });
-
-            final LinearLayout naverViewLayout = (LinearLayout)mainArView.findViewById(R.id.ar_mixview_naverview);
+            
+            // 네이버 지도 추가
+            // TODO: 2016. 12. 31. 배율 높이기 네이버 위치 리스너 만들기. 
             Fragment naverFragment = new FragmentMapview();
             naverFragment.setArguments(new Bundle());
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fm.beginTransaction();
             fragmentTransaction.add(R.id.ar_mixview_naverview,naverFragment);
             fragmentTransaction.commit();
-
-
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
             addContentView(mainArView, params);

@@ -160,9 +160,7 @@ public class MixState {
             Log.i("temp",temp);
 
         }
-
         return temp;
-
     }
     // 현재의 방위각을 리턴
     public float getCurBearing() {

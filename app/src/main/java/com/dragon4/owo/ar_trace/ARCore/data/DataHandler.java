@@ -34,11 +34,6 @@ import com.dragon4.owo.ar_trace.ARCore.MixContext;
 import com.dragon4.owo.ar_trace.ARCore.MixView;
 
 
-/**
- * DataHandler is the model which provides the ARMarker Objects.
- * 
- * DataHandler is also the Factory for new ARMarker objects.
- */
 // 데이터 핸들러 클래스. 마커 오브젝트와 연동된다
 public class DataHandler implements Serializable{
 	
