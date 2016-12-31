@@ -206,7 +206,7 @@ public class DataView {
 
             // 인자로 받은 넓이, 높이로 카메라 객체를 생성하고
             cam = new Camera(width, height, true);
-            //cam.setViewAngle(Camera.DEFAULT_VIEW_ANGLE);    // 뷰의 각도를 설정한다
+            cam.setViewAngle(Camera.DEFAULT_VIEW_ANGLE);    // 뷰의 각도를 설정한다
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -330,8 +330,7 @@ public class DataView {
                 //if (!frozen)
                 //	ma.update(curFix);
                 if (!frozen) {
-                    float addTemp = 350;
-                    ma.calcPaint(cam, addX, addY+addTemp, ma.datasource);
+                    ma.calcPaint(cam, addX, addY, ma.datasource);
                 }
                 ma.draw(dw);
             }

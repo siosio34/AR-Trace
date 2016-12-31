@@ -255,6 +255,7 @@ abstract public class ARMarker implements Comparable<ARMarker> {
 		if (isVisible) {
 			// 우선 페인트 스크린을 설정한다
 			//float maxHeight = Math.round(dw.getHeight() / 10f) + 1;
+			float maxWidth = dw.getWidth();
 			float maxHeight = dw.getHeight();
 			dw.setStrokeWidth(maxHeight / 100f);
 			dw.setFill(false);
@@ -275,6 +276,7 @@ abstract public class ARMarker implements Comparable<ARMarker> {
 	public void drawTextBlock(PaintScreen dw,DataSource.DATASOURCE datasource) {
 
 		float maxHeight = Math.round(dw.getHeight() / 10f) + 1;
+		float maxWidth = Math.round(dw.getWidth() / 10f) + 1;
 
 		String textStr = "";    // 출력될 텍스트
 		double d = distance;    // 거리. 미터 단위
@@ -298,7 +300,7 @@ abstract public class ARMarker implements Comparable<ARMarker> {
 			dw.setColor(DataSource.getColor(datasource));
 
 			// 현재 각을 얻어온다
-			float currentAngle = MixUtils.getAngle(cMarker.x, cMarker.y, signMarker.x, signMarker.y);
+			float currentAngle = MixUtils.getAngle(cMarker.y, cMarker.x, signMarker.y, signMarker.x);
 
 			// 세팅된 텍스트 블록으로 텍스트 라벨을 준비
 			txtLab.prepare(textBlock);
@@ -308,8 +310,8 @@ abstract public class ARMarker implements Comparable<ARMarker> {
 			dw.setFill(true);
 
 			// 준비된 값으로 객체를 스크린에 그린다
-			dw.paintObj(txtLab, signMarker.x - txtLab.getWidth()
-					/ 2, signMarker.y + maxHeight, currentAngle + 90, 1);
+			dw.paintObj(txtLab, signMarker.y - txtLab.getHeight()
+					/ 2, signMarker.x + maxWidth, currentAngle + 90, 1);
 		}
 
 	}

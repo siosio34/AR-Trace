@@ -26,13 +26,15 @@ import android.graphics.Color;
 
 import com.dragon4.owo.ar_trace.R;
 
+import static com.google.firebase.analytics.FirebaseAnalytics.Event.SEARCH;
+
 // 데이터 소스를 실질적으로 다루는 클래스
 public class DataSource {
 
 
     // 데이터 소스와 데이터 포맷의 열거형 변수
     public enum DATASOURCE {
-        CAFE,BUSSTOP,Convenience,Restaurant,BANK,HOSPITAL,ACCOMMODATION,DOCUMENT, IMAGE, VIDEO
+        CAFE,BUSSTOP,Convenience,Restaurant,BANK,HOSPITAL,ACCOMMODATION,DOCUMENT, IMAGE, VIDEO,SEARCH
     };
 
     public enum DATAFORMAT {
@@ -63,6 +65,7 @@ public class DataSource {
     public static Bitmap imageIcon;
     public static Bitmap videoIcon;
 
+    private static final String NAVER_MAP_URL =	"http://map.naver.com/findroute2/findWalkRoute.nhn?call=route2&output=json&coord_type=naver&search=0";
 
     public DataSource() {
 
@@ -187,11 +190,9 @@ public class DataSource {
                 ret = DATAFORMAT.DOCUMENT;
                 break;
 
-
         }
         return ret;    // 포맷 리턴
     }
-
 
     // 각 정보들로 완성된 URL 리퀘스트를 생성
     public static String createRequestURL(DATASOURCE source, double lat, double lon, double alt, float radius) {
@@ -268,10 +269,18 @@ public class DataSource {
         return ret;
     }
 
-    private static final String NAVER_MAP_URL =	"http://map.naver.com/findroute2/findWalkRoute.nhn?call=route2&output=json&coord_type=naver&search=0";
+    // 장소 하나 검색
+    public static String createNaverSearchRequestURL(String _query) {
+        String ret;
+        ret = "http://map.naver.com/search2/local.nhn?sm=hty&" +
+                "query=" + _query +  "&menu=location";
 
+        return ret;
+    }
+
+    // 지도 경로 검색
     public static String createNaverMapRequestURL(double start_lon, double start_lat, double end_lon, double end_lat) {
-        String ret = ""; // 결과 스트링
+        String ret;
         ret = NAVER_MAP_URL;
 
         ret += "&start=" + Double.toString(start_lon) + "%2C" + Double.toString(start_lat)
@@ -279,7 +288,6 @@ public class DataSource {
 
         return ret;
     }
-
 
     // 각 소스에 따른 색을 리턴
     public static int getColor(DATASOURCE datasource) {
