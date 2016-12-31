@@ -49,6 +49,8 @@ public class NaverSearchDataProcessor implements DataProcessor {
         return markers;
     }
 
+
+
     private ARMarker processSearchJsonObject(JSONObject jo, DataSource.DATASOURCE datasource) throws JSONException {
 
         ARMarker marker = null;
