@@ -76,11 +76,13 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -92,6 +94,7 @@ import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
 import com.dragon4.owo.ar_trace.ARCore.render.Matrix;
 import com.dragon4.owo.ar_trace.R;
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -163,6 +166,11 @@ public class MixView extends Activity implements SensorEventListener, LocationLi
     // 줌 레벨과 프로그레스 수치
     private String zoomLevel;
     private int zoomProgress;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
+    }
 
     // 노티피케이션 텍스트 뷰
     private TextView searchNotificationTxt;
@@ -419,8 +427,65 @@ public class MixView extends Activity implements SensorEventListener, LocationLi
                     LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT,
                     Gravity.BOTTOM));
 
-            LayoutInflater inflater = getLayoutInflater();
-            View mainArView = inflater.inflate(R.layout.activity_ar_mixview, null);
+            final LayoutInflater inflater = getLayoutInflater();
+            final View mainArView = inflater.inflate(R.layout.activity_ar_mixview, null);
+
+            final LinearLayout parentButtonView = (LinearLayout)mainArView.findViewById(R.id.ar_mixview_parent_buttonview);
+            final LinearLayout searchbar = (LinearLayout)mainArView.findViewById(R.id.ar_mixview_searchbar);
+            final Button hideSearchbar = (Button)mainArView.findViewById(R.id.ar_mixview_hide_searchbar);
+
+            mainArView.findViewById(R.id.ar_mixview_search).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                parentButtonView.setVisibility(View.GONE);
+                searchbar.setVisibility(View.VISIBLE);
+                }
+            });
+            hideSearchbar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    searchbar.setVisibility(View.GONE);
+                    parentButtonView.setVisibility(View.VISIBLE);
+                }
+            });
+
+            mainArView.findViewById(R.id.ar_mixview_category).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+            mainArView.findViewById(R.id.ar_mixview_write_review).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
+            final Button reviewOnOffBtn = (Button)mainArView.findViewById(R.id.ar_mixview_review_onoff);
+            reviewOnOffBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    reviewOnOffBtn.setBackgroundResource(R.drawable.icon_others_review_off);
+                    reviewOnOffBtn.setBackgroundResource(R.drawable.icon_others_review_on);
+                }
+            });
+
+            final LinearLayout buttonViewLayout = (LinearLayout)mainArView.findViewById(R.id.ar_mixview_buttonview);
+            final Button hideBtn = (Button)mainArView.findViewById(R.id.ar_mixview_buttonview_hide);
+            hideBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(buttonViewLayout.getVisibility() == View.GONE) {
+                        buttonViewLayout.setVisibility(View.VISIBLE);
+                        hideBtn.setBackgroundResource(R.drawable.icon_menu_up);
+                    }
+                    else if(buttonViewLayout.getVisibility() == View.VISIBLE) {
+                        buttonViewLayout.setVisibility(View.GONE);
+                        hideBtn.setBackgroundResource(R.drawable.icon_menu_down);
+                    }
+                }
+            });
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
             addContentView(mainArView, params);

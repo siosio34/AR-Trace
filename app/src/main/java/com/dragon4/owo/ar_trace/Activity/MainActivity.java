@@ -2,6 +2,7 @@ package com.dragon4.owo.ar_trace.Activity;
 
 import android.*;
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -9,6 +10,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.dragon4.owo.ar_trace.*;
+import com.tsengvn.typekit.Typekit;
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +27,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(com.dragon4.owo.ar_trace.R.layout.activity_main);
+        Typekit.getInstance()
+                .addNormal(Typekit.createFromAsset(this, "NanumBarunpenB.ttf"))
+                .addBold(Typekit.createFromAsset(this, "NanumBarunpenB.ttf"))
+                .addItalic(Typekit.createFromAsset(this, "NanumBarunpenB.ttf"))
+                .addBoldItalic(Typekit.createFromAsset(this, "NanumBarunpenB.ttf"));
     }
 
     private void checkAndRequestPermission() {
@@ -56,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
+    }
 }
