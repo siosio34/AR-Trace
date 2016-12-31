@@ -67,6 +67,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.*;
 import android.view.KeyEvent;
@@ -82,6 +84,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
 import com.dragon4.owo.ar_trace.ARCore.render.Matrix;
@@ -89,8 +92,16 @@ import com.dragon4.owo.ar_trace.NaverMap.FragmentMapview;
 import com.dragon4.owo.ar_trace.R;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static android.hardware.SensorManager.SENSOR_DELAY_GAME;
 
@@ -423,42 +434,113 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             mainArView.findViewById(R.id.ar_mixview_search).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    searchbar.animate()
-                            .translationY(view.getHeight())
-                            .alpha(1.0f);
                 parentButtonView.setVisibility(View.GONE);
-//                searchbar.setVisibility(View.VISIBLE);
+                searchbar.setVisibility(View.VISIBLE);
                 }
             });
             hideSearchbar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    searchbar.animate()
-                            .translationY(0)
-                            .alpha(0.0f)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    searchbar.setVisibility(View.GONE);
-                                }
-                            });
-//                    searchbar.setVisibility(View.GONE);
+                    searchbar.setVisibility(View.GONE);
                     parentButtonView.setVisibility(View.VISIBLE);
                 }
             });
 
-            EditText searchText = (EditText)mainArView.findViewById(R.id.ar_mixview_search_text);
+            final DataConvertor dataConvertor = new DataConvertor();
+
+            final EditText searchText = (EditText)mainArView.findViewById(R.id.ar_mixview_search_text);
+            TextWatcher watcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    String queryString = searchText.getText().toString();
+                    try {
+                        List<ARMarker> searchList = null;
+                        String encodedQueryString = URLEncoder.encode(queryString,"UTF-8");
+
+                        String tempCallbackUrl = "http://ac.map.naver.com/ac?q=" + encodedQueryString + "&st=10&r_lt=10&r_format=json";
+                        String rawData = new HttpHandler().execute(tempCallbackUrl).get();
+                        Log.i("rawData",rawData);
+
+                        JSONObject root = new JSONObject(rawData);
+                        JSONArray dataArray = root.getJSONArray("items");
+
+                        Log.i("dataArray",dataArray.toString());
+
+                        //searchList = dataConvertor.load(rawData, DataSource.DATASOURCE.SEARCH, DataSource.DATAFORMAT.NAVER_SEARCH);
+                       // Log.i("searchList1","악");
+//
+                       // if(searchList != null) {
+                       //     for (int num = 0; num < searchList.size(); num++) {
+                       //         Log.i("searchList", searchList.get(num).getTitle());
+                       //     }
+                       // }
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    //enter key 입력된 경우랍니다
+                    if(charSequence.length() > 0 && charSequence.subSequence(charSequence.length()-1, charSequence.length()).toString().equalsIgnoreCase("\n")) {
+                        DataSource.DATASOURCE datasource = DataSource.DATASOURCE.SEARCH;
+                        dataView.requestData(DataSource.createNaverSearchRequestURL(queryString), DataSource.dataFormatFromDataSource(datasource), datasource);
+
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            };
+            searchText.addTextChangedListener(watcher);
+            /*
             searchText.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View view, int i, KeyEvent keyEvent) {
+
+                    String queryString = searchText.getText().toString();
+                    try {
+                        List<ARMarker> searchList = null;
+                        String rawData = new HttpHandler().execute(DataSource.createNaverSearchRequestURL(queryString)).get();
+                        Log.i("rawData",rawData);
+                        searchList = dataConvertor.load(rawData, DataSource.DATASOURCE.SEARCH, DataSource.DATAFORMAT.NAVER_SEARCH);
+                        Log.i("searchList1","악");
+
+                        if(searchList != null) {
+                            for (int num = 0; num < searchList.size(); num++) {
+                                Log.i("searchList", searchList.get(num).getTitle());
+                            }
+                        }
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+
+
                     if(keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
+
+                        DataSource.DATASOURCE datasource = DataSource.DATASOURCE.SEARCH;
+                        dataView.requestData(DataSource.createNaverSearchRequestURL(queryString), DataSource.dataFormatFromDataSource(datasource), datasource);
 
                     }
                     return false;
                 }
             });
-
+            */
             mainArView.findViewById(R.id.ar_mixview_category).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
