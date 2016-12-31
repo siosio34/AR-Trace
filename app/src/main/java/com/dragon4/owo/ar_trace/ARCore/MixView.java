@@ -40,13 +40,10 @@ package com.dragon4.owo.ar_trace.ARCore;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -60,23 +57,22 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.Button;
@@ -88,25 +84,21 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.dragon4.owo.ar_trace.ARCore.data.DataHandler;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
 import com.dragon4.owo.ar_trace.ARCore.render.Matrix;
+import com.dragon4.owo.ar_trace.NaverMap.FragmentMapview;
 import com.dragon4.owo.ar_trace.R;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import static android.hardware.SensorManager.SENSOR_DELAY_GAME;
 
 // 메인에 보여지게 될 믹스뷰(액티비티) 클래스
 
-public class MixView extends Activity implements SensorEventListener, LocationListener, OnTouchListener {
+public class MixView extends FragmentActivity implements SensorEventListener, LocationListener, OnTouchListener {
 
     private Sensor orientationSensor;
     private SensorManager sensorMgr_ori;
@@ -486,6 +478,16 @@ public class MixView extends Activity implements SensorEventListener, LocationLi
                     }
                 }
             });
+
+            final LinearLayout naverViewLayout = (LinearLayout)mainArView.findViewById(R.id.ar_mixview_naverview);
+            Fragment naverFragment = new FragmentMapview();
+            naverFragment.setArguments(new Bundle());
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fm.beginTransaction();
+            fragmentTransaction.add(R.id.ar_mixview_naverview,naverFragment);
+            fragmentTransaction.commit();
+
+
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
             addContentView(mainArView, params);
@@ -1154,11 +1156,6 @@ class CameraSurface extends SurfaceView implements SurfaceHolder.Callback {
                 int besth = 0;
                 Iterator<Camera.Size> itr = supportedSizes.iterator();
 
-                // 우리는 최적의 프리뷰 사이즈를 찾을 것이고
-                // 이것은 스크린 형태의 팩터에 가까워야 하며, 스크린 자체보다는 넓지 않아야 한다
-                // 차후의 요구사항은 2.1버전의 HTC Hero 의 경우엔 스크린보다 큰 카메라 프리뷰 사이즈를
-                // 리포트할 것 이고, 이는 카메라의 초기화를 실패하게 할 것이기 때문이다.
-                // 하지만 다른 기기에서는 스크린보다 큰 프리뷰도 제대로 작동할 것이다
 
                 // 반복자(이터레이터)를 이용해 최적의 사이즈를 찾는다
                 while (itr.hasNext()) {
