@@ -71,9 +71,9 @@ public class DataSource {
     // 리소스로부터 각 아이콘 생성
     public static void createIcons(Resources res) {
 
-       // cafeIcon = BitmapFactory.decodeResource(res, R.drawable.icon_cafe);
+        cafeIcon = BitmapFactory.decodeResource(res, R.drawable.icon_cafe);
        // busIcon = BitmapFactory.decodeResource(res,R.drawable.icon_metro);
-       // restraurantIcon = BitmapFactory.decodeResource(res,R.drawable.icon_store);
+       // restraurantIcon = BitmapFactory.decodeResource(res,R.drawable.icon_cafe);
        // convenienceIcon = BitmapFactory.decodeResource(res,R.drawable.icon_convenition);
        // bankIcon = BitmapFactory.decodeResource(res,R.drawable.icon_bank);
        // hospitalIcon = BitmapFactory.decodeResource(res,R.drawable.icon_hospital);

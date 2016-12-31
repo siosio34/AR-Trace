@@ -18,17 +18,6 @@
  */
 package com.dragon4.owo.ar_trace.ARCore;
 
-import static android.view.KeyEvent.KEYCODE_CAMERA;
-import static android.view.KeyEvent.KEYCODE_DPAD_DOWN;
-import static android.view.KeyEvent.KEYCODE_DPAD_LEFT;
-import static android.view.KeyEvent.KEYCODE_DPAD_RIGHT;
-import static android.view.KeyEvent.KEYCODE_DPAD_UP;
-import static android.view.KeyEvent.KEYCODE_DPAD_CENTER;
-
-import java.util.ArrayList;
-import java.util.Locale;
-
-
 import android.graphics.Color;
 import android.location.Location;
 import android.util.Log;
@@ -40,6 +29,8 @@ import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
 import com.dragon4.owo.ar_trace.ARCore.gui.ScreenLine;
 import com.dragon4.owo.ar_trace.ARCore.render.Camera;
 import com.dragon4.owo.ar_trace.R;
+
+import java.util.ArrayList;
 
 
 /**
