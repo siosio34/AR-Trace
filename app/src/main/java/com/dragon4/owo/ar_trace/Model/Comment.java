@@ -1,4 +1,4 @@
-package com.dragon4.owo.ar_trace.ARCore;
+package com.dragon4.owo.ar_trace.Model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,7 +16,6 @@ public class Comment implements Serializable {
     private String content;
     private Date createDate;
     private int state;
-
 
     public Comment() {
 

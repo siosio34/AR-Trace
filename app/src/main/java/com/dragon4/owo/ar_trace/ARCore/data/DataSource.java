@@ -38,29 +38,16 @@ public class DataSource {
     };
 
     public enum DATAFORMAT {
-        CAFE,BUSSTOP,Convenience,Restaurant,BANK,HOSPITAL,ACCOMMODATION,DOCUMENT, IMAGE, VIDEO
+        CAFE,BUSSTOP,Convenience,Restaurant,BANK,HOSPITAL,ACCOMMODATION,DOCUMENT, IMAGE, VIDEO,SEARCH
     };
-
-    // 주의할것! 방대한 양의 데이터(MB단위 이상)을 산출할 때에는, 작은 반경이나 특정한 쿼리만을 사용해야한다
-    /**
-     * URL 부분 끝
-     */
-
-    // 아이콘들. 트위터와 버즈
 
     public static Bitmap cafeIcon; //카페
     public static Bitmap busIcon; // 버스
     public static Bitmap restraurantIcon; // 레스토랑
     public static Bitmap convenienceIcon; // 편의점
-
-    // TODO: 2016. 12. 11. 아래 세개거 추가
-
     public static Bitmap bankIcon; // 은행
     public static Bitmap hospitalIcon; //병원
     public static Bitmap accommodationIcon; // 숙박
-
-    // TODO: 2016. 12. 11. 도큐먼트 뿐만아니라 다른것도 분리. 
-
     public static Bitmap documentIcon;
     public static Bitmap imageIcon;
     public static Bitmap videoIcon;
@@ -126,13 +113,14 @@ public class DataSource {
             case "DOCUMENT":
                 bitmap = documentIcon;
                 break;
+
             case "IMAGE":
                 bitmap = imageIcon;
                 break;
+
             case "VIDEO":
                 bitmap = videoIcon;
                 break;
-
 
         }
         return bitmap;
@@ -269,7 +257,7 @@ public class DataSource {
         return ret;
     }
 
-    // 장소 하나 검색
+    // 일정 장소 하나 검색
     public static String createNaverSearchRequestURL(String _query) {
         String ret;
         ret = "http://map.naver.com/search2/local.nhn?sm=hty&" +

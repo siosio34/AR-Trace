@@ -39,13 +39,12 @@ public class Json extends DataHandler {
 
     public static final int MAX_JSON_OBJECTS = 100;    // JSON 객체의 최대 수
 
-    // 각종 데이터를 로드
+    // 각종 데이터를 로드 , 네이버 주변시설 정보
     public List<ARMarker> load(JSONObject root, DataSource.DATAFORMAT dataformat) {
         // 데이터를 읽는데 사용할 JSON 객체와 데이터행렬, 마커들
         JSONObject jo = null;
         JSONArray dataArray = null;
         List<ARMarker> markers = new ArrayList<ARMarker>();
-        ARMarker.markersList.clear();
 
         try {
             if (root.has("result") && root.getJSONObject("result").has("site")) // 연결 가능한 링크를 가졌을시
@@ -66,7 +65,6 @@ public class Json extends DataHandler {
                 }
                 jsonArr = jsonArr.substring(0, jsonArr.length()-1)+"]";
                 dataArray = new JSONArray(jsonArr.toString());
-
             }
 
             // 데이터행렬에 데이터들이 있다면
@@ -86,6 +84,7 @@ public class Json extends DataHandler {
                     // 데이터 포맷에 따른 처리
                     switch (dataformat) {
 
+                        // 네이버 주변 시설정보
                         case CAFE:
                             ma = processCAFEJSONObject(jo);
                             break;
@@ -114,17 +113,18 @@ public class Json extends DataHandler {
                             ma = processAccomdationJSONObject(jo);
                             break;
 
+                        // 파이어베이스 정보
                         case DOCUMENT:
                         case VIDEO:
                         case IMAGE:
                             //ma = processDocumentObject(jo);
                             break;
 
+
                     }
                     // 마커 추가
                     if (ma != null) {
                         markers.add(ma);
-                        ARMarker.markersList.add(ma);
                     }
                 }
             }
@@ -156,7 +156,9 @@ public class Json extends DataHandler {
                     0,
                     linkbasic,
                     DataSource.DATASOURCE.CAFE, "CAFE");
+            ma.setID(linkTemp);
         }
+
         return ma;    // 마커 리턴
     }
 
@@ -185,9 +187,8 @@ public class Json extends DataHandler {
                     0,
                     tempLink,
                     DataSource.DATASOURCE.BUSSTOP,"BUSSTOP");
-            // TODO: 2016-05-31 이 부분은 나중에 웹페이지에 연결을 하던지 하자
-
         }
+
         return ma;
     }
 
@@ -214,7 +215,9 @@ public class Json extends DataHandler {
                     0,
                     linkbasic,
                     DataSource.DATASOURCE.BANK,"BANK");
+            ma.setID(linkTemp);
         }
+
         return ma;    // 마커 리턴
     }
 
@@ -241,6 +244,7 @@ public class Json extends DataHandler {
                     0,
                     linkbasic,
                     DataSource.DATASOURCE.HOSPITAL,"HOSPITAL");
+            ma.setID(linkTemp);
         }
         return ma;    // 마커 리턴
     }
@@ -268,6 +272,7 @@ public class Json extends DataHandler {
                     0,
                     linkbasic,
                     DataSource.DATASOURCE.ACCOMMODATION,"ACCOMMODATION");
+            ma.setID(linkTemp);
         }
         return ma;    // 마커 리턴
     }
@@ -297,6 +302,7 @@ public class Json extends DataHandler {
                     0,
                     linkbasic,
                     DataSource.DATASOURCE.Convenience,"CONVENICE");
+            ma.setID(linkTemp);
         }
         return ma;    // 마커 리턴
     }
@@ -323,9 +329,58 @@ public class Json extends DataHandler {
                     0,
                     linkbasic,
                     DataSource.DATASOURCE.Restaurant, "RESTRAUNT");
+            ma.setID(linkTemp);
         }
         return ma;    // 마커 리턴
     }
+
+    public ARMarker processNaverSearchJson(JSONObject jo) throws JSONException {
+
+        String linkTemp = null;
+        linkTemp = jo.getString("id");
+
+        String linkbasic = "http://map.naver.com/local/siteview.nhn?code=" + linkTemp.substring(1);
+        Log.i("linkbasic",linkbasic);
+
+        ARMarker ma = null;
+        ma = new SocialARMarker(
+                jo.getString("name"),
+                jo.getDouble("y"),
+                jo.getDouble("x"),
+                0,
+                linkbasic,
+                DataSource.DATASOURCE.SEARCH,"SEARCH");
+
+        ma.setID(linkTemp);
+        return ma;
+    }
+
+
+    //public String processNaverNaviJson(String naviStirng) throws JSONException {
+    //    String temp;
+    //    JSONObject jObject = new JSONObject(naviStirng);
+    //    int distance = jObject.getJSONObject("result").getJSONObject("summary").getInt("totalDistance");
+//
+    //    if(distance < 40) {
+    //        temp = "end";
+    //        return temp;
+    //    }
+//
+    //    JSONArray jArray = jObject.getJSONObject("result").getJSONArray("route").getJSONObject(0).getJSONArray("point");
+    //    JSONObject firstRoute = jArray.getJSONObject(1);
+//
+    //    if(firstRoute == null) {
+    //        temp = "end";
+    //        return temp;
+    //    }
+//
+    //    else {
+    //        temp = firstRoute.getJSONObject("guide").getString("name");
+    //        Log.i("temp",temp);
+//
+    //    }
+    //    return temp;
+    //}
 
     //private ARMarker processDocumentObject(JSONObject jo) throws JSONException {
 //
