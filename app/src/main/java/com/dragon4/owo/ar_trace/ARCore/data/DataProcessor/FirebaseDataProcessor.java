@@ -15,7 +15,7 @@ import java.util.List;
 public class FirebaseDataProcessor implements DataProcessor {
 
     @Override
-    public List<ARMarker> load(String rawData, DataSource.DATAFORMAT dataformat) throws JSONException {
+    public List<ARMarker> load(String rawData, DataSource.DATASOURCE dataformat) throws JSONException {
         return null;
     }
 
@@ -26,4 +26,6 @@ public class FirebaseDataProcessor implements DataProcessor {
             throw new RuntimeException(e);
         }
     }
+
+
 }
