@@ -420,12 +420,10 @@ public class MixView extends Activity implements SensorEventListener, LocationLi
                     Gravity.BOTTOM));
 
             LayoutInflater inflater = getLayoutInflater();
-            //View upMenu = inflater.inflate(R.layout.layout_ar_top_menu, null);
+            View mainArView = inflater.inflate(R.layout.activity_ar_mixview, null);
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            //addContentView(upMenu, params);
-
+            addContentView(mainArView, params);
 
             // 초기 세팅된 상태가 아니라면
             if (!isInited) {
