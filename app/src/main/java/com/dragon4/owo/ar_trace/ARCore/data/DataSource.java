@@ -34,11 +34,11 @@ public class DataSource {
 
     // 데이터 소스와 데이터 포맷의 열거형 변수
     public enum DATASOURCE {
-        CAFE,BUSSTOP,Convenience,Restaurant,BANK,HOSPITAL,ACCOMMODATION,DOCUMENT, IMAGE, VIDEO,SEARCH
+        CAFE,BUSSTOP,Convenience,Restaurant,BANK,HOSPITAL,ACCOMMODATION,DOCUMENT, IMAGE, VIDEO,SEARCH,NAVI
     };
 
     public enum DATAFORMAT {
-        CAFE,BUSSTOP,Convenience,Restaurant,BANK,HOSPITAL,ACCOMMODATION,DOCUMENT, IMAGE, VIDEO,SEARCH
+        NAVER_CATEGORY,NAVER_SEARCH,NAVI,FIREBASE
     };
 
     public static Bitmap cafeIcon; //카페
@@ -128,72 +128,47 @@ public class DataSource {
 
     // 데이터 소스로부터 데이터 포맷을 추출
     public static DATAFORMAT dataFormatFromDataSource(DATASOURCE ds) {
-        DATAFORMAT ret = DATAFORMAT.CAFE;
-        // 소스 형식에 따라 포맷을 할당한다
+        DATAFORMAT ret;
         switch (ds) {
 
             // 주위 편의시설
             case CAFE:
-                ret = DATAFORMAT.CAFE;
-                break;
-
             case BUSSTOP: // 버스 정류장
-                ret = DATAFORMAT.BUSSTOP;
-                break;
-
             case Convenience:
-                ret = DATAFORMAT.Convenience;
-                break;
-
             case Restaurant:
-                ret = DATAFORMAT.Restaurant;
-                break;
-
             case BANK:
-                ret = DATAFORMAT.BANK;
-                break;
-            
             case HOSPITAL:
-                ret = DATAFORMAT.HOSPITAL;
-                break;
-
             case ACCOMMODATION:
-                ret = DATAFORMAT.ACCOMMODATION;
+                ret = DATAFORMAT.NAVER_CATEGORY;
                 break;
-            
-            //  파이어베이스 부분
+            case SEARCH:
+                ret = DATAFORMAT.NAVER_SEARCH;
+                break;
+            case NAVI:
+                ret = DATAFORMAT.NAVI;
+                break;
+            // 파이어베이스 부분
             case DOCUMENT:
-                ret = DATAFORMAT.DOCUMENT;
-                break;
-
             case IMAGE:
-                ret = DATAFORMAT.IMAGE;
-                break;
-
             case VIDEO:
-                ret = DATAFORMAT.VIDEO;
+                ret = DATAFORMAT.FIREBASE;
                 break;
 
             default:
-                ret = DATAFORMAT.DOCUMENT;
+                ret = DATAFORMAT.NAVER_CATEGORY;
                 break;
-
         }
         return ret;    // 포맷 리턴
     }
 
     // 각 정보들로 완성된 URL 리퀘스트를 생성
-    public static String createRequestURL(DATASOURCE source, double lat, double lon, double alt, float radius) {
-        String ret = "";    // 결과 스트링
 
-        // https://dinosaur-facts.firebaseio.com/
-        // https://dinosaur-facts.firebaseio.com/dinosaurs.json?orderBy="height"&startAt=3&print=pretty
-        // 파일로부터 읽는 것이 아니라면
-        if (!ret.startsWith("file://")) {
+
+    public static String createRequestCategoryURL(DATASOURCE source, double lat, double lon, double alt, float radius) {
+        String ret = "";    // 결과 스트링
 
             // 각 소스에 따른 URL 리퀘스트를 완성한다
             switch (source) {
-                // TODO: 2016. 9. 9. yj  json 작업해야됨
 
                 // 네이버 웹페이지에서 가져오는 정보
                 case CAFE:
@@ -238,21 +213,7 @@ public class DataSource {
                             Double.toString(lat - 0.01) + "%3B" + Double.toString(lon + 0.02) +
                             "%3B" + Double.toString(lat + 0.01) + "&pageSize=100";
                     break;
-
-
-                case DOCUMENT:
-                case IMAGE:
-                case VIDEO:
-                    ret = "https://tourseoul-451de.firebaseio.com/posts.json";
-                    break;
-
-                default:
-                    ret = "https://tourseoul-451de.firebaseio.com/posts.json";
-                    break;
-
             }
-
-        }
 
         return ret;
     }
@@ -273,9 +234,25 @@ public class DataSource {
 
         ret += "&start=" + Double.toString(start_lon) + "%2C" + Double.toString(start_lat)
                 + "&destination=" + Double.toString(end_lon) + "%2C" + Double.toString(end_lat);
-
         return ret;
     }
+
+    /*
+
+     case DOCUMENT:
+                case IMAGE:
+                case VIDEO:
+                    ret = "https://tourseoul-451de.firebaseio.com/posts.json";
+                    break;
+
+                default:
+                    ret = "https://tourseoul-451de.firebaseio.com/posts.json";
+                    break;
+
+
+     */
+
+
 
     // 각 소스에 따른 색을 리턴
     public static int getColor(DATASOURCE datasource) {

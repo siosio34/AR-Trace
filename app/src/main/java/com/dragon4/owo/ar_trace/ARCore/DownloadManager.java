@@ -18,24 +18,14 @@
  */
 package com.dragon4.owo.ar_trace.ARCore;
 
-import java.io.InputStream;
-import java.io.StringReader;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-
 import android.util.Log;
 
+import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
-import com.dragon4.owo.ar_trace.ARCore.data.Json;
+
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
 
 // 다운로드 관리자 클래스. 스레드로 관리
 public class DownloadManager implements Runnable {
@@ -157,38 +147,21 @@ public class DownloadManager implements Runnable {
 				is = ctx.getHttpGETInputStream(request.url);	// 인풋 스트림에 할당
 
 				String tmp = ctx.getHttpInputString(is);	// 스트링 형태로 변환
-
-
-				Json layer = new Json();	// JSON 파일을 다룰 객체
-
+				DataConvertor dataConvertor = new DataConvertor();
 
 				// JSON 데이터를 로드한다
-				try {
-					Log.v(MixView.TAG, "try to load JSON data");
+				Log.v(MixView.TAG, "try to load JSON data");
 
-					// JSON 형태의 스트링으로 JSON 객체를 생성
+				// JSON 객체와 포맷으로 마커를 생성한다
+				List<ARMarker> ARMarkers = dataConvertor.load(tmp,request.source,request.format);
+				result.setARMarkers(ARMarkers);	// 다운로드 결과에 마커를 할당
 
-					//JSONArray root = new JSONArray(tmp);
-					JSONObject root = new JSONObject(tmp);
+				// 인자로 받은 리퀘스트로부터 포맷과 소스를 할당한다
+				result.format = request.format;
+				result.source = request.source;
+				result.error = false;
+				result.errorMsg = null;
 
-					Log.d(MixView.TAG, "loading JSON data");
-
-					// JSON 객체와 포맷으로 마커를 생성한다
-					List<ARMarker> ARMarkers = layer.load(root,request.format);
-					result.setARMarkers(ARMarkers);	// 다운로드 결과에 마커를 할당
-
-					// 인자로 받은 리퀘스트로부터 포맷과 소스를 할당한다
-					result.format = request.format;
-					result.source = request.source;
-					result.error = false;
-					result.errorMsg = null;
-
-				}
-				catch (JSONException e) {
-					// 예외 발생시. JSON 데이터가 아니라 판단하고 XML로 읽는다
-					Log.v(MixView.TAG, "no JSON data");
-					Log.v(MixView.TAG, "try to load XML data");
-				}
 				ctx.returnHttpInputStream(is);	// 인풋 스트림을 돌려보냄(닫음)
 				is = null;
 			}

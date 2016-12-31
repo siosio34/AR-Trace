@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+/*
 // JSON 파일을 다루는 클래스
 public class Json extends DataHandler {
 
@@ -434,11 +435,6 @@ public class Json extends DataHandler {
     //}
 //
 
+*/
 
-
-
-
-
-
-}
 
