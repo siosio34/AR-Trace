@@ -37,6 +37,8 @@ package com.dragon4.owo.ar_trace.ARCore;
  */
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
@@ -425,14 +427,27 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             mainArView.findViewById(R.id.ar_mixview_search).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    searchbar.animate()
+                            .translationY(view.getHeight())
+                            .alpha(1.0f);
                 parentButtonView.setVisibility(View.GONE);
-                searchbar.setVisibility(View.VISIBLE);
+//                searchbar.setVisibility(View.VISIBLE);
                 }
             });
             hideSearchbar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    searchbar.setVisibility(View.GONE);
+                    searchbar.animate()
+                            .translationY(0)
+                            .alpha(0.0f)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    searchbar.setVisibility(View.GONE);
+                                }
+                            });
+//                    searchbar.setVisibility(View.GONE);
                     parentButtonView.setVisibility(View.VISIBLE);
                 }
             });

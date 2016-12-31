@@ -25,11 +25,12 @@
         android:visibility="gone">
         <Button
             android:id="@+id/ar_mixview_hide_searchbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="18dp"
+            android:layout_height="50dp"
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/icon_back"/>
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -44,11 +45,11 @@
                 android:inputType="textNoSuggestions"
                 android:layout_centerInParent="true"/>
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_centerInParent="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="6dp"
-                android:gravity="center_vertical"
                 android:background="@drawable/icon_erase_all"/>
         </RelativeLayout>
     </LinearLayout>
@@ -69,29 +70,29 @@
             android:visibility="gone">
             <Button
                 android:id="@+id/ar_mixview_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:background="@drawable/icon_search"/>
             <Button
                 android:id="@+id/ar_mixview_category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:background="@drawable/icon_category"/>
             <Button
                 android:id="@+id/ar_mixview_write_review"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:background="@drawable/icon_write_review"/>
             <Button
                 android:id="@+id/ar_mixview_review_onoff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:background="@drawable/icon_others_review_off"/>
         </LinearLayout>
         <Button
             android:id="@+id/ar_mixview_buttonview_hide"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="@drawable/icon_menu_down"/>
     </LinearLayout>
 </RelativeLayout>
