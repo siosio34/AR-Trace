@@ -75,7 +75,7 @@ public class SocialARMarker extends ARMarker {
 			else {	// 비트맵 파일을 갖지 않는 마커의 경우
 				dw.setStrokeWidth(maxHeight / 10f);
 				dw.setFill(false);
-				//dw.setColor(DataSource.getColor(datasource));
+				dw.setColor(DataSource.getColor(datasource));
 				dw.paintCircle(cMarker.x, cMarker.y, maxHeight / 1.5f);
 			}
 		}

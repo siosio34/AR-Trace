@@ -23,6 +23,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.util.Log;
 
 import com.dragon4.owo.ar_trace.R;
 
@@ -222,7 +223,11 @@ public class DataSource {
     public static String createNaverSearchRequestURL(String _query) {
         String ret;
         ret = "http://map.naver.com/search2/local.nhn?sm=hty&" +
-                "query=" + _query +  "&menu=location";
+                "query=" + _query +
+                "&isFirstSearch=" + "true" +
+                "&menu=location";
+
+        Log.i("검색 url test",ret);
 
         return ret;
     }
