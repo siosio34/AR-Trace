@@ -219,6 +219,13 @@ public class DataSource {
         return ret;
     }
 
+    public static String createNaverSearchCallBackURL(String _query) {
+        String ret;
+        ret = "http://ac.map.naver.com/ac?q=" + _query +
+                "&st=10&r_lt=10&r_format=json";
+        return ret;
+    }
+
     // 일정 장소 하나 검색
     public static String createNaverSearchRequestURL(String _query) {
         String ret;
