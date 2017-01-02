@@ -171,6 +171,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     private String zoomLevel;
     private int zoomProgress;
 
+    private FragmentMapview naverFragment;
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
@@ -493,7 +494,10 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                         searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                                if(naverFragment != null)
+                                    naverFragment.findAndDrawRoot();
+                                else
+                                    Toast.makeText(MixView.this, "지도가 될때까지 기다려주세요.", Toast.LENGTH_SHORT).show();
                             }
                         });
                         //searchList = dataConvertor.load(rawData, DataSource.DATASOURCE.SEARCH, DataSource.DATAFORMAT.NAVER_SEARCH);
@@ -539,7 +543,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             mainArView.findViewById(R.id.ar_mixview_category).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                 }
             });
             mainArView.findViewById(R.id.ar_mixview_write_review).setOnClickListener(new View.OnClickListener() {
@@ -573,10 +576,10 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                     }
                 }
             });
-            
+
             // 네이버 지도 추가
-            // TODO: 2016. 12. 31. 배율 높이기 네이버 위치 리스너 만들기. 
-            Fragment naverFragment = new FragmentMapview();
+            // TODO: 2016. 12. 31. 배율 높이기 네이버 위치 리스너 만들기.
+            naverFragment = new FragmentMapview();
             naverFragment.setArguments(new Bundle());
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fm.beginTransaction();
