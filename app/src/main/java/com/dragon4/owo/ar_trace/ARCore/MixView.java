@@ -475,6 +475,8 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                                 searchList = dataConvertor.load(searchRawData, DataSource.DATASOURCE.SEARCH, DataSource.DATAFORMAT.NAVER_SEARCH);
                                 Log.i("search Log", searchList.toString());
 
+                                // TODO: 2017. 1. 3.
+
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             } catch (InterruptedException e) {
