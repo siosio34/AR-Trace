@@ -271,8 +271,6 @@ public class DataView {
                 state.nextLStatus = MixState.DONE;    // 다음 상태는 완료 상태로
 
 
-            //state.downloadId = mixContext.getDownloader().submitJob(request);
-
 
         } else if (state.nextLStatus == MixState.PROCESSING) {    // 처리중인 상태일 경우
             // 컨텍스트로부터 다운로드 관리자를 읽어옴

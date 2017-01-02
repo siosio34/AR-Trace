@@ -26,9 +26,7 @@ public class NaverSearchDataProcessor implements DataProcessor {
         JSONObject root = convertToJSON(rawData);
         JSONArray dataArray = null;
 
-        if(root.getJSONObject("result").getJSONObject("site").has("list")) {
-            dataArray = root.getJSONObject("result").getJSONObject("site").getJSONArray("list");
-        }
+        dataArray = root.getJSONArray("items");
 
         if(dataArray == null) {
             Log.i("Naver Search Error",": data nothing");
@@ -52,18 +50,17 @@ public class NaverSearchDataProcessor implements DataProcessor {
     private ARMarker processSearchJsonObject(JSONObject jo, DataSource.DATASOURCE datasource) throws JSONException {
 
         ARMarker marker = null;
-        String id = jo.getString("id");
-        String naverWebLink = "http://map.naver.com/local/siteview.nhn?code=" + id.substring(1);
+        String naverWebLink = jo.getString("link");
 
-        marker = new SocialARMarker(jo.getString("name"),
-                jo.getDouble("y"),
-                jo.getDouble("x"),
+        marker = new SocialARMarker(jo.getString("title"),
+                jo.getDouble("mapx"),
+                jo.getDouble("mapy"),
                 0,
                 naverWebLink,
                 datasource,
                 datasource.toString());
 
-        marker.setID(jo.getString("id"));
+       // marker.setID(jo.getString("id"));
         return marker;
     }
 

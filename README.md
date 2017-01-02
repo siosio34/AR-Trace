@@ -20,6 +20,7 @@
 
     - mixare -> AR-Engine Open Source , http://www.mixare.org/
     - naver API -> Naver Open API , https://developers.naver.com/
+    - typekit -> typo API , https://github.com/tsengvn/typekit
 
 # Copyright
 ![alt AR-Trace](https://github.com/siosio34/AR-Trace/blob/master/docs/ar_trace_profile.png)

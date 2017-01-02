@@ -18,6 +18,8 @@ public class NaverNaviDataProcessor implements DataProcessor {
         return null;
     }
 
+
+
     private JSONObject convertToJSON(String rawData){
         try {
             return new JSONObject(rawData);

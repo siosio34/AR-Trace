@@ -37,6 +37,9 @@ public class HttpHandler extends AsyncTask<String, Void, String> {
         String urlStr = params[0];
         HttpURLConnection conn = null;
 
+        String clientId = "FUYe3rcT2vNtJtk4aoK2";//애플리케이션 클라이언트 아이디값";
+        String clientSecret = "FgMzaRVgqt";//애플리케이션 클라이언트 시크릿값";
+
         if (urlStr.startsWith("file:\\")) ;
         // TODO: 2016. 10. 2. 파일에서 읽어올경우 처리해야됨
 
@@ -82,21 +85,21 @@ public class HttpHandler extends AsyncTask<String, Void, String> {
         try {
 
             url = new URL(urlStr);
-
             conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(10000);
             conn.setConnectTimeout(10000);
             conn.setRequestMethod("GET");
+            conn.setRequestProperty("X-Naver-Client-Id", clientId);
+            conn.setRequestProperty("X-Naver-Client-Secret", clientSecret);
             conn.setDoInput(true);
             conn.connect();
 
             int responseCode = conn.getResponseCode();
             Log.i("ResponseCode : ", Integer.toString(responseCode));
 
-
             InputStream in = new BufferedInputStream(conn.getInputStream());
             responseStr = convertStreamToString(in);
-
+            Log.i("Response String", responseStr);
 
         } catch (MalformedURLException e) {
             Log.e(TAG, "MalformedURLException: " + e.getMessage());
