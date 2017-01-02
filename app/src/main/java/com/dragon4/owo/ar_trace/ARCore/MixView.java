@@ -84,6 +84,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dragon4.owo.ar_trace.ARCore.data.DataHandler;
 import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
@@ -471,14 +472,25 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
 
                         Log.i("dataArray",dataArray.toString());
 
+                        if (charSequence.length()>0 && charSequence.subSequence(charSequence.length()-1, charSequence.length()).toString().equalsIgnoreCase("\n")) {
+
+                            String searchURL = DataSource.createNaverSearchRequestURL(queryString);
+                            String searchRawData = new HttpHandler().execute(searchURL).get();
+                            searchList = dataConvertor.load(searchRawData, DataSource.DATASOURCE.SEARCH, DataSource.DATAFORMAT.NAVER_SEARCH);
+                            Log.i("search Log", searchList.toString());
+                            //DataSource.DATASOURCE datasource = DataSource.DATASOURCE.SEARCH;
+                            //dataView.requestData(DataSource.createNaverSearchRequestURL(queryString), DataSource.dataFormatFromDataSource(datasource), datasource);
+
+                        }
+
                         //searchList = dataConvertor.load(rawData, DataSource.DATASOURCE.SEARCH, DataSource.DATAFORMAT.NAVER_SEARCH);
-                       // Log.i("searchList1","악");
-//
-                       // if(searchList != null) {
-                       //     for (int num = 0; num < searchList.size(); num++) {
-                       //         Log.i("searchList", searchList.get(num).getTitle());
-                       //     }
-                       // }
+                        //Log.i("searchList1","악");
+                        //
+                        //if(searchList != null) {
+                        //    for (int num = 0; num < searchList.size(); num++) {
+                        //        Log.i("searchList", searchList.get(num).getTitle());
+                        //    }
+                        //}
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -492,11 +504,12 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
 
 
                     //enter key 입력된 경우랍니다
-                    if(charSequence.length() > 0 && charSequence.subSequence(charSequence.length()-1, charSequence.length()).toString().equalsIgnoreCase("\n")) {
-                        DataSource.DATASOURCE datasource = DataSource.DATASOURCE.SEARCH;
-                        dataView.requestData(DataSource.createNaverSearchRequestURL(queryString), DataSource.dataFormatFromDataSource(datasource), datasource);
-
-                    }
+                    //if(charSequence.length() > 0 && charSequence.subSequence(charSequence.length()-1, charSequence.length()).toString().equalsIgnoreCase("\n")) {
+                    //    DataSource.DATASOURCE datasource = DataSource.DATASOURCE.SEARCH;
+                    //    String searchURL = DataSource.createNaverSearchRequestURL(queryString);
+                    //    dataView.requestData(DataSource.createNaverSearchRequestURL(queryString), DataSource.dataFormatFromDataSource(datasource), datasource);
+//
+                    //}
                 }
 
                 @Override
@@ -637,37 +650,31 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
         handleIntent(intent);
     }
 
-    // 검색 버튼을 눌렀을 경우 수행될 검색
-    //private void doMixSearch(String query) {
-    //    DataHandler jLayer = dataView.getDataHandler();    // 데이터 핸들러 등록
-//
-    //    // 데이터 뷰가 얼어있지 않다면 리스트뷰와 맵으로부터 마커 리스트를 읽는다
-    //    if (!dataView.isFrozen()) {
-    //        // MixListView.originalMarkerList = jLayer.getMarkerList();
-//
-    //    }
-//
-    //    // 검색 결과를 저장 할 리스트
-    //    ArrayList<ARMarker> searchResults = new ArrayList<ARMarker>();
-//
-    //    // 검색된 항목이 1개 이상 있을 경우
-    //    if (jLayer.getMarkerCount() > 0) {
-    //        // 검색된 항목들을 결과 리스트에 추가
-    //        for (int i = 0; i < jLayer.getMarkerCount(); i++) {
-    //            ARMarker ma = jLayer.getMarker(i);
-    //            if (ma.getTitle().toLowerCase().indexOf(query.toLowerCase()) != -1) {
-    //                searchResults.add(ma);
-	//				/*타이틀에 상응하는 웹사이트들*/
-    //            }
-    //        }
-    //    }
-    //    // 결과 리스트에 하나라도 값이 있을 경우
-    //    if (searchResults.size() > 0) {
-    //        dataView.setFrozen(true);    // 데이터 뷰를 얼리고
-    //        jLayer.setMarkerList(searchResults);    // 결과를 핸들러에 할당
-    //    } else    // 결과가 없을 경우엔 토스트 출력
-    //        Toast.makeText(this, getString(DataView.SEARCH_FAILED_NOTIFICATION), Toast.LENGTH_LONG).show();
-    //}
+
+    private void doMixSearch(String query) {
+        DataHandler jLayer = dataView.getDataHandler();    // 데이터 핸들러 등록
+
+        // 검색 결과를 저장 할 리스트
+        ArrayList<ARMarker> searchResults = new ArrayList<ARMarker>();
+
+        // 검색된 항목이 1개 이상 있을 경우
+        if (jLayer.getMarkerCount() > 0) {
+            // 검색된 항목들을 결과 리스트에 추가
+            for (int i = 0; i < jLayer.getMarkerCount(); i++) {
+                ARMarker ma = jLayer.getMarker(i);
+                if (ma.getTitle().toLowerCase().indexOf(query.toLowerCase()) != -1) {
+                    searchResults.add(ma);
+    				/*타이틀에 상응하는 웹사이트들*/
+                }
+            }
+        }
+        // 결과 리스트에 하나라도 값이 있을 경우
+        if (searchResults.size() > 0) {
+            dataView.setFrozen(true);    // 데이터 뷰를 얼리고
+            jLayer.setMarkerList(searchResults);    // 결과를 핸들러에 할당
+        } else    // 결과가 없을 경우엔 토스트 출력
+            Toast.makeText(this, getString(DataView.SEARCH_FAILED_NOTIFICATION), Toast.LENGTH_LONG).show();
+    }
 
     // 중단 되었을 경우
     @Override
