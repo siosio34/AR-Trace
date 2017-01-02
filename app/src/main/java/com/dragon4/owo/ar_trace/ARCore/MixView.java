@@ -68,17 +68,25 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.*;
 import android.view.KeyEvent;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -431,8 +439,10 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             final LinearLayout parentButtonView = (LinearLayout)mainArView.findViewById(R.id.ar_mixview_parent_buttonview);
             final LinearLayout searchbar = (LinearLayout)mainArView.findViewById(R.id.ar_mixview_searchbar);
             final Button hideSearchbar = (Button)mainArView.findViewById(R.id.ar_mixview_hide_searchbar);
+            final ListView searchListView = (ListView)mainArView.findViewById(R.id.ar_mixview_search_list);
 
-            mainArView.findViewById(R.id.ar_mixview_search).setOnClickListener(new View.OnClickListener() {
+            Button searchBtn = (Button)mainArView.findViewById(R.id.ar_mixview_search);
+            searchBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                 parentButtonView.setVisibility(View.GONE);
@@ -449,7 +459,39 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
 
             final DataConvertor dataConvertor = new DataConvertor();
 
+
             final EditText searchText = (EditText)mainArView.findViewById(R.id.ar_mixview_search_text);
+            searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    switch (actionId) {
+                        case EditorInfo.IME_ACTION_SEARCH:
+                            String queryString = searchText.getText().toString();
+                            try {
+                                List<ARMarker> searchList = null;
+                                String encodedQueryString = URLEncoder.encode(queryString,"UTF-8");
+                                String searchURL = DataSource.createNaverSearchRequestURL(encodedQueryString);
+                                String searchRawData = new HttpHandler().execute(searchURL).get();
+                                searchList = dataConvertor.load(searchRawData, DataSource.DATASOURCE.SEARCH, DataSource.DATAFORMAT.NAVER_SEARCH);
+                                Log.i("search Log", searchList.toString());
+
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            }
+
+                            break;
+                        default:
+                            Toast.makeText(getApplicationContext(), "기본", Toast.LENGTH_LONG).show();
+                            return false;
+                    }
+                    return true;
+                }
+            });
+
             TextWatcher watcher = new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -469,19 +511,36 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
 
                         JSONObject root = new JSONObject(rawData);
                         JSONArray dataArray = root.getJSONArray("items");
+                        JSONArray locationData = dataArray.getJSONArray(0);
 
-                        Log.i("dataArray",dataArray.toString());
+                        Log.i("dataArray",locationData.toString());
 
-                        if (charSequence.length()>0 && charSequence.subSequence(charSequence.length()-1, charSequence.length()).toString().equalsIgnoreCase("\n")) {
+                        ArrayList<String> list = new ArrayList<>();
+                        for(int index=0; index<locationData.length(); index++)
+                            list.add(locationData.getString(index).substring(2, locationData.getString(index).length()-2));
 
-                            String searchURL = DataSource.createNaverSearchRequestURL(queryString);
-                            String searchRawData = new HttpHandler().execute(searchURL).get();
-                            searchList = dataConvertor.load(searchRawData, DataSource.DATASOURCE.SEARCH, DataSource.DATAFORMAT.NAVER_SEARCH);
-                            Log.i("search Log", searchList.toString());
+                        SearchViewAdapter adapter = new SearchViewAdapter();
+                        adapter.setDataList(list);
+                        adapter.setCurrentText(charSequence.toString());
+                        searchListView.setAdapter(adapter);
+                        searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                            }
+                        });
+
+
+                        if (charSequence.length() > 0 && charSequence.subSequence(charSequence.length()-1, charSequence.length()).toString().equalsIgnoreCase("\n")) {
+
+
                             //DataSource.DATASOURCE datasource = DataSource.DATASOURCE.SEARCH;
                             //dataView.requestData(DataSource.createNaverSearchRequestURL(queryString), DataSource.dataFormatFromDataSource(datasource), datasource);
 
                         }
+
+                //search listview
+
 
                         //searchList = dataConvertor.load(rawData, DataSource.DATASOURCE.SEARCH, DataSource.DATAFORMAT.NAVER_SEARCH);
                         //Log.i("searchList1","악");
@@ -502,7 +561,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                         e.printStackTrace();
                     }
 
-
                     //enter key 입력된 경우랍니다
                     //if(charSequence.length() > 0 && charSequence.subSequence(charSequence.length()-1, charSequence.length()).toString().equalsIgnoreCase("\n")) {
                     //    DataSource.DATASOURCE datasource = DataSource.DATASOURCE.SEARCH;
@@ -518,42 +576,13 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                 }
             };
             searchText.addTextChangedListener(watcher);
-            /*
-            searchText.setOnKeyListener(new View.OnKeyListener() {
+            mainArView.findViewById(R.id.ar_mixview_search_erase).setOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onKey(View view, int i, KeyEvent keyEvent) {
-
-                    String queryString = searchText.getText().toString();
-                    try {
-                        List<ARMarker> searchList = null;
-                        String rawData = new HttpHandler().execute(DataSource.createNaverSearchRequestURL(queryString)).get();
-                        Log.i("rawData",rawData);
-                        searchList = dataConvertor.load(rawData, DataSource.DATASOURCE.SEARCH, DataSource.DATAFORMAT.NAVER_SEARCH);
-                        Log.i("searchList1","악");
-
-                        if(searchList != null) {
-                            for (int num = 0; num < searchList.size(); num++) {
-                                Log.i("searchList", searchList.get(num).getTitle());
-                            }
-                        }
-
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    }
-
-
-                    if(keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
-
-                        DataSource.DATASOURCE datasource = DataSource.DATASOURCE.SEARCH;
-                        dataView.requestData(DataSource.createNaverSearchRequestURL(queryString), DataSource.dataFormatFromDataSource(datasource), datasource);
-
-                    }
-                    return false;
+                public void onClick(View view) {
+                    searchText.setText("");
                 }
             });
-            */
+
             mainArView.findViewById(R.id.ar_mixview_category).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -633,6 +662,101 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
        // registerReceiver(naviRecevicer, naviBraodFilter);
 
     }
+
+    private class SearchViewAdapter extends BaseAdapter {
+        private ArrayList<String> dataList = new ArrayList<>();
+        private String currentText;
+
+        @Override
+        public int getCount() {
+            return dataList.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return dataList.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            LayoutInflater inflater = MixView.this.getLayoutInflater();
+            view = inflater.inflate(R.layout.layout_search_item, null);
+            TextView searchItem = (TextView)view.findViewById(R.id.search_item);
+
+            String data = dataList.get(i);
+            int index = data.indexOf(currentText);
+
+            if(index != -1) {
+                SpannableStringBuilder builder = new SpannableStringBuilder();
+
+                String before = data.substring(0, index);
+                SpannableString beforeSpannable = new SpannableString(before);
+                beforeSpannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0, before.length(), 0);
+                builder.append(beforeSpannable);
+
+                String current = data.substring(index, index + currentText.length());
+                SpannableString currentSpannable = new SpannableString(current);
+                currentSpannable.setSpan(new ForegroundColorSpan(Color.parseColor("#88C290")), 0, current.length(), 0);
+                builder.append(currentSpannable);
+
+                String after = data.substring(index + currentText.length(), data.length());
+                SpannableString afterSpannable = new SpannableString(after);
+                afterSpannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0, after.length(), 0);
+                builder.append(afterSpannable);
+
+                searchItem.setText(builder, TextView.BufferType.SPANNABLE);
+
+                return view;
+            }
+
+            String currentTextNoSpace = currentText.replaceAll(" ", "");
+            index = data.indexOf(currentTextNoSpace);
+
+            if(index != -1) {
+                SpannableStringBuilder builder = new SpannableStringBuilder();
+
+                String before = data.substring(0, index);
+                SpannableString beforeSpannable = new SpannableString(before);
+                beforeSpannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0, before.length(), 0);
+                builder.append(beforeSpannable);
+
+                String current = data.substring(index, index + currentTextNoSpace.length());
+                SpannableString currentSpannable = new SpannableString(current);
+                currentSpannable.setSpan(new ForegroundColorSpan(Color.parseColor("#88C290")), 0, current.length(), 0);
+                builder.append(currentSpannable);
+
+                String after = data.substring(index + currentTextNoSpace.length(), data.length());
+                SpannableString afterSpannable = new SpannableString(after);
+                afterSpannable.setSpan(new ForegroundColorSpan(Color.BLACK), 0, after.length(), 0);
+                builder.append(afterSpannable);
+
+                searchItem.setText(builder, TextView.BufferType.SPANNABLE);
+
+                return view;
+            }
+
+            searchItem.setText(data);
+            return view;
+        }
+
+        public void setDataList(ArrayList<String> dataList) {
+            this.dataList = dataList;
+        }
+
+        public String getCurrentText() {
+            return currentText;
+        }
+
+        public void setCurrentText(String currentText) {
+            this.currentText = currentText;
+        }
+    };
+
 
     // 인텐트 제어
     private void handleIntent(Intent intent) {

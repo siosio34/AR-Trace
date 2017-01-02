@@ -229,10 +229,9 @@ public class DataSource {
     // 일정 장소 하나 검색
     public static String createNaverSearchRequestURL(String _query) {
         String ret;
-        ret = "http://map.naver.com/search2/local.nhn?sm=hty&" +
+        ret = "https://openapi.naver.com/v1/search/local.json?" +
                 "query=" + _query +
-                "&isFirstSearch=" + "true" +
-                "&menu=location";
+                "&display=10&start=1&sort=random";
 
         Log.i("검색 url test",ret);
 
@@ -263,8 +262,6 @@ public class DataSource {
 
 
      */
-
-
 
     // 각 소스에 따른 색을 리턴
     public static int getColor(DATASOURCE datasource) {

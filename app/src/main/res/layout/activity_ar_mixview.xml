@@ -29,30 +29,42 @@
             android:layout_height="50dp"
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
-            android:layout_gravity="center_vertical"
             android:background="@drawable/icon_back"/>
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginRight="30dp"
-            android:layout_gravity="center_vertical">
-            <EditText
-                android:id="@+id/ar_mixview_search_text"
+            android:orientation="vertical">
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:background="#BBFFFFFF"
-                android:inputType="textNoSuggestions"
-                android:layout_centerInParent="true"/>
-            <Button
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_centerInParent="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="6dp"
-                android:background="@drawable/icon_erase_all"/>
-        </RelativeLayout>
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="30dp">
+                <EditText
+                    android:id="@+id/ar_mixview_search_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:background="#BBFFFFFF"
+                    android:imeOptions="actionSearch"
+                    android:inputType="textNoSuggestions"
+                    android:layout_centerInParent="true"
+                    android:textSize="20dp"/>
+                <Button
+                    android:id="@+id/ar_mixview_search_erase"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="6dp"
+                    android:background="@drawable/icon_erase_all"/>
+            </RelativeLayout>
+            <ListView
+                android:id="@+id/ar_mixview_search_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
