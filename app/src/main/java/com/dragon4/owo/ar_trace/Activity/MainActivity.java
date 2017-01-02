@@ -27,11 +27,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(com.dragon4.owo.ar_trace.R.layout.activity_main);
-        Typekit.getInstance()
-                .addNormal(Typekit.createFromAsset(this, "NanumBarunpenB.ttf"))
-                .addBold(Typekit.createFromAsset(this, "NanumBarunpenB.ttf"))
-                .addItalic(Typekit.createFromAsset(this, "NanumBarunpenB.ttf"))
-                .addBoldItalic(Typekit.createFromAsset(this, "NanumBarunpenB.ttf"));
     }
 
     private void checkAndRequestPermission() {
@@ -62,10 +57,5 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 }
