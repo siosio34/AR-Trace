@@ -588,8 +588,18 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             mainArView.findViewById(R.id.ar_mixview_category).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    mainArView.findViewById(R.id.ar_mixview_parent_buttonview).setVisibility(View.GONE);
+                    mainArView.findViewById(R.id.ar_mixview_parent_categoryview).setVisibility(View.VISIBLE);
                 }
             });
+            mainArView.findViewById(R.id.ar_mixview_category_hide).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mainArView.findViewById(R.id.ar_mixview_parent_categoryview).setVisibility(View.GONE);
+                    mainArView.findViewById(R.id.ar_mixview_parent_buttonview).setVisibility(View.VISIBLE);
+                }
+            });
+
             mainArView.findViewById(R.id.ar_mixview_write_review).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
