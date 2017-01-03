@@ -56,6 +56,8 @@ public class FragmentMapview extends Fragment {
     private static final String LOG_TAG = "NMapViewer";
     private static final boolean DEBUG = false;
 
+    public static FragmentMapview naverMapView;
+
     private LinearLayout mMapContainer;
     private NMapContext mMapContext;
     private NMapView mMapView;
@@ -71,6 +73,7 @@ public class FragmentMapview extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        naverMapView = this;
         return inflater.inflate(R.layout.fragment_map_view, container, false);
     }
 
@@ -849,61 +852,65 @@ public class FragmentMapview extends Fragment {
             "  }\n" +
             "}";
 
-    public void findAndDrawRoot() {
-        if (currentLocation != null) {
-            double lat = currentLocation.getLatitude();
-            double lon = currentLocation.getLongitude();
-
+    public void findAndDrawRoot(final String naviJson) {
             //find location
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (currentLocation != null) {
+                        double lat = currentLocation.getLatitude();
+                        double lon = currentLocation.getLongitude();
 
-            try {
-                JSONObject test = new JSONObject(testJSON);
-                JSONObject result = test.getJSONObject("result");
-                JSONArray route = result.getJSONArray("route");
-                JSONObject start = route.getJSONObject(0).getJSONArray("point").getJSONObject(0);
-                JSONObject end = route.getJSONObject(route.length()-1).getJSONArray("point").getJSONObject(0);
+                        try {
+                            JSONObject test = new JSONObject(naviJson);
+                            JSONObject result = test.getJSONObject("result");
+                            JSONArray route = result.getJSONArray("route");
+                            JSONObject start = route.getJSONObject(0).getJSONArray("point").getJSONObject(0);
+                            JSONObject end = route.getJSONObject(route.length() - 1).getJSONArray("point").getJSONObject(0);
 
-                int markerId = NMapPOIflagType.PIN;
-                NMapPOIdata poIdata = new NMapPOIdata(2, mMapViewerResourceProvider);
+                            int markerId = NMapPOIflagType.PIN;
+                            NMapPOIdata poIdata = new NMapPOIdata(2, mMapViewerResourceProvider);
 
-                poIdata.beginPOIdata(2);
-                poIdata.addPOIitem(start.getInt("x"), start.getInt("y"), "출발지", NMapPOIflagType.FROM, 0);
-                poIdata.addPOIitem(end.getInt("x"), end.getInt("y"), "도착지", NMapPOIflagType.TO, 0);
+                            poIdata.beginPOIdata(2);
+                            poIdata.addPOIitem(start.getInt("x"), start.getInt("y"), "출발지", NMapPOIflagType.FROM, 0);
+                            poIdata.addPOIitem(end.getInt("x"), end.getInt("y"), "도착지", NMapPOIflagType.TO, 0);
 
-                poIdata.endPOIdata();
+                            poIdata.endPOIdata();
 
-                //create POI data overlay
-                NMapPOIdataOverlay poIdataOverlay = mOverlayManager.createPOIdataOverlay(poIdata, null);
+                            //create POI data overlay
+                            NMapPOIdataOverlay poIdataOverlay = mOverlayManager.createPOIdataOverlay(poIdata, null);
 
-                //show all POI data
-                //poIdataOverlay.showAllPOIdata(0);
+                            //show all POI data
+                            //poIdataOverlay.showAllPOIdata(0);
 
-                //set event listener to the overlay
-                //poIdataOverlay.setOnStateChangeListener(onPOIdataStateChangeListener);
+                            //set event listener to the overlay
+                            //poIdataOverlay.setOnStateChangeListener(onPOIdataStateChangeListener);
 
-                //register callout overlay listener to customizeit.
-                //mOverlayManager.setOnCalloutOverlayListener(onCalloutOverlayListener);
+                            //register callout overlay listener to customizeit.
+                            //mOverlayManager.setOnCalloutOverlayListener(onCalloutOverlayListener);
 
-                //set path data points
-                NMapPathData pathData = new NMapPathData(route.length());
-                pathData.initPathData();
-                JSONArray path = route.getJSONObject(0).getJSONArray("point");
-                for (int i = 0; i < path.length(); i++) {
-                    JSONObject data = path.getJSONObject(i);
-                    pathData.addPathPoint(data.getInt("x"), data.getInt("y"), NMapPathLineStyle.TYPE_SOLID);
+                            //set path data points
+                            NMapPathData pathData = new NMapPathData(route.length());
+                            pathData.initPathData();
+                            JSONArray path = route.getJSONObject(0).getJSONArray("point");
+                            for (int i = 0; i < path.length(); i++) {
+                                JSONObject data = path.getJSONObject(i);
+                                pathData.addPathPoint(data.getInt("x"), data.getInt("y"), NMapPathLineStyle.TYPE_SOLID);
+                            }
+                            pathData.addPathPoint(end.getInt("x"), end.getInt("y"), NMapPathLineStyle.TYPE_DASH);
+                            pathData.endPathData();
+                            NMapPathDataOverlay pathDataOverlay = mOverlayManager.createPathDataOverlay(pathData);
+
+                            pathDataOverlay.showAllPathData(0);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else
+                        Toast.makeText(getContext(), "현재 위치를 알 수 없습니다.", Toast.LENGTH_SHORT).show();
                 }
-                pathData.addPathPoint(end.getInt("x"), end.getInt("y"), NMapPathLineStyle.TYPE_DASH);
-                pathData.endPathData();
-                NMapPathDataOverlay pathDataOverlay = mOverlayManager.createPathDataOverlay(pathData);
+            });
 
-                pathDataOverlay.showAllPathData(0);
-            }
-            catch(JSONException e){
-                e.printStackTrace();
-            }
-        }
-        else
-            Toast.makeText(getContext(), "현재 위치를 알 수 없습니다.", Toast.LENGTH_SHORT).show();
     }
 
     @Override

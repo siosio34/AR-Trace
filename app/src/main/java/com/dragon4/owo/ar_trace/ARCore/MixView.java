@@ -42,9 +42,11 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -63,6 +65,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -346,6 +349,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
         }
     }
 
+*/
     private BroadcastReceiver naviRecevicer = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -357,14 +361,11 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                     public void onClick(View v) {
                         Toast.makeText(getApplicationContext(),"네비게이션을 종료합니다.",Toast.LENGTH_SHORT).show();
                         MixState.enterNaviEnd = true;
-
                     }
                 }).show();
             }
         }
     };
-    */
-
 
     // 뷰 생성시
     @Override
@@ -529,10 +530,10 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                         searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                if(naverFragment != null)
-                                    naverFragment.findAndDrawRoot();
-                                else
-                                    Toast.makeText(MixView.this, "지도가 될때까지 기다려주세요.", Toast.LENGTH_SHORT).show();
+                               // if(naverFragment != null)
+                               //     naverFragment.findAndDrawRoot();
+                               // else
+                               //     Toast.makeText(MixView.this, "지도가 될때까지 기다려주세요.", Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -662,9 +663,9 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             doError(ex);    // 예외 발생시 에러 처리
         }
 
-       // IntentFilter naviBraodFilter = new IntentFilter();
-       // naviBraodFilter.addAction("NAVI");
-       // registerReceiver(naviRecevicer, naviBraodFilter);
+        IntentFilter naviBraodFilter = new IntentFilter();
+        naviBraodFilter.addAction("NAVI");
+        registerReceiver(naviRecevicer, naviBraodFilter);
 
     }
 
