@@ -37,9 +37,6 @@ package com.dragon4.owo.ar_trace.ARCore;
  */
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
@@ -66,7 +63,6 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -82,7 +78,6 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -90,6 +85,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -191,6 +187,9 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
 
     // 내부 저장공간에 저장될 프레퍼런스에 쓰일 이름
     public static final String PREFS_NAME = "MyPrefsFileForMenuItems";
+
+    //리뷰를 위한 팝업뷰
+    PopupWindow mPopupWindow;
 
     // GPS 사용이 가능한지 여부를 리턴
     public boolean isGpsEnabled() {
@@ -608,7 +607,33 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             mainArView.findViewById(R.id.ar_mixview_write_review).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    final View popupView = getLayoutInflater().inflate(R.layout.layout_ar_mixview_write_review, null);
+                    popupView.findViewById(R.id.ar_mixview_write_review_back).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            mPopupWindow.dismiss();
+                            mPopupWindow = null;
+                        }
+                    });
 
+                    final ImageView middleImg = (ImageView)popupView.findViewById(R.id.ar_mixview_write_review_middle_img);
+                    popupView.findViewById(R.id.ar_mixview_write_review_axis).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            middleImg.setImageResource(R.drawable.icon_rhombus_left_chosen);
+                        }
+                    });
+
+                    popupView.findViewById(R.id.ar_mixview_write_review_location).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            middleImg.setImageResource(R.drawable.icon_rhombus_right_chosen);
+                        }
+                    });
+
+                    mPopupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+                    mPopupWindow.setFocusable(true);
+                    mPopupWindow.showAtLocation(popupView, Gravity.TOP, 0, 0);
                 }
             });
 
