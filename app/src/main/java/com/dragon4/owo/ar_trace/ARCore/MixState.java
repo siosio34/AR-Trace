@@ -28,6 +28,7 @@ import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.ARCore.reality.PhysicalPlace;
 import com.dragon4.owo.ar_trace.ARCore.render.Matrix;
 import com.dragon4.owo.ar_trace.ARCore.render.MixVector;
+import com.dragon4.owo.ar_trace.NaverMap.FragmentMapview;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -100,6 +101,7 @@ public class MixState {
                                             String result = "";
                                             String guide = "";
                                             result = new HttpHandler().execute(url).get();
+                                            FragmentMapview.naverMapView.findAndDrawRoot(result);
                                             guide = parsingNaverNaviJson(result);
 
                                             if (!guide.equals("end")) {
