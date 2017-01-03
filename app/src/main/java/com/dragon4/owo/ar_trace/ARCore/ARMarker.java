@@ -31,8 +31,6 @@ import com.dragon4.owo.ar_trace.ARCore.render.Camera;
 import com.dragon4.owo.ar_trace.ARCore.render.MixVector;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 
 // 화면에 찍힐 마커를 담당할 클래스. Comparable 구현

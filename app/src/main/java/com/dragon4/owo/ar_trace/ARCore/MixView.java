@@ -37,9 +37,6 @@ package com.dragon4.owo.ar_trace.ARCore;
  */
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
@@ -66,7 +63,6 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -82,12 +78,10 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -285,6 +279,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     }
 
     /*
+
     public void navercategoryClicked(View v) throws ExecutionException, InterruptedException {
 
         if (dataView.isFrozen())
@@ -347,9 +342,9 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             mixContext.toogleDataSource(datasource);
             //mixContext.setDataSource(datasource,true);
         }
-    }
+    } */
 
-*/
+
     private BroadcastReceiver naviRecevicer = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
