@@ -49,6 +49,7 @@ public class DataSource {
     public static Bitmap bankIcon; // 은행
     public static Bitmap hospitalIcon; //병원
     public static Bitmap accommodationIcon; // 숙박
+
     public static Bitmap documentIcon;
     public static Bitmap imageIcon;
     public static Bitmap videoIcon;
@@ -62,13 +63,13 @@ public class DataSource {
     // 리소스로부터 각 아이콘 생성
     public static void createIcons(Resources res) {
 
-        cafeIcon = BitmapFactory.decodeResource(res, R.drawable.icon_cafe);
-       // busIcon = BitmapFactory.decodeResource(res,R.drawable.icon_metro);
-       // restraurantIcon = BitmapFactory.decodeResource(res,R.drawable.icon_cafe);
-       // convenienceIcon = BitmapFactory.decodeResource(res,R.drawable.icon_convenition);
-       // bankIcon = BitmapFactory.decodeResource(res,R.drawable.icon_bank);
-       // hospitalIcon = BitmapFactory.decodeResource(res,R.drawable.icon_hospital);
-       // accommodationIcon = BitmapFactory.decodeResource(res,R.drawable.icon_hotel);
+        cafeIcon = BitmapFactory.decodeResource(res, R.drawable.ic_ar_cafe);
+        busIcon = BitmapFactory.decodeResource(res,R.drawable.ic_ar_bus);
+        restraurantIcon = BitmapFactory.decodeResource(res,R.drawable.ic_ar_cafe);
+        convenienceIcon = BitmapFactory.decodeResource(res,R.drawable.ic_ar_convenience_store);
+        bankIcon = BitmapFactory.decodeResource(res,R.drawable.ic_ar_bank);
+        hospitalIcon = BitmapFactory.decodeResource(res,R.drawable.ic_ar_hospital);
+        accommodationIcon = BitmapFactory.decodeResource(res,R.drawable.ic_ar_lodgment);
 //
        // // TODO: 2016. 12. 11. icon 들 변경해야됨...
        // // 이미지 영상, 비디오 이미지 구해야됨 크기는 40 * 60 정도

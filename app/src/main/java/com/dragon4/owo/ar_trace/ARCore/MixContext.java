@@ -117,7 +117,7 @@ public class MixContext extends ContextWrapper {
         // (위키피디아는 기본 데이터 소스로 한다)
 
         if (!atLeastOneDatasourceSelected)
-            setDataSource(DataSource.DATASOURCE.CAFE, true);
+        //    setDataSource(DataSource.DATASOURCE.CAFE, true);
 
         // 가장 기본
 

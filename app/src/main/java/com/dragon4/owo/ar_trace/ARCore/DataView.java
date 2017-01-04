@@ -251,7 +251,6 @@ public class DataView {
             else {
                 // 현재의 위치로부터 위도, 경도, 고도 값을 읽고
                 double lat = curFix.getLatitude(), lon = curFix.getLongitude(), alt = curFix.getAltitude();
-                int i = 0;
 
                 // 각각의 데이터 소스들 모두에 적용
                 for (DataSource.DATASOURCE source : DataSource.DATASOURCE.values()) {
@@ -261,7 +260,7 @@ public class DataView {
                             Log.i("데이터소스", source.toString());
                             Toast.makeText(mixContext, "... 데이터 받는 중 ...", Toast.LENGTH_SHORT).show();
                     }
-                    i++;
+
                 }
 
             }
@@ -317,19 +316,20 @@ public class DataView {
         for (int i = dataHandler.getMarkerCount() - 1; i >= 0; i--) {
             ARMarker ma = dataHandler.getMarker(i);
 
-            //  && (ma.getDistance() / 1000f < radius) 아래거에넣어야됨
-            if (ma.isActive()) {
-                // 성능을 향상시키기 위해, 모든 마커의 위치를 드로우 호출시마다 재계산하진 않는다
-                // 대신, 위치가 바뀌었을 경우와 새로운 마커를 다운로드 한 이후에
-                // 각 마커의 위치를 재계산 하도록 한다
 
-                //if (!frozen)
-                //	ma.update(curFix);
-                if (!frozen) {
-                    ma.calcPaint(cam, addX, addY, ma.datasource);
+                if (ma.isActive() && (ma.getDistance() / 1000f < radius)) {
+                    // 성능을 향상시키기 위해, 모든 마커의 위치를 드로우 호출시마다 재계산하진 않는다
+                    // 대신, 위치가 바뀌었을 경우와 새로운 마커를 다운로드 한 이후에
+                    // 각 마커의 위치를 재계산 하도록 한다
+
+                    //if (!frozen)
+                    //	ma.update(curFix);
+                    if (!frozen) {
+                        ma.calcPaint(cam, addX, addY, ma.datasource);
+                    }
+                    ma.draw(dw);
                 }
-                ma.draw(dw);
-            }
+
         }
 
 

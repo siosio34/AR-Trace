@@ -86,21 +86,25 @@
                 android:id="@+id/ar_mixview_search"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/icon_search"/>
             <Button
                 android:id="@+id/ar_mixview_category"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/icon_category"/>
             <Button
                 android:id="@+id/ar_mixview_write_review"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/icon_write_review"/>
             <Button
                 android:id="@+id/ar_mixview_review_onoff"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/icon_others_review_off"/>
         </LinearLayout>
         <Button
@@ -122,46 +126,50 @@
             android:id="@+id/ar_mixview_category_hide"
             android:layout_width="18dp"
             android:layout_height="50dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginRight="10dp"
             android:background="@drawable/icon_back"/>
         <LinearLayout
             android:id="@+id/ar_mixview_categoryview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <Button
-                android:id="@+id/ar_mixview_bus"
-                style="@style/CategoryView"
-                android:background="@drawable/icon_bus"/>
-            <Button
-                android:id="@+id/ar_mixview_restaurant"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/icon_restaurant"/>
+
             <Button
                 android:id="@+id/ar_mixview_cafe"
                 style="@style/CategoryView"
                 android:background="@drawable/icon_cafe"/>
             <Button
-                android:id="@+id/ar_mixview_lodgment"
+                android:id="@+id/ar_mixview_bus"
                 style="@style/CategoryView"
-                android:background="@drawable/icon_lodgment"/>
+                android:background="@drawable/icon_bus"/>
             <Button
-                android:id="@+id/ar_mixview_hospital"
+                android:id="@+id/ar_mixview_convenience_store"
                 style="@style/CategoryView"
-                android:background="@drawable/icon_hospital"/>
+                android:background="@drawable/icon_convenience_store"/>
+            <Button
+                android:id="@+id/ar_mixview_restaurant"
+                style="@style/CategoryView"
+                android:background="@drawable/icon_restaurant"/>
             <Button
                 android:id="@+id/ar_mixview_bank"
                 style="@style/CategoryView"
                 android:background="@drawable/icon_bank"/>
             <Button
+                android:id="@+id/ar_mixview_hospital"
+                style="@style/CategoryView"
+                android:background="@drawable/icon_hospital"/>
+
+            <Button
+                android:id="@+id/ar_mixview_lodgment"
+                style="@style/CategoryView"
+                android:background="@drawable/icon_lodgment"/>
+
+            <Button
                 android:id="@+id/ar_mixview_mart"
                 style="@style/CategoryView"
                 android:background="@drawable/icon_mart"/>
-            <Button
-                android:id="@+id/ar_mixview_convenience_store"
-                style="@style/CategoryView"
-                android:background="@drawable/icon_convenience_store"/>
+
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

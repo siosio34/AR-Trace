@@ -22,7 +22,6 @@ package com.dragon4.owo.ar_trace.ARCore.data;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 

@@ -8,4 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="CategoryView">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:onClick">navercategoryClicked</item>
+    </style>
+
+
+
 </resources>

@@ -12,6 +12,6 @@ import java.util.List;
  */
 
 public interface DataProcessor {
-    List<ARMarker> load(String rawData, DataSource.DATASOURCE dataformat) throws JSONException;
+    List<ARMarker> load(String rawData, DataSource.DATASOURCE datasource) throws JSONException;
 
 }

@@ -114,7 +114,7 @@ public class MixState {
                                                 ctx.sendBroadcast(naviBroadReceiver);
                                                 loopThread.interrupt();
                                             }
-                                            Thread.sleep(5000);
+                                            Thread.sleep(5000); // 5초마다 갱신
 
                                         } catch (ExecutionException e) {
                                             e.printStackTrace();

@@ -82,8 +82,10 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -184,6 +186,9 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     // 내부 저장공간에 저장될 프레퍼런스에 쓰일 이름
     public static final String PREFS_NAME = "MyPrefsFileForMenuItems";
 
+    //리뷰를 위한 팝업뷰
+    PopupWindow mPopupWindow;
+
     // GPS 사용이 가능한지 여부를 리턴
     public boolean isGpsEnabled() {
         return isGpsEnabled;
@@ -276,8 +281,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
         alert.show();    // 얼럿 다이얼로그 호출
     }
 
-    /*
-
     public void navercategoryClicked(View v) throws ExecutionException, InterruptedException {
 
       //  if (dataView.isFrozen())
@@ -330,14 +333,14 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             Toast.makeText(mixContext, "지원하는 데이터소스없음", Toast.LENGTH_SHORT).show();
 
         else {
-           // Location location = mixContext.getCurrentLocation();
-          //  Log.i("로케이션 경도", String.valueOf(location.getLatitude()));
-           // dataView.requestData(DataSource.createRequestCategoryURL(datasource,location.getLatitude(),location.getLongitude(),
-         //           location.getAltitude(),20),DataSource.dataFormatFromDataSource(datasource), datasource);
-        //    //mixContext.setDataSource(datasource,true);
+             Location location = mixContext.getCurrentLocation();
+             Log.i("로케이션 경도", String.valueOf(location.getLatitude()));
+             dataView.requestData(DataSource.createRequestCategoryURL(datasource,location.getLatitude(),location.getLongitude(),
+                     location.getAltitude(),20),DataSource.dataFormatFromDataSource(datasource), datasource);
+             mixContext.setDataSource(datasource,true);
         }
     }
-    */
+
 
 
     private BroadcastReceiver naviRecevicer = new BroadcastReceiver() {
@@ -464,9 +467,9 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                                 String encodedQueryString = URLEncoder.encode(queryString,"UTF-8");
                                 String searchURL = DataSource.createNaverSearchRequestURL(encodedQueryString);
                                 String searchRawData = new HttpHandler().execute(searchURL).get();
+                                Toast.makeText(getApplicationContext(),searchRawData,Toast.LENGTH_LONG).show();
                                 searchList = dataConvertor.load(searchRawData, DataSource.DATASOURCE.SEARCH, DataSource.DATAFORMAT.NAVER_SEARCH);
-                                Log.i("search Log", searchList.toString());
-
+                                Toast.makeText(getApplicationContext(),searchList.get(0).toString(),Toast.LENGTH_LONG).show();
                                 // TODO: 2017. 1. 3.
 
                             } catch (UnsupportedEncodingException e) {
@@ -601,7 +604,33 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             mainArView.findViewById(R.id.ar_mixview_write_review).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    final View popupView = getLayoutInflater().inflate(R.layout.layout_ar_mixview_write_review, null);
+                    popupView.findViewById(R.id.ar_mixview_write_review_back).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            mPopupWindow.dismiss();
+                            mPopupWindow = null;
+                        }
+                    });
 
+                    final ImageView middleImg = (ImageView)popupView.findViewById(R.id.ar_mixview_write_review_middle_img);
+                    popupView.findViewById(R.id.ar_mixview_write_review_axis).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            middleImg.setImageResource(R.drawable.icon_rhombus_left_chosen);
+                        }
+                    });
+
+                    popupView.findViewById(R.id.ar_mixview_write_review_location).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            middleImg.setImageResource(R.drawable.icon_rhombus_right_chosen);
+                        }
+                    });
+
+                    mPopupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+                    mPopupWindow.setFocusable(true);
+                    mPopupWindow.showAtLocation(popupView, Gravity.TOP, 0, 0);
 
                 }
             });

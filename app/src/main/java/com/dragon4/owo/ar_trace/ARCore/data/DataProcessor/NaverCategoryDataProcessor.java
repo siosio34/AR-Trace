@@ -47,7 +47,8 @@ public class NaverCategoryDataProcessor implements DataProcessor{
             if (datasource != DataSource.DATASOURCE.BUSSTOP) {
                 marker = processCategoryJsonObject(getObject, datasource);
             } else {
-                marker = processBusJsonObject(getObject, datasource);
+             //   marker = processBusJsonObject(getObject, datasource);
+            //    Log.i("marker Count", marker.getTitle());
             }
             if (marker != null) {
                 markers.add(marker);
@@ -88,9 +89,10 @@ public class NaverCategoryDataProcessor implements DataProcessor{
             link += sTemp[i];
         }
 
-        webBusLink = ("http://lab.khlug.org/manapie/bus_arrival.php?station=" + link);
+        webBusLink = "http://lab.khlug.org/manapie/bus_arrival.php?station=" + link;
+        Log.i("webBusLink",webBusLink);
 
-        marker = new SocialARMarker(jo.getString("name"),
+        marker = new SocialARMarker(jo.getString("stationDisplayName"),
                 jo.getDouble("y"),
                 jo.getDouble("x"),
                 0,
@@ -98,8 +100,7 @@ public class NaverCategoryDataProcessor implements DataProcessor{
                 datasource,
                 datasource.toString());
 
-
-        marker.setID(jo.getString("id"));
+        marker.setID(jo.getString("stationID"));
         return marker;
     }
 
@@ -107,6 +108,7 @@ public class NaverCategoryDataProcessor implements DataProcessor{
 
     private JSONObject convertToJSON(String rawData){
         try {
+            Log.i("rawdata",rawData);
             return new JSONObject(rawData);
         } catch (JSONException e) {
             throw new RuntimeException(e);
