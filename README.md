@@ -27,7 +27,11 @@
 
     Youngje jo [ siosio34@nate.com ] site : https://github.com/siosio34
     Mansu KIM [ akakakakakaa@gmail.com ] site : https://github.com/akakakakakaa
-    Jihyun KIM [ wlgus0078@naver.com ] site : https://github.com/KIMgsu 
+    Jihyun KIM [ wlgus0078@naver.com ] site : https://github.com/KIMgsu
+    
+# Lisence
+    This project is licensed by GPLv3
+    
     
 
 
