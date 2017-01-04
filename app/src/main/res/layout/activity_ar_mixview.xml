@@ -131,8 +131,7 @@
             android:orientation="vertical">
             <Button
                 android:id="@+id/ar_mixview_bus"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                style="@style/CategoryView"
                 android:background="@drawable/icon_bus"/>
             <Button
                 android:id="@+id/ar_mixview_restaurant"
@@ -141,33 +140,27 @@
                 android:background="@drawable/icon_restaurant"/>
             <Button
                 android:id="@+id/ar_mixview_cafe"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                style="@style/CategoryView"
                 android:background="@drawable/icon_cafe"/>
             <Button
                 android:id="@+id/ar_mixview_lodgment"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                style="@style/CategoryView"
                 android:background="@drawable/icon_lodgment"/>
             <Button
                 android:id="@+id/ar_mixview_hospital"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                style="@style/CategoryView"
                 android:background="@drawable/icon_hospital"/>
             <Button
                 android:id="@+id/ar_mixview_bank"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                style="@style/CategoryView"
                 android:background="@drawable/icon_bank"/>
             <Button
                 android:id="@+id/ar_mixview_mart"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                style="@style/CategoryView"
                 android:background="@drawable/icon_mart"/>
             <Button
                 android:id="@+id/ar_mixview_convenience_store"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                style="@style/CategoryView"
                 android:background="@drawable/icon_convenience_store"/>
         </LinearLayout>
     </LinearLayout>
