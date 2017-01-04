@@ -118,8 +118,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     private Sensor orientationSensor;
     private SensorManager sensorMgr_ori;
 
-    public double mapLat = 0;
-    public double mapLog = 0;
     public static double gpsLat = 0;//gps에서 수시로 받아오는 값
     public static double gpsLong = 0;
 
@@ -282,52 +280,45 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
 
     public void navercategoryClicked(View v) throws ExecutionException, InterruptedException {
 
-        if (dataView.isFrozen())
-            dataView.setFrozen(false);
+      //  if (dataView.isFrozen())
+         //   dataView.setFrozen(false);
 
         DataSource.DATASOURCE datasource = null;
+
+        DataConvertor dataConvertor = new DataConvertor();
 
         // TODO: 2016. 12. 9. 다른 카테고리 추가해야된다.
         switch (v.getId()) {
 
-            case R.id.cafe:
-                datasource = DataSource.DATASOURCE.CAFE;
-                break;
-
-            case R.id.train: //
+            case R.id.ar_mixview_bus:
+                Log.i("카테고리버튼이벤트", "클릭됨");
                 datasource = DataSource.DATASOURCE.BUSSTOP;
                 break;
 
-            case R.id.restaurant:
+            case R.id.ar_mixview_restaurant: //
+                Log.i("카테고리버튼이벤트", "클릭됨");
                 datasource = DataSource.DATASOURCE.Restaurant;
                 break;
 
-            case R.id.market:
-                datasource = DataSource.DATASOURCE.Convenience;
+            case R.id.ar_mixview_cafe:
+                Log.i("카테고리버튼이벤트", "클릭됨");
+                datasource = DataSource.DATASOURCE.CAFE;
                 break;
 
-            case R.id.bank:
-                datasource  = DataSource.DATASOURCE.BANK;
-                break;
-
-            case R.id.pharmacy:
-                datasource = DataSource.DATASOURCE.HOSPITAL;
-                break;
-
-            case R.id.hotel:
+            case R.id.ar_mixview_lodgment:
                 datasource = DataSource.DATASOURCE.ACCOMMODATION;
                 break;
 
-            case R.id.document_only:
-                datasource = DataSource.DATASOURCE.DOCUMENT;
+            case R.id.ar_mixview_hospital:
+                datasource  = DataSource.DATASOURCE.HOSPITAL;
                 break;
 
-            case R.id.document_with_image:
-                datasource = DataSource.DATASOURCE.IMAGE;
+            case R.id.ar_mixview_bank:
+                datasource = DataSource.DATASOURCE.BANK;
                 break;
 
-            case R.id.document_with_video:
-                datasource = DataSource.DATASOURCE.VIDEO;
+            case R.id.ar_mixview_convenience_store:
+                datasource = DataSource.DATASOURCE.ACCOMMODATION;
                 break;
 
             default:
@@ -339,10 +330,14 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             Toast.makeText(mixContext, "지원하는 데이터소스없음", Toast.LENGTH_SHORT).show();
 
         else {
-            mixContext.toogleDataSource(datasource);
-            //mixContext.setDataSource(datasource,true);
+           // Location location = mixContext.getCurrentLocation();
+          //  Log.i("로케이션 경도", String.valueOf(location.getLatitude()));
+           // dataView.requestData(DataSource.createRequestCategoryURL(datasource,location.getLatitude(),location.getLongitude(),
+         //           location.getAltitude(),20),DataSource.dataFormatFromDataSource(datasource), datasource);
+        //    //mixContext.setDataSource(datasource,true);
         }
-    } */
+    }
+    */
 
 
     private BroadcastReceiver naviRecevicer = new BroadcastReceiver() {
@@ -600,9 +595,13 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                 }
             });
 
+
+
+
             mainArView.findViewById(R.id.ar_mixview_write_review).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
 
                 }
             });
