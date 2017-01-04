@@ -14,7 +14,7 @@
   
 # Intro Video
 
-    upload 예정
+    [![IMAGE ALT youtube](http://img.youtube.com/vi/V0eGnEXL0VQ/0.jpg)](http://www.youtube.com/watch?v=V0eGnEXL0VQ)
 
 # References 
 
