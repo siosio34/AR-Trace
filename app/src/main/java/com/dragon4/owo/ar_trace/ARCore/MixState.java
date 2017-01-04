@@ -36,6 +36,10 @@ import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
 
+/**
+ * edited by joyeongje on 2016. 12. 31..
+ */
+
 
 // 현재의 상태에 관한 클래스
 public class MixState {

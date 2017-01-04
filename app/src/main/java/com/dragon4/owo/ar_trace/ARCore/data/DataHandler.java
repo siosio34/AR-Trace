@@ -17,6 +17,10 @@
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
 
+/**
+ * edited by joyeongje on 2016. 12. 31..
+ */
+
 package com.dragon4.owo.ar_trace.ARCore.data;
 
 import java.io.Serializable;

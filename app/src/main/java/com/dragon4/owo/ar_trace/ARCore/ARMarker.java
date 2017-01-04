@@ -32,6 +32,9 @@ import com.dragon4.owo.ar_trace.ARCore.render.MixVector;
 
 import java.text.DecimalFormat;
 
+/**
+ * edited by joyeongje on 2016. 12. 31..
+ */
 
 // 화면에 찍힐 마커를 담당할 클래스. Comparable 구현
 abstract public class ARMarker implements Comparable<ARMarker> {

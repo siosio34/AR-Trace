@@ -36,6 +36,10 @@ package com.dragon4.owo.ar_trace.ARCore;
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
 
+/**
+ * edited by joyeongje,Mansu on 2016. 12. 31..
+ */
+
 
 import android.app.AlertDialog;
 import android.app.SearchManager;
