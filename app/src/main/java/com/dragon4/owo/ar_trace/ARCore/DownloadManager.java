@@ -141,18 +141,15 @@ public class DownloadManager implements Runnable {
 		result.error = true;
 		
 		try {
-			// 컨텍스트, 리퀘스트가 있고 리퀘스트의 url 이 존재할 때 
-			if(ctx!=null && request!=null && ctx.getHttpGETInputStream(request.url)!=null){
-
-				is = ctx.getHttpGETInputStream(request.url);	// 인풋 스트림에 할당
-
-				String tmp = ctx.getHttpInputString(is);	// 스트링 형태로 변환
-				DataConvertor dataConvertor = new DataConvertor();
+			// 컨텍스트, 리퀘스트가 있고 리퀘스트의 url 이 존재할 때
+			String tmp = new HttpHandler().execute(request.url).get();	// 스트링 형태로 변환
+			if(ctx != null && tmp != null){
 
 				// JSON 데이터를 로드한다
 				Log.v(MixView.TAG, "try to load JSON data");
 
 				// JSON 객체와 포맷으로 마커를 생성한다
+				DataConvertor dataConvertor = new DataConvertor();
 				List<ARMarker> ARMarkers = dataConvertor.load(tmp,request.source,request.format);
 				result.setARMarkers(ARMarkers);	// 다운로드 결과에 마커를 할당
 
@@ -162,18 +159,12 @@ public class DownloadManager implements Runnable {
 				result.error = false;
 				result.errorMsg = null;
 
-				ctx.returnHttpInputStream(is);	// 인풋 스트림을 돌려보냄(닫음)
-				is = null;
+
 			}
 		}
 		catch (Exception ex) {	// 예외 발생시에는 에러 처리를 하고
 			result.errorMsg = ex.getMessage();
 			result.errorRequest = request;	// 에러가 발생한 리퀘스트에 등록
-
-			try {	// 인풋 스트림을 닫는다
-				ctx.returnHttpInputStream(is);
-			} catch (Exception ignore) {
-			}
 
 			ex.printStackTrace();
 		}

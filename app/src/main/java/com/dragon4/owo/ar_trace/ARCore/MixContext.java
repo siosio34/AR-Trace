@@ -100,26 +100,13 @@ public class MixContext extends ContextWrapper {
 
         // 액티비티의 자체 세팅을 공유할 프레퍼런스
         SharedPreferences settings = getSharedPreferences(MixView.PREFS_NAME, 0);
-        boolean atLeastOneDatasourceSelected = false;    // 최소 하나 이상의 데이터 소스가 선택되었는지 여부
 
-        // 데이터 소스 전체를 돌며 적용
-        // 여기서 토글된 데이터 소스 다 뒤져가면서 찾는다 !
         for (DataSource.DATASOURCE source : DataSource.DATASOURCE.values()) {
             // 선택된 데이터소스의 해쉬맵을 프레퍼런스 세팅값에 따라 설정
-           selectedDataSources.put(source, settings.getBoolean(source.toString(), false));
+            selectedDataSources.put(source, settings.getBoolean(source.toString(), false));
             // 쉐어드 프리퍼런스에 해당키에 데이터가있으면 값넣어주고 아니면 false 리턴
 
-            // 한개라도 선택된 것이 있다면 플래그를 true
-            if (selectedDataSources.get(source))
-                atLeastOneDatasourceSelected = true;
         }
-        // 아무것도 선택된 것이 없을 경우 위키피디아를 선택한다
-        // (위키피디아는 기본 데이터 소스로 한다)
-
-        if (!atLeastOneDatasourceSelected)
-        //    setDataSource(DataSource.DATASOURCE.CAFE, true);
-
-        // 가장 기본
 
         // 회전행렬을 일단 단위행렬로 세팅
         rotationM.toIdentity();
@@ -210,144 +197,6 @@ public class MixContext extends ContextWrapper {
         }
     }
 
-    // GET 형식으로 데이터를 받아 인풋 스트림을 리턴한다
-    public InputStream getHttpGETInputStream(String urlStr)
-            throws Exception {
-        InputStream is = null;    // 내용을 읽어올 인풋 스트림
-        URLConnection conn = null;    // URL 과의 통신을 위한 URLConnection 객체
-
-        // 각 파일, 컨텐트, 네트워크 주소등에 따른 스트림을 읽을 준비
-        if (urlStr.startsWith("file://"))
-            return new FileInputStream(urlStr.replace("file://", ""));
-
-        if (urlStr.startsWith("content://"))
-            return getContentInputStream(urlStr, null);
-
-        // 네트워크 부분은 절차가 좀 복잡하다(SSL/TLS)
-        if (urlStr.startsWith("https://")) {
-            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
-
-            // SSL 통신용 컨텍스트
-            SSLContext context = SSLContext.getInstance("TLS");
-
-            context.init(null, new X509TrustManager[]{new X509TrustManager() {
-                public void checkClientTrusted(X509Certificate[] chain,
-                                               String authType) throws CertificateException {
-                }
-
-                public void checkServerTrusted(X509Certificate[] chain,
-                                               String authType) throws CertificateException {
-                }
-
-                public X509Certificate[] getAcceptedIssuers() {
-                    return new X509Certificate[0];
-                }
-            }}, new SecureRandom());
-
-            HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
-        }
-
-        try {
-            URL url = new URL(urlStr);    // 준비된 스트링 값으로 URL 을 생성
-            // 커넥션 설정을 한다
-            conn = url.openConnection();
-            conn.setReadTimeout(10000);
-            conn.setConnectTimeout(10000);
-
-            is = conn.getInputStream();    // 인풋 스트림으로 저장하여 리턴
-
-            return is;
-        } catch (Exception ex) {    // 예외 처리
-            try {
-                is.close();    // 인풋 스트림을 닫고
-            } catch (Exception ignore) {
-            }
-            try {    // 접속을 끊는다
-                if (conn instanceof HttpURLConnection)
-                    ((HttpURLConnection) conn).disconnect();
-            } catch (Exception ignore) {
-            }
-
-            throw ex;
-
-        }
-    }
-
-    // 네트워크의 데이터를 인풋 스트림을 스트링 형태로 리턴
-    public String getHttpInputString(InputStream is) {
-        // 인풋 스트림으로부터 데이터를 읽을 버퍼와 그에 사용될 스트링 빌더
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is), 8 * 1024);
-        StringBuilder sb = new StringBuilder();
-
-        try {
-            // 행 단위로 읽어 뒤에 개행코드를 추가한다
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {    // 모든 작업이 끝나면
-            try {
-                is.close();    // 스트림을 닫는다
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return sb.toString();    // 완성된 스트링을 리턴
-    }
-
-    // 컨텐트 인풋 스트림을 리턴
-    public InputStream getContentInputStream(String urlStr, String params)
-            throws Exception {
-        // 쿼리를 통해 컨텐트 프로바이더(CP)와 통신할 ContentResolver 객체와 커서
-        ContentResolver cr = mixView.getContentResolver();
-        // ContentResolver 의 쿼리를 통해 urlStr 을 파싱하여 커서를 생성한다. 파라메터 이용
-        Cursor cur = cr.query(Uri.parse(urlStr), null, params, null, null);
-
-        cur.moveToFirst();    // 커서를 맨 처음으로 옮기고, 모드를 읽어 저장
-        int mode = cur.getInt(cur.getColumnIndex("MODE"));
-
-        // 모드가 1일 경우
-        if (mode == 1) {
-            // 결과를 읽는다
-            String result = cur.getString(cur.getColumnIndex("RESULT"));
-            cur.deactivate();
-
-            // 결과를 바이트단위의 인풋스트림으로 변환하여 리턴한다
-            return new ByteArrayInputStream(result
-                    .getBytes());
-        } else {
-            cur.deactivate();
-
-            // 다른 모드일 경우엔 예외 발생
-            throw new Exception("Invalid content:// mode " + mode);
-        }
-    }
-
-    // 네트워크 인풋 스트림을 닫는다
-    public void returnHttpInputStream(InputStream is) throws Exception {
-        if (is != null) {
-            is.close();
-        }
-    }
-
-    // 리소스 인풋 스트림을 리턴
-    public InputStream getResourceInputStream(String name) throws Exception {
-        AssetManager mgr = mixView.getAssets();    // assets 안의 파일을 접근하기 위함
-        return mgr.open(name);
-    }
-
-    // 리소스 인풋 스트림을 닫는다
-    public void returnResourceInputStream(InputStream is) throws Exception {
-        if (is != null)
-            is.close();
-    }
-
     // 웹페이지를 로드
     public void loadMixViewWebPage(String url) throws Exception {
 
@@ -435,10 +284,7 @@ public class MixContext extends ContextWrapper {
         return selectedDataSources.get(source);
     }
 
-    // 데이터 소스의 선택 여부를 토글
-    public void toogleDataSource(DataSource.DATASOURCE source) {
-        setDataSource(source, !selectedDataSources.get(source));
-    }
+
 
     // 선택된 데이터 소스 리스트를 스트링 형태로 리턴
     public String getDataSourcesStringList() {

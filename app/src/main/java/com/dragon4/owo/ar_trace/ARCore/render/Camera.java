@@ -18,6 +18,7 @@
  */
 package com.dragon4.owo.ar_trace.ARCore.render;
 
+
 // 카메라 부분을 담당하는 클래스
 public class Camera {
 	

@@ -83,7 +83,6 @@ public class HttpHandler extends AsyncTask<String, Void, String> {
 
 
         try {
-
             url = new URL(urlStr);
             conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(10000);

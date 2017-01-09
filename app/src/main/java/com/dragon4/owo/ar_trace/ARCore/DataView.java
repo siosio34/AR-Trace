@@ -253,6 +253,8 @@ public class DataView {
                 double lat = curFix.getLatitude(), lon = curFix.getLongitude(), alt = curFix.getAltitude();
 
                 // 각각의 데이터 소스들 모두에 적용
+                // TODO: 2017. 1. 9. 이거 리팩 토링해야됨.
+
                 for (DataSource.DATASOURCE source : DataSource.DATASOURCE.values()) {
                     // 선택된 데이터 소스로 데이터 요청을 한다
                     if (mixContext.isDataSourceSelected(source))  { // 선택된것 ~

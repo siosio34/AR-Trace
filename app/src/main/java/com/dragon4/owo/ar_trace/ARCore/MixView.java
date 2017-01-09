@@ -162,7 +162,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     private Matrix m3 = new Matrix();
     private Matrix m4 = new Matrix();
 
-    private SeekBar myZoomBar;    // 줌 배율을 설정하기 위함
     private WakeLock mWakeLock;    // 화면이 점멸되지 않게 하기 위함
 
     private boolean fError;    // 에러 여부
@@ -170,11 +169,8 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     // 나침반 에러
     private int compassErrorDisplayed = 0;
 
-    // 줌 레벨과 프로그레스 수치
-    private String zoomLevel;
-    private int zoomProgress;
-
     private FragmentMapview naverFragment;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
@@ -196,21 +192,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     // GPS 사용이 가능한지 여부를 리턴
     public boolean isGpsEnabled() {
         return isGpsEnabled;
-    }
-
-    // 줌 바가 보이는지 리턴
-    public boolean isZoombarVisible() {
-        return myZoomBar != null && myZoomBar.getVisibility() == View.VISIBLE;
-    }
-
-    // 줌 레벨을 리턴
-    public String getZoomLevel() {
-        return zoomLevel;
-    }
-
-    // 줌 프로그레스 수치를 리턴
-    public int getZoomProgress() {
-        return zoomProgress;
     }
 
     // 에러 처리 메소드
@@ -243,7 +224,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     public void repaint() {
         dataView = new DataView(mixContext);
         dWindow = new PaintScreen();
-        setZoomLevel();    // 줌 레벨도 재설정
     }
 
     // 에러 다이얼로그
@@ -267,7 +247,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                 }
             }
         });
-		/*Open settings*/
+        /*Open settings*/
         builder.setNeutralButton(DataView.CONNECTION_ERROR_DIALOG_BUTTON2, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // 무선 설정 인텐트를 호출
@@ -287,8 +267,8 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
 
     public void navercategoryClicked(View v) throws ExecutionException, InterruptedException {
 
-      //  if (dataView.isFrozen())
-         //   dataView.setFrozen(false);
+        //  if (dataView.isFrozen())
+        //   dataView.setFrozen(false);
 
         DataSource.DATASOURCE datasource = null;
 
@@ -298,17 +278,14 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
         switch (v.getId()) {
 
             case R.id.ar_mixview_bus:
-                Log.i("카테고리버튼이벤트", "클릭됨");
                 datasource = DataSource.DATASOURCE.BUSSTOP;
                 break;
 
-            case R.id.ar_mixview_restaurant: //
-                Log.i("카테고리버튼이벤트", "클릭됨");
+            case R.id.ar_mixview_restaurant:
                 datasource = DataSource.DATASOURCE.Restaurant;
                 break;
 
             case R.id.ar_mixview_cafe:
-                Log.i("카테고리버튼이벤트", "클릭됨");
                 datasource = DataSource.DATASOURCE.CAFE;
                 break;
 
@@ -317,7 +294,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                 break;
 
             case R.id.ar_mixview_hospital:
-                datasource  = DataSource.DATASOURCE.HOSPITAL;
+                datasource = DataSource.DATASOURCE.HOSPITAL;
                 break;
 
             case R.id.ar_mixview_bank:
@@ -337,14 +314,13 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             Toast.makeText(mixContext, "지원하는 데이터소스없음", Toast.LENGTH_SHORT).show();
 
         else {
-             Location location = mixContext.getCurrentLocation();
-             Log.i("로케이션 경도", String.valueOf(location.getLatitude()));
-             dataView.requestData(DataSource.createRequestCategoryURL(datasource,location.getLatitude(),location.getLongitude(),
-                     location.getAltitude(),20),DataSource.dataFormatFromDataSource(datasource), datasource);
-             mixContext.setDataSource(datasource,true);
+            Location location = mixContext.getCurrentLocation();
+            Log.i("로케이션 경도", String.valueOf(location.getLatitude()));
+            mixContext.setDataSource(datasource,!mixContext.isDataSourceSelected(datasource));
+            dataView.requestData(DataSource.createRequestCategoryURL(datasource, location.getLatitude(), location.getLongitude(),
+                    location.getAltitude(), 20), DataSource.dataFormatFromDataSource(datasource), datasource);
         }
     }
-
 
 
     private BroadcastReceiver naviRecevicer = new BroadcastReceiver() {
@@ -354,12 +330,12 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                 String guide = intent.getStringExtra("GUIDE");
                 Snackbar.make(getWindow().getDecorView().getRootView(), guide, Snackbar.LENGTH_LONG)
                         .setAction("종료", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(),"네비게이션을 종료합니다.",Toast.LENGTH_SHORT).show();
-                        MixState.enterNaviEnd = true;
-                    }
-                }).show();
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(getApplicationContext(), "네비게이션을 종료합니다.", Toast.LENGTH_SHORT).show();
+                                MixState.enterNaviEnd = true;
+                            }
+                        }).show();
             }
         }
     };
@@ -398,22 +374,11 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();    // 변경사항을 기록할 에디터
 
-            // 줌 바의 생성과 설정
-            myZoomBar = new SeekBar(this);
-            myZoomBar.setVisibility(View.INVISIBLE);
-            myZoomBar.setMax(100);
-            // 프레퍼런스로부터 줌 레벨을 읽는다. 디폴트 값은 65
-            myZoomBar.setProgress(settings.getInt("zoomLevel", 65));
-            // 체인지 리스너를 등록하고
-            myZoomBar.setOnSeekBarChangeListener(myZoomBarOnSeekBarChangeListener);
-            myZoomBar.setVisibility(View.INVISIBLE);    // 갱신
-
             // 프레임 레이아웃을 사용한다
             FrameLayout frameLayout = new FrameLayout(this);
 
             // 최소 넓이를 설정하고 줌 바를 등록, 여백을 설정한다
             frameLayout.setMinimumWidth(3000);
-            frameLayout.addView(myZoomBar);
             frameLayout.setPadding(10, 0, 10, 10);
 
             // 카메라 스크린과 증강 스크린을 생성하고
@@ -435,17 +400,17 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             final LayoutInflater inflater = getLayoutInflater();
             final View mainArView = inflater.inflate(R.layout.activity_ar_mixview, null);
 
-            final LinearLayout parentButtonView = (LinearLayout)mainArView.findViewById(R.id.ar_mixview_parent_buttonview);
-            final LinearLayout searchbar = (LinearLayout)mainArView.findViewById(R.id.ar_mixview_searchbar);
-            final Button hideSearchbar = (Button)mainArView.findViewById(R.id.ar_mixview_hide_searchbar);
-            final ListView searchListView = (ListView)mainArView.findViewById(R.id.ar_mixview_search_list);
+            final LinearLayout parentButtonView = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_parent_buttonview);
+            final LinearLayout searchbar = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_searchbar);
+            final Button hideSearchbar = (Button) mainArView.findViewById(R.id.ar_mixview_hide_searchbar);
+            final ListView searchListView = (ListView) mainArView.findViewById(R.id.ar_mixview_search_list);
 
-            Button searchBtn = (Button)mainArView.findViewById(R.id.ar_mixview_search);
+            Button searchBtn = (Button) mainArView.findViewById(R.id.ar_mixview_search);
             searchBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                parentButtonView.setVisibility(View.GONE);
-                searchbar.setVisibility(View.VISIBLE);
+                    parentButtonView.setVisibility(View.GONE);
+                    searchbar.setVisibility(View.VISIBLE);
                 }
             });
             hideSearchbar.setOnClickListener(new View.OnClickListener() {
@@ -459,7 +424,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             final DataConvertor dataConvertor = new DataConvertor();
 
 
-            final EditText searchText = (EditText)mainArView.findViewById(R.id.ar_mixview_search_text);
+            final EditText searchText = (EditText) mainArView.findViewById(R.id.ar_mixview_search_text);
             searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -468,12 +433,12 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                             String queryString = searchText.getText().toString();
                             try {
                                 List<ARMarker> searchList = null;
-                                String encodedQueryString = URLEncoder.encode(queryString,"UTF-8");
+                                String encodedQueryString = URLEncoder.encode(queryString, "UTF-8");
                                 String searchURL = DataSource.createNaverSearchRequestURL(encodedQueryString);
                                 String searchRawData = new HttpHandler().execute(searchURL).get();
-                                Toast.makeText(getApplicationContext(),searchRawData,Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), searchRawData, Toast.LENGTH_LONG).show();
                                 searchList = dataConvertor.load(searchRawData, DataSource.DATASOURCE.SEARCH, DataSource.DATAFORMAT.NAVER_SEARCH);
-                                Toast.makeText(getApplicationContext(),searchList.get(0).toString(),Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), searchList.get(0).toString(), Toast.LENGTH_LONG).show();
                                 // TODO: 2017. 1. 3.
 
                             } catch (UnsupportedEncodingException e) {
@@ -504,21 +469,21 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                     String queryString = searchText.getText().toString();
                     try {
                         List<ARMarker> searchList = null;
-                        String encodedQueryString = URLEncoder.encode(queryString,"UTF-8");
+                        String encodedQueryString = URLEncoder.encode(queryString, "UTF-8");
 
                         String tempCallbackUrl = "http://ac.map.naver.com/ac?q=" + encodedQueryString + "&st=10&r_lt=10&r_format=json";
                         String rawData = new HttpHandler().execute(tempCallbackUrl).get();
-                        Log.i("rawData",rawData);
+                        Log.i("rawData", rawData);
 
                         JSONObject root = new JSONObject(rawData);
                         JSONArray dataArray = root.getJSONArray("items");
                         JSONArray locationData = dataArray.getJSONArray(0);
 
-                        Log.i("dataArray",locationData.toString());
+                        Log.i("dataArray", locationData.toString());
 
                         ArrayList<String> list = new ArrayList<>();
-                        for(int index=0; index<locationData.length(); index++)
-                            list.add(locationData.getString(index).substring(2, locationData.getString(index).length()-2));
+                        for (int index = 0; index < locationData.length(); index++)
+                            list.add(locationData.getString(index).substring(2, locationData.getString(index).length() - 2));
 
                         SearchViewAdapter adapter = new SearchViewAdapter();
                         adapter.setDataList(list);
@@ -527,33 +492,12 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                         searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                               // if(naverFragment != null)
-                               //     naverFragment.findAndDrawRoot();
-                               // else
-                               //     Toast.makeText(MixView.this, "지도가 될때까지 기다려주세요.", Toast.LENGTH_SHORT).show();
+                                // if(naverFragment != null)
+                                //     naverFragment.findAndDrawRoot();
+                                // else
+                                //     Toast.makeText(MixView.this, "지도가 될때까지 기다려주세요.", Toast.LENGTH_SHORT).show();
                             }
                         });
-
-
-                        if (charSequence.length() > 0 && charSequence.subSequence(charSequence.length()-1, charSequence.length()).toString().equalsIgnoreCase("\n")) {
-
-
-                            //DataSource.DATASOURCE datasource = DataSource.DATASOURCE.SEARCH;
-                            //dataView.requestData(DataSource.createNaverSearchRequestURL(queryString), DataSource.dataFormatFromDataSource(datasource), datasource);
-
-                        }
-
-                //search listview
-
-
-                        //searchList = dataConvertor.load(rawData, DataSource.DATASOURCE.SEARCH, DataSource.DATAFORMAT.NAVER_SEARCH);
-                        //Log.i("searchList1","악");
-                        //
-                        //if(searchList != null) {
-                        //    for (int num = 0; num < searchList.size(); num++) {
-                        //        Log.i("searchList", searchList.get(num).getTitle());
-                        //    }
-                        //}
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -565,13 +509,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                         e.printStackTrace();
                     }
 
-                    //enter key 입력된 경우랍니다
-                    //if(charSequence.length() > 0 && charSequence.subSequence(charSequence.length()-1, charSequence.length()).toString().equalsIgnoreCase("\n")) {
-                    //    DataSource.DATASOURCE datasource = DataSource.DATASOURCE.SEARCH;
-                    //    String searchURL = DataSource.createNaverSearchRequestURL(queryString);
-                    //    dataView.requestData(DataSource.createNaverSearchRequestURL(queryString), DataSource.dataFormatFromDataSource(datasource), datasource);
-//
-                    //}
                 }
 
                 @Override
@@ -603,8 +540,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             });
 
 
-
-
             mainArView.findViewById(R.id.ar_mixview_write_review).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -617,7 +552,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                         }
                     });
 
-                    final ImageView middleImg = (ImageView)popupView.findViewById(R.id.ar_mixview_write_review_middle_img);
+                    final ImageView middleImg = (ImageView) popupView.findViewById(R.id.ar_mixview_write_review_middle_img);
                     popupView.findViewById(R.id.ar_mixview_write_review_axis).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -639,7 +574,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                 }
             });
 
-            final Button reviewOnOffBtn = (Button)mainArView.findViewById(R.id.ar_mixview_review_onoff);
+            final Button reviewOnOffBtn = (Button) mainArView.findViewById(R.id.ar_mixview_review_onoff);
             reviewOnOffBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -648,16 +583,15 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                 }
             });
 
-            final LinearLayout buttonViewLayout = (LinearLayout)mainArView.findViewById(R.id.ar_mixview_buttonview);
-            final Button hideBtn = (Button)mainArView.findViewById(R.id.ar_mixview_buttonview_hide);
+            final LinearLayout buttonViewLayout = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_buttonview);
+            final Button hideBtn = (Button) mainArView.findViewById(R.id.ar_mixview_buttonview_hide);
             hideBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(buttonViewLayout.getVisibility() == View.GONE) {
+                    if (buttonViewLayout.getVisibility() == View.GONE) {
                         buttonViewLayout.setVisibility(View.VISIBLE);
                         hideBtn.setBackgroundResource(R.drawable.icon_menu_up);
-                    }
-                    else if(buttonViewLayout.getVisibility() == View.VISIBLE) {
+                    } else if (buttonViewLayout.getVisibility() == View.VISIBLE) {
                         buttonViewLayout.setVisibility(View.GONE);
                         hideBtn.setBackgroundResource(R.drawable.icon_menu_down);
                     }
@@ -670,7 +604,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             naverFragment.setArguments(new Bundle());
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fm.beginTransaction();
-            fragmentTransaction.add(R.id.ar_mixview_naverview,naverFragment);
+            fragmentTransaction.add(R.id.ar_mixview_naverview, naverFragment);
             fragmentTransaction.commit();
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
@@ -686,8 +620,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                 dWindow = new PaintScreen();
                 dataView = new DataView(mixContext);
 
-				/*마지막으로 유저에게 선택된 값으로 데이터 뷰의 반경을 설정*/
-                setZoomLevel();
                 isInited = true;    // 세팅 플래그 true
             }
 
@@ -729,12 +661,12 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
         public View getView(int i, View view, ViewGroup viewGroup) {
             LayoutInflater inflater = MixView.this.getLayoutInflater();
             view = inflater.inflate(R.layout.layout_search_item, null);
-            TextView searchItem = (TextView)view.findViewById(R.id.search_item);
+            TextView searchItem = (TextView) view.findViewById(R.id.search_item);
 
             String data = dataList.get(i);
             int index = data.indexOf(currentText);
 
-            if(index != -1) {
+            if (index != -1) {
                 SpannableStringBuilder builder = new SpannableStringBuilder();
 
                 String before = data.substring(0, index);
@@ -760,7 +692,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             String currentTextNoSpace = currentText.replaceAll(" ", "");
             index = data.indexOf(currentTextNoSpace);
 
-            if(index != -1) {
+            if (index != -1) {
                 SpannableStringBuilder builder = new SpannableStringBuilder();
 
                 String before = data.substring(0, index);
@@ -798,7 +730,9 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
         public void setCurrentText(String currentText) {
             this.currentText = currentText;
         }
-    };
+    }
+
+    ;
 
 
     // 인텐트 제어
@@ -806,7 +740,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
         // 검색 버튼을 눌렀을 경우
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);    // 쿼리 생성
-          //  doMixSearch(query);    // 마커로부터 검색
+            //  doMixSearch(query);    // 마커로부터 검색
         }
     }
 
@@ -1065,96 +999,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
         }
     }
 
-
-    // 줌 레벨을 계산
-    public float calcZoomLevel() {
-        // 줌 바로 부터 현제 프로그레스 값(줌 레벨)을 읽는다
-        int myZoomLevel = myZoomBar.getProgress();
-        float myout = 5;
-
-        // 수치에 따른 줌 레벨 계산. 적절한 값을 할당하기 위해 추가 계산을 한다
-        if (myZoomLevel <= 26) {
-            myout = myZoomLevel / 25f;
-        } else if (25 < myZoomLevel && myZoomLevel < 50) {
-            myout = (1 + (myZoomLevel - 25)) * 0.38f;
-        } else if (25 == myZoomLevel) {
-            myout = 1;
-        } else if (50 == myZoomLevel) {
-            myout = 10;
-        } else if (50 < myZoomLevel && myZoomLevel < 75) {
-            myout = (10 + (myZoomLevel - 50)) * 0.83f;
-        } else {
-            myout = (30 + (myZoomLevel - 75) * 2f);
-        }
-
-        return myout;    // 계산된 값 리턴
-    }
-
-    // 줌 레벨 지정
-    private void setZoomLevel() {
-        float myout = calcZoomLevel();    // 줌 레벨은 우선 특정한 방식으로 계산되어야 한다
-
-        dataView.setRadius(myout);    // 계산된 값으로 데이터 뷰의 반경을 설정 후
-
-        // 줌 바를 감추면서 줌 레벨을 지정한다
-        myZoomBar.setVisibility(View.INVISIBLE);
-        zoomLevel = String.valueOf(myout);
-
-        // 재설정된 반경을 적용하기 위한 데이터뷰 재시작
-        dataView.doStart();
-        dataView.clearEvents();    // 이벤트를 클리어 하고
-        // 내용을 다시 다운로드 한다
-        downloadThread = new Thread(mixContext.downloadManager);
-        downloadThread.start();
-
-    }
-
-    // 시크바 체인지 리스너. 줌 레벨 설정시의 줌 바를 처리하기 위함
-    private SeekBar.OnSeekBarChangeListener myZoomBarOnSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
-        Toast t;    // 결과를 알릴 토스트
-
-        // 프로그레스가 변경될 경우
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            float myout = calcZoomLevel();    // 줌 레벨을 계산
-
-            // 각 값들을 변경하고
-            zoomLevel = String.valueOf(myout);
-            zoomProgress = myZoomBar.getProgress();
-
-            // 변경 사항을 출력해 준다
-            t.setText("Radius: " + String.valueOf(myout));
-            t.show();
-        }
-
-        // 프로그레스를 터치하여 트랙킹 중일 경우
-        public void onStartTrackingTouch(SeekBar seekBar) {
-            Context ctx = seekBar.getContext();
-            // 토스트의 텍스트를 변경
-            t = Toast.makeText(ctx, "Radius: ", Toast.LENGTH_LONG);
-//			zoomChanging= true;
-        }
-
-        // 트랙킹이 멈췄을 경우
-        public void onStopTrackingTouch(SeekBar seekBar) {
-            // 공유 프레퍼런스를 읽어오고
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-            SharedPreferences.Editor editor = settings.edit();
-			/*유저로부터 선택된 줌 반경을 등록한다*/
-            editor.putInt("zoomLevel", myZoomBar.getProgress());
-            editor.commit();
-
-            // 줌 바는 감춘다
-            myZoomBar.setVisibility(View.INVISIBLE);
-//			zoomChanging= false;
-
-            myZoomBar.getProgress();
-
-            t.cancel();
-            setZoomLevel();    // 값의 지정이 끝났으면 줌 레벨을 설정
-        }
-
-    };
-
     // 센서값이 변경될 경우 처리
     public void onSensorChanged(SensorEvent evt) {
         try {
@@ -1330,6 +1174,7 @@ class CameraSurface extends SurfaceView implements SurfaceHolder.Callback {
     SurfaceHolder holder;    // 서페이스 홀더
     Camera camera;
 
+
     // 생성자
     CameraSurface(Context context) {
         super(context);
@@ -1479,12 +1324,6 @@ class CameraSurface extends SurfaceView implements SurfaceHolder.Callback {
 class AugmentedView extends View {
     MixView app;    // 메인 뷰
 
-    // 클래스 외부에서 사용될 변수들(?)
-    int xSearch = 200;
-    int ySearch = 10;
-    int searchObjWidth = 0;
-    int searchObjHeight = 0;
-
     // 생성자
     public AugmentedView(Context context) {
         super(context);
@@ -1508,38 +1347,11 @@ class AugmentedView extends View {
             // 캔버스의 넓이만큼 뷰로 설정(뷰의 넓이만큼을 캔버스로 이용한다)
             MixView.dWindow.setWidth(canvas.getWidth());
             MixView.dWindow.setHeight(canvas.getHeight());
-
             MixView.dWindow.setCanvas(canvas);    // 캔버스와 연결
 
             // 데이터 뷰가 초기화 되지 않았을 경우엔 초기화 처리
             if (!MixView.dataView.isInited()) {
                 MixView.dataView.init(MixView.dWindow.getWidth(), MixView.dWindow.getHeight());
-            }
-
-            // 줌 바가 보여지고 있을 경우
-            if (app.isZoombarVisible()) {
-
-                // 줌에 관련된 정보를 표시할 페인트 객체 설정
-                Paint zoomPaint = new Paint();
-                zoomPaint.setColor(Color.WHITE);
-                zoomPaint.setTextSize(14);
-
-                // 거리를 나타낼 스트링 값
-                String startKM, endKM;
-                endKM = "80km";
-                startKM = "0km";
-
-                // 거리 정보 텍스트 출력
-                canvas.drawText(startKM, canvas.getWidth() / 100 * 4, canvas.getHeight() / 100 * 85, zoomPaint);
-                canvas.drawText(endKM, canvas.getWidth() / 100 * 99 + 25, canvas.getHeight() / 100 * 85, zoomPaint);
-
-                // 줌 레벨을 출력
-                int height = canvas.getHeight() / 100 * 85;
-                int zoomProgress = app.getZoomProgress();
-                if (zoomProgress > 92 || zoomProgress < 6) {
-                    height = canvas.getHeight() / 100 * 80;
-                }
-                canvas.drawText(app.getZoomLevel(), (canvas.getWidth()) / 100 * zoomProgress + 20, height, zoomPaint);
             }
 
             // 데이터 뷰의 데이터들을 윈도우에 그린다

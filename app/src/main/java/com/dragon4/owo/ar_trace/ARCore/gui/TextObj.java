@@ -20,8 +20,9 @@ package com.dragon4.owo.ar_trace.ARCore.gui;
 
 import java.text.BreakIterator;
 import java.util.ArrayList;
-
 import android.graphics.Color;
+
+
 
 // 화면에 표시될 텍스트 클래스
 public class TextObj implements ScreenObj {

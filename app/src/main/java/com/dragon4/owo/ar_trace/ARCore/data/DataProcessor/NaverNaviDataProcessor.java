@@ -1,6 +1,6 @@
 package com.dragon4.owo.ar_trace.ARCore.data.DataProcessor;
 
-import com.dragon4.owo.ar_trace.ARCore.Navi;
+import com.dragon4.owo.ar_trace.ARCore.NavigationMarker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 public class NaverNaviDataProcessor {
 
-    public Navi load(String rawData) throws JSONException {
+    public NavigationMarker load(String rawData) throws JSONException {
 
         JSONObject root = convertToJSON(rawData);
         JSONArray dataArray = null;
