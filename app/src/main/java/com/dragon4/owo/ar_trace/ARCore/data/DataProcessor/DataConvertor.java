@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.dragon4.owo.ar_trace.ARCore.ARMarker;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
-import com.dragon4.owo.ar_trace.Model.Navi;
+import com.dragon4.owo.ar_trace.ARCore.Navi;
 
 import org.json.JSONException;
 
