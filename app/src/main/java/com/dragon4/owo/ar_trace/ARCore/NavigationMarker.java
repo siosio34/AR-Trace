@@ -21,14 +21,14 @@ public class NavigationMarker extends ARMarker {
     // 마커 제이썬 리스트 마다 다름.
     private String type; // 좌,우,직진,횡단보도
     private Integer xList; // x좌표리스트.
-    private Integer yList; // y좌표리스트
+    private Integer yList; // y좌표리스트.
     private String guideList; // 가는 길 가이드 ex) 직선방향으로 5m!
 
     // 생성자. 타이틀, 위도, 경도, 고도, 그리고 URL과 데이터 소스를 인자로 받는다
     public NavigationMarker(String title, double latitude, double longitude,
                             double altitude, String URL, DataSource.DATASOURCE datasource) {
         super(title, latitude, longitude, altitude, URL, datasource);
-        this.startingPoint = startingPoint;
+
     }
 
     // 마커 위치 갱신
