@@ -1,17 +1,14 @@
 package com.dragon4.owo.ar_trace.Activity;
 
-import android.*;
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
-import com.dragon4.owo.ar_trace.*;
-import com.tsengvn.typekit.Typekit;
-import com.tsengvn.typekit.TypekitContextWrapper;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -19,12 +16,25 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_CODE_ACCESS_FINE_LOCATION = 8001;
     private static final int PERMISSIONS_REQUEST_CODE_ACCESS_READ = 8002;
     private static final int PERMISSIONS_REQUEST_CODE_ACCESS_WRITE = 8003;
+    private static final String TAG = "MainActivity";
     Intent permissionIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(com.dragon4.owo.ar_trace.R.layout.activity_main);
+        //FCMInstanceIDService getTokenService = new FCMInstanceIDService();
+
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.i(TAG,token);
+
+        if (getIntent().getExtras() != null) {
+            for (String key : getIntent().getExtras().keySet()) {
+                Object value = getIntent().getExtras().get(key);
+                Log.d(TAG, "Key: " + key + " Value: " + value);
+            }
+        }
+
     }
 
     private void checkAndRequestPermission() {
