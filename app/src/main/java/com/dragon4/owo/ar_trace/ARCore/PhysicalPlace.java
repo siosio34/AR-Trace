@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with 
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
-package com.dragon4.owo.ar_trace.ARCore.reality;
+package com.dragon4.owo.ar_trace.ARCore;
 
 import android.location.Location;
 
