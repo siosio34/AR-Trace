@@ -15,13 +15,12 @@ public class Comment implements Serializable {
     private String userImageUrl;
     private String content;
     private Date createDate;
-    private int state;
 
     public Comment() {
 
     }
 
-    public Comment(int commentId,int documentId,String userId, String userName,String userImageUrl,String content, Date createDate,int state)
+    public Comment(int commentId,int documentId,String userId, String userName,String userImageUrl,String content, Date createDate)
     {
         this.commentId = commentId;
         this.documentId = documentId;
@@ -30,7 +29,6 @@ public class Comment implements Serializable {
         this.userImageUrl = userImageUrl;
         this.content = content;
         this.createDate = createDate;
-        this.state = state;
     }
 
     public int getCommentId() {
@@ -72,15 +70,6 @@ public class Comment implements Serializable {
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
-    }
-
 
     public String getUserImageUrl() {
         return userImageUrl;
