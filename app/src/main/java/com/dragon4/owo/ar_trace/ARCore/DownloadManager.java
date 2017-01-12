@@ -159,7 +159,6 @@ public class DownloadManager implements Runnable {
 				result.error = false;
 				result.errorMsg = null;
 
-
 			}
 		}
 		catch (Exception ex) {	// 예외 발생시에는 에러 처리를 하고

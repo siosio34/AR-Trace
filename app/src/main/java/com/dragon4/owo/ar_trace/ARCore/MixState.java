@@ -25,7 +25,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
-import com.dragon4.owo.ar_trace.ARCore.reality.PhysicalPlace;
 import com.dragon4.owo.ar_trace.ARCore.render.Matrix;
 import com.dragon4.owo.ar_trace.ARCore.render.MixVector;
 import com.dragon4.owo.ar_trace.NaverMap.FragmentMapview;

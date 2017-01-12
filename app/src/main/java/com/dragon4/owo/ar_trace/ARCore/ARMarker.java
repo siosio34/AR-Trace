@@ -26,7 +26,6 @@ import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
 import com.dragon4.owo.ar_trace.ARCore.gui.ScreenLine;
 import com.dragon4.owo.ar_trace.ARCore.gui.ScreenObj;
 import com.dragon4.owo.ar_trace.ARCore.gui.TextObj;
-import com.dragon4.owo.ar_trace.ARCore.reality.PhysicalPlace;
 import com.dragon4.owo.ar_trace.ARCore.render.Camera;
 import com.dragon4.owo.ar_trace.ARCore.render.MixVector;
 
@@ -52,12 +51,8 @@ abstract public class ARMarker implements Comparable<ARMarker> {
 
 	// 드로우 속성
 	protected boolean isVisible;    // 보여지는지 여부
-	//	private boolean isLookingAt;
-//	private boolean isNear;
-//	private float deltaCenter;
 	public MixVector cMarker = new MixVector();    // 카메라 마커
 	protected MixVector signMarker = new MixVector();    // 기호 마커
-//	private MixVector oMarker = new MixVector();
 
 	// 장소에 관련된 벡터값들
 	protected MixVector locationVector = new MixVector();
@@ -169,8 +164,6 @@ abstract public class ARMarker implements Comparable<ARMarker> {
 	// 고도를 계산. 이제는 쓰이지 않는듯?
 	private void calcV(Camera viewCam) {
 		isVisible = false;    // 일단 보이지 않는 상태로 만들고
-//		isLookingAt = false;
-//		deltaCenter = Float.MAX_VALUE;
 
 		// 마커의 z 값에 따른 처리를 한다
 		if (cMarker.z < -1f) {
@@ -185,11 +178,6 @@ abstract public class ARMarker implements Comparable<ARMarker> {
 
 	// 마커 위치를 업데이트
 	public void update(Location curGPSFix) {
-		// 고도 0.0은 아마 POI의 고도가 알려지지 않았고,
-		// 유저의 GPS 높이를 세팅해야 한다는 것을 의미한다
-		// http://www.geonames.org/export/web-services.html#astergdem 를 참고하여
-		// SRTM, AGDEM 또는 GTOPO30등의 DEM모델을 사용해 
-		// 정확한 높이를 측정 함으로써 이 문제를 개선할 수 있을 것이다
 
 		// 고도 값이 0.0일 경우 현재의 GPS픽스를 이용해 다시 고도값을 얻어온다
 		if (mGeoLoc.getAltitude() == 0.0)
@@ -205,10 +193,6 @@ abstract public class ARMarker implements Comparable<ARMarker> {
 		cCMarker(origin, viewCam, addX, addY, type);    // 카메라 마커를 생성
 		calcV(viewCam);    // 카메라의 고도를 계산
 	}
-
-//	private void calcPaint(Camera viewCam) {
-//		cCMarker(origin, viewCam, 0, 0);
-//	}
 
 	// 클릭이 허용되어 있는지 조사
 	public boolean isClickValid(float x, float y) {

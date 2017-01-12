@@ -233,38 +233,6 @@ public class MixContext extends ContextWrapper {
         webview.loadUrl(url);    // 웹 뷰에 url 로드
     }
 
-    // 웹 페이지 로드. 위 메소드와의 차이는 컨텍스트를 별도로 지정한다는 것이다
-    public void loadWebPage(String url, Context context) throws Exception {
-
-        WebView webview = new WebView(context);    // 웹 뷰
-
-        webview.setWebViewClient(new WebViewClient() {
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
-            }
-
-        });
-
-        Dialog d = new Dialog(context) {
-            public boolean onKeyDown(int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK)
-                    this.dismiss();
-                return true;
-            }
-        };
-        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        d.getWindow().setGravity(Gravity.BOTTOM);
-        d.addContentView(webview, new FrameLayout.LayoutParams(
-                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
-                Gravity.BOTTOM));
-
-        d.show();
-
-        webview.loadUrl(url);
-    }
-
-
        // 데이터 소스 세팅
     public void setDataSource(DataSource.DATASOURCE source, Boolean selection) {
         selectedDataSources.put(source, selection);    // 선택된 데이터 소스의 상태를 세팅

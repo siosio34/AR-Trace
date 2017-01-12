@@ -285,14 +285,10 @@ public class DataView {
                     retry++;    // 재시도 횟수를 늘리고 에러 리퀘스트를 다시 제출한다
                     mixContext.getDownloader().submitJob(dRes.errorRequest);
 
-                    // 토스트로 에러 상황을 알림
-                    //	Toast.makeText(mixContext,mixContext.getResources().getString(R.string.download_error) +" "+ dRes.errorRequest.url, Toast.LENGTH_SHORT).show();
-
                 }
 
                 // 에러가 없는 경우
                 if (!dRes.error) {
-                    //jLayer = (DataHandler) dRes.obj;
 
                     // 데이터 핸들러에 마커를 추가 한다
                     Log.i(MixView.TAG, "Adding Markers");
@@ -318,14 +314,10 @@ public class DataView {
         for (int i = dataHandler.getMarkerCount() - 1; i >= 0; i--) {
             ARMarker ma = dataHandler.getMarker(i);
 
-
+                // 마커 활성화 그리고 일정반경안이면 업데이트.
                 if (ma.isActive() && (ma.getDistance() / 1000f < radius)) {
-                    // 성능을 향상시키기 위해, 모든 마커의 위치를 드로우 호출시마다 재계산하진 않는다
-                    // 대신, 위치가 바뀌었을 경우와 새로운 마커를 다운로드 한 이후에
-                    // 각 마커의 위치를 재계산 하도록 한다
 
-                    //if (!frozen)
-                    //	ma.update(curFix);
+                    //addX, addY는 화면에 찍히는 좌표, 더오른쪽으로 할거면 x를 더하고 더 높이 띄울거면 y를 더한다
                     if (!frozen) {
                         ma.calcPaint(cam, addX, addY, ma.datasource);
                     }
@@ -376,25 +368,6 @@ public class DataView {
         return evtHandled;    // 성공했을 경우 true 를 리턴
     }
 
-    // 레이더에 텍스트를 출력
-    void radarText(PaintScreen dw, String txt, float x, float y, boolean bg) {
-        float padw = 4, padh = 2;    // 폭과 높이의 여백
-        // 텍스트 정보로 폭과 높이를 계산한다
-        float w = dw.getTextWidth(txt) + padw * 2;
-        float h = dw.getTextAsc() + dw.getTextDesc() + padh * 2;
-
-        // 배경이 있을 경우 처리
-        if (bg) {
-            dw.setColor(Color.rgb(0, 0, 0));
-            dw.setFill(true);
-            dw.paintRect(x - w / 2, y - h / 2, w, h);
-            dw.setColor(Color.rgb(255, 255, 255));
-            dw.setFill(false);
-            dw.paintRect(x - w / 2, y - h / 2, w, h);
-        }
-        // 텍스트를 출력
-        dw.paintText(padw + x - w / 2, padh + dw.getTextAsc() + y - h / 2, txt, false);
-    }
 
     // 클릭 이벤트의 처리. UI 이벤트 리스트에 추가한다
     public void clickEvent(float x, float y) {

@@ -30,7 +30,6 @@ public class PaintScreen {
 	Canvas canvas;	// 출력에 사용될 캔버스
 	int width, height;	// 넓이와 높이
 	Paint paint = new Paint();	// 출력에 사용될 페인트 객체
-	Paint bPaint = new Paint();	// 두번째
 
 	// 생성자. 기본 텍스트크기 16, 안티 알리아싱, 색상은 블루, 페인트 스타일은 외각선.
 	public PaintScreen() {
@@ -98,18 +97,6 @@ public class PaintScreen {
 	public void paintBitmap(Bitmap bitmap, float left, float top) {
 		canvas.drawBitmap(bitmap, left, top, paint);
 	}
-	
-	// 경로(패스)를 그린다. 패스 객체와 x, y, 넓이와 높이, 회전과 확대에 대한 값을 받는다
-	// 사실 패스를 그리는 것 이외의 기능도 하는듯? 실제 작동여부를 파악 해봐야 겠다
-	public void paintPath(Path path,float x, float y, float width, float height, float rotation, float scale) {
-		canvas.save();	// 현 캔버스를 저장하고
-		canvas.translate(x + width / 2, y + height / 2);	// 중심축 기준 이동
-		canvas.rotate(rotation);	// 회전
-		canvas.scale(scale, scale);	// 확대. 가로세로가 같은 비율로 확대 된다
-		canvas.translate(-(width / 2), -(height / 2));	// 이동 작업의 완료
-		canvas.drawPath(path, paint);	// 패스를 그린다
-		canvas.restore();	// 원래의 상태로 되돌림
-	}
 
 	// 원을 그린다. 출력 위치(x, y)와 반지름 값을 인자로 받는다
 	public void paintCircle(float x, float y, float radius) {
@@ -126,8 +113,6 @@ public class PaintScreen {
 	public void paintObj(ScreenObj obj, float x, float y, float rotation,
 			float scale) {
 		canvas.save();	// 현재 캔버스를 저장
-		// x, y 좌표의 처리는 화면 중심 기준이기 때문에, translate를 두 번 호출한다.
-		// 어쩌면 회전연산을 중심 기준으로 하기 위함일 지도 모르겠다.
 		canvas.translate(x + obj.getWidth() / 2, y + obj.getHeight() / 2);
 		canvas.rotate(rotation);
 		canvas.scale(scale, scale);

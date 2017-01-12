@@ -571,8 +571,13 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                     mPopupWindow.setFocusable(true);
                     mPopupWindow.showAtLocation(popupView, Gravity.TOP, 0, 0);
 
+                    // TODO: 2017. 1. 12. 이미지뷰, 동영상 연동
+
+
                 }
             });
+
+
 
             final Button reviewOnOffBtn = (Button) mainArView.findViewById(R.id.ar_mixview_review_onoff);
             reviewOnOffBtn.setOnClickListener(new View.OnClickListener() {

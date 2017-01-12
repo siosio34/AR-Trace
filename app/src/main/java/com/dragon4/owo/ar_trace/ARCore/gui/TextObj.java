@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import android.graphics.Color;
 
 
-
 // 화면에 표시될 텍스트 클래스
 public class TextObj implements ScreenObj {
 	String txt;	// 텍스트
@@ -153,15 +152,6 @@ public class TextObj implements ScreenObj {
 		// 각 라인별로 텍스트를 출력
 		for (int i = 0; i < lines.length; i++) {
 			String line = lines[i];
-
-			// stroke
-/* 			dw.setFill(false);
-			dw.setStrokeWidth(4);
-		    dw.setColor(textShadowColor);
-			dw.paintText(pad, pad + lineHeight * i + dw.getTextAsc(), line);
-*/
-
-			// actual text
 
 			// 출력모드를 설정하고
 			dw.setFill(true);
