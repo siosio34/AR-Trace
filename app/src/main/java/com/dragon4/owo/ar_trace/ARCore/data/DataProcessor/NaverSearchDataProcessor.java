@@ -61,6 +61,8 @@ public class NaverSearchDataProcessor implements DataProcessor {
                 datasource.toString());
 
 
+
+
        // marker.setID(jo.getString("id"));
 
         // 제공값은 카텍좌표계 값으로 제공된다.

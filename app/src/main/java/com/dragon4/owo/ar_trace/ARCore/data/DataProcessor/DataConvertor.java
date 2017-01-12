@@ -35,16 +35,16 @@ public class DataConvertor {
         return null;
     }
 
-    public NavigationMarker load(String rawResult) {
-
-        NaverNaviDataProcessor naviDataProcessor = new NaverNaviDataProcessor();
-        try {
-            return naviDataProcessor.load(rawResult);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+    //public List<NavigationMarker> load(String rawResult) {
+//
+    //    NaverNaviDataProcessor naviDataProcessor = new NaverNaviDataProcessor();
+    //    try {
+    //        return naviDataProcessor.load(rawResult);
+    //    } catch (JSONException e) {
+    //        e.printStackTrace();
+    //    }
+    //    return null;
+    //}
 
     private DataProcessor selectDataProcessor(DataSource.DATAFORMAT dataformat) {
         DataProcessor selectedProcessor = null;
@@ -57,11 +57,9 @@ public class DataConvertor {
                 selectedProcessor = new NaverSearchDataProcessor();
                 break;
 
-            /*
             case NAVI:
                 selectedProcessor = new NaverNaviDataProcessor();
                 break;
-                */
 
             case FIREBASE:
                 selectedProcessor = new FirebaseDataProcessor();
