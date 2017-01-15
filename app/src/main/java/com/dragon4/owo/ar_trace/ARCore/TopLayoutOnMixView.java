@@ -2,6 +2,7 @@ package com.dragon4.owo.ar_trace.ARCore;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -57,7 +58,9 @@ public class TopLayoutOnMixView {
     //가장 상단의 레이아웃
     private View mainArView;
 
-    public TopLayoutOnMixView(final Context context, final LayoutInflater inflater, FragmentManager manager) {
+    private Context context;
+    public TopLayoutOnMixView(final Activity activity, final LayoutInflater inflater, FragmentManager manager) {
+        context = activity.getApplicationContext();
         mainArView = inflater.inflate(R.layout.activity_ar_mixview, null);
 
         final LinearLayout parentButtonView = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_parent_buttonview);
@@ -203,34 +206,8 @@ public class TopLayoutOnMixView {
         mainArView.findViewById(R.id.ar_mixview_write_review).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final View popupView = inflater.inflate(R.layout.layout_ar_mixview_write_review, null);
-                popupView.findViewById(R.id.ar_mixview_write_review_back).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mPopupWindow.dismiss();
-                        mPopupWindow = null;
-                    }
-                });
-
-                final ImageView middleImg = (ImageView) popupView.findViewById(R.id.ar_mixview_write_review_middle_img);
-                popupView.findViewById(R.id.ar_mixview_write_review_axis).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        middleImg.setImageResource(R.drawable.icon_rhombus_left_chosen);
-                    }
-                });
-
-                popupView.findViewById(R.id.ar_mixview_write_review_location).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        middleImg.setImageResource(R.drawable.icon_rhombus_right_chosen);
-                    }
-                });
-
-                mPopupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                mPopupWindow.setFocusable(true);
-                mPopupWindow.showAtLocation(popupView, Gravity.TOP, 0, 0);
-
+                Intent intent = new Intent(activity, WriteReviewActivity.class);
+                activity.startActivity(intent);
                 // TODO: 2017. 1. 12. 이미지뷰, 동영상 연동
 
 

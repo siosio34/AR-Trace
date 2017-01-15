@@ -392,7 +392,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                     LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT,
                     Gravity.BOTTOM));
 
-            TopLayoutOnMixView topLayoutOnMixView = new TopLayoutOnMixView(getApplicationContext(), getLayoutInflater(), getSupportFragmentManager());
+            TopLayoutOnMixView topLayoutOnMixView = new TopLayoutOnMixView(this, getLayoutInflater(), getSupportFragmentManager());
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
             addContentView(topLayoutOnMixView.getMainArView(), params);
 

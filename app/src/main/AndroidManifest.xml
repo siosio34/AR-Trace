@@ -63,7 +63,8 @@
             </intent-filter>
         </service>
 
-
+        <activity android:name=".ARCore.WriteReviewActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
     </application>
 
