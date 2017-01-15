@@ -18,22 +18,20 @@
         android:name=".ARCore.App"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".Activity.MainActivity" />
 
         <activity
             android:name=".ARCore.MixView"
-            android:launchMode="singleTop"
-            >
+            android:launchMode="singleTop">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+
+                <!--<action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                -->
 
                 <data
                     android:mimeType="application/mixare-json"
