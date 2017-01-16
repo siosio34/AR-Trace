@@ -20,7 +20,6 @@ public class Trace {
     private Date writeDate; // 글쓴시간
     private List<Comment> commentList;
 
-
     public String getLocationID() {
         return locationID;
     }
