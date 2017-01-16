@@ -2,16 +2,19 @@ package com.dragon4.owo.ar_trace.ARCore;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
+import android.location.Location;
 import android.net.Uri;
 import android.opengl.GLES20;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -21,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.dragon4.owo.ar_trace.Model.Trace;
+import com.dragon4.owo.ar_trace.PythonServer.FileUpload;
 import com.dragon4.owo.ar_trace.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,6 +43,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,6 +68,9 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
     private int uploadedThumbnailCount;
     private int uploadFailThumbnailCount;
 
+    private Context context;
+    // TODO: 2017. 1. 16. 인텐트로 넘기기전에 경도 위도를 받아오도록하자
+
     //choosed bitmap
     private Bitmap currentBitmap = null;
 
@@ -71,6 +79,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_ar_mixview_write_review);
 
+        context = getApplicationContext();
         middleImg = (ImageView)findViewById(R.id.ar_mixview_write_review_middle_img);
         //register onclick listener
         findViewById(R.id.ar_mixview_write_review_back).setOnClickListener(this);
@@ -113,6 +122,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
         destination = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/ARTrace/" + System.currentTimeMillis() + ".jpg");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(destination));
+       // uploadImageToPythonServer(Uri.fromFile(destination));
         startActivityForResult(intent, REQUEST_IMAGE);
     }
 
@@ -123,7 +133,12 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         if (requestCode == REQUEST_IMAGE) {
             if (resultCode == RESULT_OK) {
                 try {
-                    FileInputStream in = new FileInputStream(destination);
+
+                    uploadImageToPythonServer(Uri.fromFile(destination));
+
+                    FileInputStream in = null;
+                    in = new FileInputStream(destination);
+
                     currentBitmap = BitmapFactory.decodeStream(in, null, null);
 
                     //bitmap is too large to be uploaded into a texture problem.
@@ -141,7 +156,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                     currentImageView.setLayoutParams(params);
 
                     //delete current pictureview and add new pictureview
-                    ViewGroup parent = (ViewGroup)picture.getParent();
+                    ViewGroup parent = (ViewGroup) picture.getParent();
                     int index = parent.indexOfChild(picture);
                     parent.removeView(picture);
                     parent.addView(currentImageView, index);
@@ -151,6 +166,8 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                     currentImageView.setOnClickListener(this);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
                 destination.delete();
             } else if (resultCode == RESULT_CANCELED) {
@@ -158,6 +175,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                 destination.delete();
             }
         }
+
     }
 
     private void uploadTraceToServer() {
@@ -170,7 +188,13 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         myRef.push().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+               // Location curLoc = mixContext.getCurrentLocation();
+             //  Double lat = curLoc.getLatitude();
+             //   Double lon = curLoc.getLongitude();
+
                 Trace trace = new Trace();
+                String requestLocationIdURL;
 
                 //set location id of trace
                 trace.setLocationID("1");
@@ -205,6 +229,42 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                 dialog.dismiss();
             }
         });
+    }
+
+    private void uploadImageToPythonServer(final Uri fileURI) throws IOException {
+        // TODO: 2017. 1. 16. 파일의 uri 가져오는거 ㄲ
+
+        final String charset = "UTF-8";
+        final String requestURL = "http://192.168.1.41:8009/upload";
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                MultipartUtility multipart = null;
+                try {
+                    multipart = new MultipartUtility(requestURL, charset);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                multipart.addFormField("param_name_1", "param_value");
+                multipart.addFormField("param_name_2", "param_value");
+                multipart.addFormField("param_name_3", "param_value");
+                try {
+                    multipart.addFilePart("file", new File(fileURI.getPath()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                String response = null; // response from server.
+                try {
+                    response = multipart.finish();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Log.i("response code",response);
+
+            }
+        }).start();
+
     }
 
     private void uploadImageToServer(final Trace trace, final ProgressDialog dialog) {

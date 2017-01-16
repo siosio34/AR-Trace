@@ -224,6 +224,14 @@ public class DataSource {
         return ret;
     }
 
+    public static String createBuildIDRequestURL(String _query) {
+        String ret;
+        ret = "http://192.168.1.41:8009/buildinginfo" + "?buildName=" + _query;
+        Log.i("다음검색 url test",ret);
+        return ret;
+
+    }
+
     public static String createNaverSearchCallBackURL(String _query) {
         String ret;
         ret = "http://ac.map.naver.com/ac?q=" + _query +

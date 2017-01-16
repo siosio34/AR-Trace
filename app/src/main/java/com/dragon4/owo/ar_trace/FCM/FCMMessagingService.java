@@ -8,9 +8,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.dragon4.owo.ar_trace.Activity.MainActivity;
+import com.dragon4.owo.ar_trace.MainActivity;
 import com.dragon4.owo.ar_trace.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
