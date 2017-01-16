@@ -9,10 +9,11 @@ import java.util.List;
 
 public class Trace {
 
-    private String locationID; // 장소 di
+    private String locationID; // 장소 id
     private String traceID; // 흔적 id
     private String content; // 글 내용
     private String imageURL;
+    private String thumbnailURL;
     private int likeNum; // 좋아요 갯수
     private double lat;
     private double lon;
@@ -98,5 +99,13 @@ public class Trace {
 
     public void setCommentList(List<Comment> commentList) {
         this.commentList = commentList;
+    }
+
+    public String getThumbnailURL() {
+        return thumbnailURL;
+    }
+
+    public void setThumbnailURL(String thumbnailURL) {
+        this.thumbnailURL = thumbnailURL;
     }
 }
