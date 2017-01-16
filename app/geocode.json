@@ -1,0 +1,23 @@
+{
+  "result": {
+    "total": 1,
+    "userquery": "경기도 용인시 기흥구 덕영대로 1732 경희대학교",
+    "items": [
+      {
+        "address": "경기도 용인시 기흥구 덕영대로  1732 경희대학교국제캠퍼스",
+        "addrdetail": {
+          "country": "대한민국",
+          "sido": "경기도",
+          "sigugun": "용인시 기흥구",
+          "dongmyun": "덕영대로",
+          "rest": " 1732 경희대학교국제캠퍼스"
+        },
+        "isRoadAddress": true,
+        "point": {
+          "x": 127.0798535,
+          "y": 37.2433617
+        }
+      }
+    ]
+  }
+}

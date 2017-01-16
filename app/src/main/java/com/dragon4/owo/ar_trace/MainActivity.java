@@ -1,4 +1,4 @@
-package com.dragon4.owo.ar_trace.Activity;
+package com.dragon4.owo.ar_trace;
 
 import android.Manifest;
 import android.content.Intent;

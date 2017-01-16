@@ -1,0 +1,128 @@
+{
+  "lastBuildDate": "Mon, 16 Jan 2017 13:29:21 +0900",
+  "total": 72,
+  "start": 1,
+  "display": 10,
+  "items": [
+    {
+      "title": "<b>경희대학교 국제캠퍼스</b>",
+      "link": "http://www.khu.ac.kr/",
+      "category": "교육,학문>대학교",
+      "description": "경기도 용인시 기흥구 서천동에 위치한 <b>경희대학교 국제캠퍼스</b>.",
+      "telephone": "",
+      "address": "경기도 용인시 기흥구 서천동 1 ",
+      "roadAddress": "경기도 용인시 기흥구 덕영대로 1732 경희대학교",
+      "mapx": "318561",
+      "mapy": "516125"
+
+    },
+    {
+      "title": "<b>경희대학교</b> <b>국제</b>대학원",
+      "link": "http://gsp.khu.ac.kr/",
+      "category": "교육,학문>대학원",
+      "description": "<b>국제</b>통상, 개발협력학, 경영학, 관계학, 입학전형 안내",
+      "telephone": "",
+      "address": "경기도 용인시 기흥구 서천동 1 ",
+      "roadAddress": "경기도 용인시 기흥구 덕영대로 1732 경희대학교",
+      "mapx": "318561",
+      "mapy": "516125"
+
+    },
+    {
+      "title": "<b>경희대학교</b> 동서의학대학원",
+      "link": "http://gsm.khu.ac.kr/",
+      "category": "교육,학문>대학원",
+      "description": "",
+      "telephone": "",
+      "address": "경기도 용인시 기흥구 서천동 1 ",
+      "roadAddress": "경기도 용인시 기흥구 덕영대로 1732 경희대학교",
+      "mapx": "318664",
+      "mapy": "515732"
+
+    },
+    {
+      "title": "<b>경희대학교국제캠퍼스</b> 애지원",
+      "link": "",
+      "category": "교육,학문>학교부속시설",
+      "description": "",
+      "telephone": "",
+      "address": "경기도 수원시 영통구 영통동 273-1 ",
+      "roadAddress": "경기도 수원시 영통구 덕영대로 1731 애지원기숙사",
+      "mapx": "318697",
+      "mapy": "516780"
+
+    },
+    {
+      "title": "<b>경희대학교국제캠퍼스</b> 제2기숙사(남학생)",
+      "link": "",
+      "category": "교육,학문>학교부속시설",
+      "description": "",
+      "telephone": "",
+      "address": "경기도 용인시 기흥구 서천동 245-4 ",
+      "roadAddress": "",
+      "mapx": "318322",
+      "mapy": "516033"
+
+    },
+    {
+      "title": "<b>경희대학교국제캠퍼스</b>외국어대학관",
+      "link": "",
+      "category": ">교육>종합대학",
+      "description": "",
+      "telephone": "",
+      "address": "경기도 용인시 기흥구 서천동",
+      "roadAddress": "",
+      "mapx": "318373",
+      "mapy": "516335"
+
+    },
+    {
+      "title": "<b>경희대학교 국제캠퍼스</b> 도서관",
+      "link": "http://kulis.khu.ac.kr/",
+      "category": "교육,학문>도서관",
+      "description": "도서관 이용 안내, 소장자료 및 학술 DB, 전자저널 검색.",
+      "telephone": "",
+      "address": "경기도 용인시 기흥구 서천동 1 ",
+      "roadAddress": "경기도 용인시 기흥구 덕영대로 1732 경희대학교",
+      "mapx": "318535",
+      "mapy": "515865"
+
+    },
+    {
+      "title": "<b>경희대학교 국제캠퍼스</b> 국제교육원",
+      "link": "http://global.khu.ac.kr/",
+      "category": "교육,학문>학교부속시설",
+      "description": "교육원 소개, 학사일정, 학교생활, 외국어, 한국어 등 교육과정 안내.",
+      "telephone": "",
+      "address": "경기도 용인시 기흥구 서천동 1 ",
+      "roadAddress": "경기도 용인시 기흥구 덕영대로 1732 경희대학교",
+      "mapx": "318414",
+      "mapy": "516273"
+
+    },
+    {
+      "title": "<b>경희대학교국제캠퍼스</b>예술디자인대학관",
+      "link": "",
+      "category": ">교육>학교건물",
+      "description": "",
+      "telephone": "",
+      "address": "경기도 용인시 기흥구 하갈동",
+      "roadAddress": "",
+      "mapx": "318962",
+      "mapy": "515943"
+
+    },
+    {
+      "title": "<b>경희대학교</b> 평생교육원",
+      "link": "http://ice.khu.ac.kr/",
+      "category": "교육,학문>평생,사회교육원",
+      "description": "교육원소개, 학점은행제, 일반 및 특별교육과정, 휘트니스 등 안내.",
+      "telephone": "",
+      "address": "경기도 용인시 기흥구 서천동 1 ",
+      "roadAddress": "경기도 용인시 기흥구 덕영대로 1732 경희대학교",
+      "mapx": "318414",
+      "mapy": "516273"
+
+    }
+  ]
+}
