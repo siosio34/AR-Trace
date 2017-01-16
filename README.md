@@ -6,12 +6,19 @@
  
 # Qucik Start
 
+
     Android App Client
 
     1) Install Android-Studio : https://developer.android.com/studio/index.html?hl=ko
   
     2) File -> Import Existing Project -> PATH_CLONE_AR-Trace/AR-Trace
   
+# FireBase Server Setting
+    
+    1) Create FireBase Project - https://console.firebase.google.com/
+
+    2) FireBase Android Setting - https://firebase.google.com/docs/android/setup
+
 # Intro Video
 
 [![IMAGE ALT youtube](http://img.youtube.com/vi/V0eGnEXL0VQ/0.jpg)](http://www.youtube.com/watch?v=V0eGnEXL0VQ)
@@ -30,7 +37,22 @@
     Jihyun KIM [ wlgus0078@naver.com ] site : https://github.com/KIMgsu
     
 # Lisence
-    This project is licensed by GPLv3
+    GPL v3 Copyright (C) {2017} {@siosio34, @akakakakakaa, @KIMgsu}
+
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or 
+    (at your option) any later version.
+
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+    or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>
     
     
 
