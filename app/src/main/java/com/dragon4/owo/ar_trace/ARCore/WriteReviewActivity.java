@@ -319,8 +319,9 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                 }
 
                 dialog.dismiss();
-                Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
+
             }
         }).start();
+        Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
     }
 }
