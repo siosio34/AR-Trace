@@ -32,6 +32,7 @@ import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
 import com.dragon4.owo.ar_trace.NaverMap.FragmentMapview;
 import com.dragon4.owo.ar_trace.R;
+import com.nhn.android.maps.maplib.NGeoPoint;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -207,15 +208,16 @@ public class TopLayoutOnMixView {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(activity, WriteReviewActivity.class);
+
+                NGeoPoint nGeoPoint = naverFragment.getCurrentLocation();
+                intent.putExtra("lat",nGeoPoint.getLatitude());
+                intent.putExtra("lon", nGeoPoint.getLongitude());
                 activity.startActivity(intent);
-                // TODO: 2017. 1. 12. 이미지뷰, 동영상 연동
+                // TODO: 2017. 1. 12. 이미지뷰
 
 
             }
         });
-
-
-
 
 
         final Button reviewOnOffBtn = (Button) mainArView.findViewById(R.id.ar_mixview_review_onoff);

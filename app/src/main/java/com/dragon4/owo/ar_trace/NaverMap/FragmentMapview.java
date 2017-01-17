@@ -370,6 +370,10 @@ public class FragmentMapview extends Fragment {
 
     };
 
+    public NGeoPoint getCurrentLocation() {
+        return currentLocation;
+    }
+
     private String testJSON = "{\n" +
             "  \"result\": {\n" +
             "    \"summary\": {\n" +

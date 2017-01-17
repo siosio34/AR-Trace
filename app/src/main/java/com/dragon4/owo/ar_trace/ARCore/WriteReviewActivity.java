@@ -6,10 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
-import android.location.Location;
 import android.net.Uri;
-import android.opengl.GLES20;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -17,7 +14,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,15 +32,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -73,6 +65,9 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
     //choosed bitmap
     private Bitmap currentBitmap = null;
 
+    private Double currentLat;
+    private Double currentLon;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +81,9 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         findViewById(R.id.ar_mixview_write_review_location).setOnClickListener(this);
         findViewById(R.id.ar_mixview_write_review_picture).setOnClickListener(this);
         findViewById(R.id.ar_mixview_write_review_register).setOnClickListener(this);
+
+        currentLat = getIntent().getDoubleExtra("lat",0.0);
+        currentLon = getIntent().getDoubleExtra("lon",0.0);
     }
 
     public void onClick(View v) {
@@ -189,13 +187,14 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 // Location curLoc = mixContext.getCurrentLocation();
-                //  Double lat = curLoc.getLatitude();
-                //   Double lon = curLoc.getLongitude();
+                // Double lat = curLoc.getLatitude();
+                // Double lon = curLoc.getLongitude();
 
                 Trace trace = new Trace();
                 String requestLocationIdURL;
-
+                
                 //set location id of trace
+                // TODO: 2017. 1. 17. 해쉿값뽑아내기
                 trace.setLocationID("1");
 
                 //use key as trace id
@@ -207,6 +206,15 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                     trace.setContent(content.getText().toString());
                 else
                     trace.setContent("");
+
+                trace.setLat(currentLat);
+                trace.setLon(currentLon);
+                // image url, tumbnailurl 은 아래 함수서 뽑아냄
+
+                // like num은 어차피 0
+                // lat, lon 뽑아내야함.
+                // placeName 뽑아내야함
+                // userID가 없네... !
 
                 //add current date to trace
                 trace.setWriteDate(new Date());
@@ -229,6 +237,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
             }
         });
     }
+
 
     private void uploadImageToPythonServer(final Uri fileURI) throws IOException {
         // TODO: 2017. 1. 16. 파일의 uri 가져오는거 ㄲ
@@ -383,4 +392,6 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         }).start();
         Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
     }
+
+
 }
