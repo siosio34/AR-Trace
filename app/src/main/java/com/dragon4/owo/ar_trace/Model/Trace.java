@@ -9,8 +9,8 @@ import java.util.List;
 
 public class Trace {
 
-    private String locationID; // 장소 id
-    private String traceID; // 흔적 id
+    private String locationID; // 장소 id 부모노드가 될예정
+    private String traceID; // 흔적 id 이미지 아이디 가 될예정
     private String content; // 글 내용
     private String imageURL;
     private String thumbnailURL;

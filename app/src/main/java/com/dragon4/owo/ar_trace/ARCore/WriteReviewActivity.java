@@ -24,7 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.dragon4.owo.ar_trace.Model.Trace;
-import com.dragon4.owo.ar_trace.PythonServer.FileUpload;
 import com.dragon4.owo.ar_trace.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -122,7 +121,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
         destination = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/ARTrace/" + System.currentTimeMillis() + ".jpg");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(destination));
-       // uploadImageToPythonServer(Uri.fromFile(destination));
+        // uploadImageToPythonServer(Uri.fromFile(destination));
         startActivityForResult(intent, REQUEST_IMAGE);
     }
 
@@ -189,9 +188,9 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-               // Location curLoc = mixContext.getCurrentLocation();
-             //  Double lat = curLoc.getLatitude();
-             //   Double lon = curLoc.getLongitude();
+                // Location curLoc = mixContext.getCurrentLocation();
+                //  Double lat = curLoc.getLatitude();
+                //   Double lon = curLoc.getLongitude();
 
                 Trace trace = new Trace();
                 String requestLocationIdURL;

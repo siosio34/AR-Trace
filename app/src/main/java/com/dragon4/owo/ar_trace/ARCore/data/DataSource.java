@@ -69,17 +69,12 @@ public class DataSource {
 
         cafeIcon = BitmapFactory.decodeResource(res, R.drawable.ic_ar_cafe);
         busIcon = BitmapFactory.decodeResource(res,R.drawable.ic_ar_bus);
-        restraurantIcon = BitmapFactory.decodeResource(res,R.drawable.ic_ar_cafe);
+        restraurantIcon = BitmapFactory.decodeResource(res,R.drawable.ic_ar_restaurant);
         convenienceIcon = BitmapFactory.decodeResource(res,R.drawable.ic_ar_convenience_store);
         bankIcon = BitmapFactory.decodeResource(res,R.drawable.ic_ar_bank);
         hospitalIcon = BitmapFactory.decodeResource(res,R.drawable.ic_ar_hospital);
         accommodationIcon = BitmapFactory.decodeResource(res,R.drawable.ic_ar_lodgment);
-//
-       // // TODO: 2016. 12. 11. icon 들 변경해야됨...
-       // // 이미지 영상, 비디오 이미지 구해야됨 크기는 40 * 60 정도
-       // documentIcon = BitmapFactory.decodeResource(res, R.drawable.ar_document_document_marker);
-       // imageIcon = BitmapFactory.decodeResource(res,R.drawable.ar_document_image_marker);
-       // videoIcon = BitmapFactory.decodeResource(res,R.drawable.ar_document_vidoe_marker);
+
 
     }
 
@@ -96,11 +91,11 @@ public class DataSource {
                 bitmap = busIcon;
                 break;
 
-            case "CONVENIENCE":
+            case "Convenience":
                 bitmap = convenienceIcon;
                 break;
 
-            case "RESTRAUNT":
+            case "Restaurant":
                 bitmap = restraurantIcon;
                 break;
 
@@ -114,18 +109,6 @@ public class DataSource {
 
             case "HOSPITAL":
                 bitmap = hospitalIcon;
-                break;
-
-            case "DOCUMENT":
-                bitmap = documentIcon;
-                break;
-
-            case "IMAGE":
-                bitmap = imageIcon;
-                break;
-
-            case "VIDEO":
-                bitmap = videoIcon;
                 break;
 
         }

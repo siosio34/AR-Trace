@@ -271,32 +271,31 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
 
         // TODO: 2016. 12. 9. 다른 카테고리 추가해야된다.
         switch (v.getId()) {
+            case R.id.ar_mixview_cafe:
+                datasource = DataSource.DATASOURCE.CAFE;
+                break;
 
             case R.id.ar_mixview_bus:
                 datasource = DataSource.DATASOURCE.BUSSTOP;
+                break;
+
+            case R.id.ar_mixview_convenience_store:
+                datasource = DataSource.DATASOURCE.Convenience;
                 break;
 
             case R.id.ar_mixview_restaurant:
                 datasource = DataSource.DATASOURCE.Restaurant;
                 break;
 
-            case R.id.ar_mixview_cafe:
-                datasource = DataSource.DATASOURCE.CAFE;
-                break;
-
-            case R.id.ar_mixview_lodgment:
-                datasource = DataSource.DATASOURCE.ACCOMMODATION;
+            case R.id.ar_mixview_bank:
+                datasource = DataSource.DATASOURCE.BANK;
                 break;
 
             case R.id.ar_mixview_hospital:
                 datasource = DataSource.DATASOURCE.HOSPITAL;
                 break;
 
-            case R.id.ar_mixview_bank:
-                datasource = DataSource.DATASOURCE.BANK;
-                break;
-
-            case R.id.ar_mixview_convenience_store:
+            case R.id.ar_mixview_lodgment:
                 datasource = DataSource.DATASOURCE.ACCOMMODATION;
                 break;
 
@@ -310,6 +309,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
 
         else {
             Location location = mixContext.getCurrentLocation();
+            Toast.makeText(mixContext, datasource.toString(), Toast.LENGTH_SHORT).show();
             Log.i("로케이션 경도", String.valueOf(location.getLatitude()));
             mixContext.setDataSource(datasource,!mixContext.isDataSourceSelected(datasource));
             dataView.requestData(DataSource.createRequestCategoryURL(datasource, location.getLatitude(), location.getLongitude(),
