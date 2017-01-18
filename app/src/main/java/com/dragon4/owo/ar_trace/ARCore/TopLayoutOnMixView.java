@@ -112,9 +112,14 @@ public class TopLayoutOnMixView {
             }
         });
 
+        naverFragment = new FragmentMapview();
+        naverFragment.setArguments(new Bundle());
+
+        FragmentTransaction fragmentTransaction = manager.beginTransaction();
+        fragmentTransaction.add(R.id.ar_mixview_naverview, naverFragment);
+        fragmentTransaction.commit();
+
         final DataConvertor dataConvertor = new DataConvertor();
-
-
         final EditText searchText = (EditText) mainArView.findViewById(R.id.ar_mixview_search_text);
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -235,7 +240,6 @@ public class TopLayoutOnMixView {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(activity, WriteReviewActivity.class);
-
                 NGeoPoint nGeoPoint = naverFragment.getCurrentLocation();
                 intent.putExtra("lat",nGeoPoint.getLatitude());
                 intent.putExtra("lon", nGeoPoint.getLongitude());
@@ -271,12 +275,6 @@ public class TopLayoutOnMixView {
             }
         });
 
-        naverFragment = new FragmentMapview();
-        naverFragment.setArguments(new Bundle());
-
-        FragmentTransaction fragmentTransaction = manager.beginTransaction();
-        fragmentTransaction.add(R.id.ar_mixview_naverview, naverFragment);
-        fragmentTransaction.commit();
 
         // 네이버 지도 추가
         // TODO: 2016. 12. 31. 배율 높이기 네이버 위치 리스너 만들기.

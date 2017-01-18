@@ -81,8 +81,6 @@ public class HttpHandler extends AsyncTask<String, Void, String> {
             HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
         }
 
-
-
         try {
             url = new URL(urlStr);
             conn = (HttpURLConnection) url.openConnection();

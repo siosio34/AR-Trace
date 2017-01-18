@@ -207,12 +207,12 @@ public class DataSource {
         return ret;
     }
 
-    public static String createBuildIDRequestURL(String _query) {
+    public static String createNaverGeoAPIRequcetURL(double lat, double lon) {
         String ret;
-        ret = "http://192.168.1.41:8009/buildinginfo" + "?buildName=" + _query;
-        Log.i("다음검색 url test",ret);
+        String queryLocation = String.valueOf(lon)+","+String.valueOf(lat);
+        ret = "https://openapi.naver.com/v1/map/reversegeocode?query=" + queryLocation;
+        Log.i("NaverGeoURL", ret);
         return ret;
-
     }
 
     public static String createNaverSearchCallBackURL(String _query) {
@@ -244,20 +244,6 @@ public class DataSource {
         return ret;
     }
 
-    /*
-
-     case DOCUMENT:
-                case IMAGE:
-                case VIDEO:
-                    ret = "https://tourseoul-451de.firebaseio.com/posts.json";
-                    break;
-
-                default:
-                    ret = "https://tourseoul-451de.firebaseio.com/posts.json";
-                    break;
-
-
-     */
 
     // 각 소스에 따른 색을 리턴
     public static int getColor(DATASOURCE datasource) {

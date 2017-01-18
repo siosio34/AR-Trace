@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,8 +18,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.Model.Trace;
 import com.dragon4.owo.ar_trace.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -32,12 +35,17 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by mansu on 2017-01-16.
@@ -68,22 +76,65 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
     private Double currentLat;
     private Double currentLon;
 
+    //
+    TextView axisTitle;
+    TextView axisNum;
+    TextView locationTitle;
+    TextView locationName;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_ar_mixview_write_review);
+        loadActivity();
+    }
+
+    public void loadActivity() {
 
         context = getApplicationContext();
         middleImg = (ImageView)findViewById(R.id.ar_mixview_write_review_middle_img);
+
         //register onclick listener
         findViewById(R.id.ar_mixview_write_review_back).setOnClickListener(this);
         findViewById(R.id.ar_mixview_write_review_axis).setOnClickListener(this);
         findViewById(R.id.ar_mixview_write_review_location).setOnClickListener(this);
         findViewById(R.id.ar_mixview_write_review_add).setOnClickListener(this);
         findViewById(R.id.ar_mixview_write_review_register).setOnClickListener(this);
+        axisTitle = (TextView)findViewById(R.id.ar_mixview_write_review_axis_title);
+        axisNum = (TextView)findViewById(R.id.ar_mixview_write_review_axis_num);
+        locationTitle = (TextView)findViewById(R.id.ar_mixview_write_review_location_title);
+        locationName = (TextView)findViewById(R.id.ar_mixview_write_review_location_name);
 
         currentLat = getIntent().getDoubleExtra("lat",0.0);
         currentLon = getIntent().getDoubleExtra("lon",0.0);
+
+        // 경도 위도
+        TextView axisView = (TextView)findViewById(R.id.ar_mixview_write_review_axis_num);
+        axisView.setText(String.valueOf(String.valueOf(currentLat) + " N " + String.valueOf(currentLon) + " E "));
+
+        // 경도 위도를 좌표 변환후 주소로 표시.
+        TextView locationNameView = (TextView)findViewById(R.id.ar_mixview_write_review_location_name);
+        String requestReverseGeoAPI = DataSource.createNaverGeoAPIRequcetURL(currentLat,currentLon);
+        try {
+            String reverseGeoString = new HttpHandler().execute(requestReverseGeoAPI).get();
+            locationNameView.setText(parsingReverseGeoJson(reverseGeoString));
+            Log.i("parsing Address",locationNameView.getText().toString());
+
+        } catch (InterruptedException | JSONException | ExecutionException e) {
+
+        }
+    }
+
+    public String parsingReverseGeoJson(String reverseGeoString) throws JSONException {
+        String locationName = "";
+        JSONObject reverseObject = new JSONObject(reverseGeoString);
+        JSONArray dataList = reverseObject.getJSONObject("result").getJSONArray("items");
+        for(int i = 0 ; i < dataList.length(); i++) {
+            if(dataList.getJSONObject(i).getBoolean("isRoadAddress")) {
+                locationName = dataList.getJSONObject(i).getString("address");
+            }
+        }
+        return locationName;
     }
 
     public void onClick(View v) {
@@ -112,10 +163,18 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
     private void chooseAxis() {
         middleImg.setImageResource(R.drawable.icon_rhombus_left_chosen);
+        axisTitle.setTextColor(Color.parseColor("#A6000000"));
+        axisNum.setTextColor(Color.parseColor("#A6000000"));
+        locationTitle.setTextColor(Color.parseColor("#5B000000"));
+        locationName.setTextColor(Color.parseColor("#42000000"));
     }
 
     private void chooseLocation() {
         middleImg.setImageResource(R.drawable.icon_rhombus_right_chosen);
+        axisTitle.setTextColor(Color.parseColor("#5B000000"));
+        axisNum.setTextColor(Color.parseColor("#42000000"));
+        locationTitle.setTextColor(Color.parseColor("#A6000000"));
+        locationName.setTextColor(Color.parseColor("#A6000000"));
     }
 
     private void choosePictureCase() {
@@ -139,7 +198,8 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
             if (resultCode == RESULT_OK) {
                 try {
 
-                    uploadImageToPythonServer(Uri.fromFile(destination));
+                    // if python server on
+                    //uploadImageToPythonServer(Uri.fromFile(destination));
 
                     FileInputStream in = null;
                     in = new FileInputStream(destination);
@@ -194,6 +254,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+
                 // Location curLoc = mixContext.getCurrentLocation();
                 // Double lat = curLoc.getLatitude();
                 // Double lon = curLoc.getLongitude();
@@ -217,10 +278,10 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
                 trace.setLat(currentLat);
                 trace.setLon(currentLon);
+
                 // image url, tumbnailurl 은 아래 함수서 뽑아냄
 
                 // like num은 어차피 0
-                // lat, lon 뽑아내야함.
                 // placeName 뽑아내야함
                 // userID가 없네... !
 

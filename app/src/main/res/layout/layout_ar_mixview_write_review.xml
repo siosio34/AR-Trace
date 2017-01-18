@@ -111,22 +111,22 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
                         <TextView
-                            android:id="@+id/ar_mixview_write_review_axis_top"
+                            android:id="@+id/ar_mixview_write_review_axis_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="8dp"
                             android:text="좌표"
                             android:textSize="14sp"
-                            android:textColor="#898989"
+                            android:textColor="#A6000000"
                             android:textStyle="bold"/>
                         <TextView
-                            android:id="@+id/ar_mixview_write_review_axis_bottom"
+                            android:id="@+id/ar_mixview_write_review_axis_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="37 14 52.4N 127 04 36.3E"
                             android:textSize="12sp"
-                            android:textColor="#CDCDCD"/>
+                            android:textColor="#A6000000"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -159,22 +159,22 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
                         <TextView
-                            android:id="@+id/ar_mixview_write_review_location_top"
+                            android:id="@+id/ar_mixview_write_review_location_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="8dp"
                             android:text="장소"
                             android:textSize="14sp"
-                            android:textColor="#989898"
+                            android:textColor="#5B000000"
                             android:textStyle="bold"/>
                         <TextView
-                            android:id="@+id/ar_mixview_write_review_location_bottom"
+                            android:id="@+id/ar_mixview_write_review_location_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="스타벅스 경희대국제캠퍼스점"
                             android:textSize="12sp"
-                            android:textColor="#CDCDCD"/>
+                            android:textColor="#42000000"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -216,7 +216,7 @@
                     android:text="추가하기"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="#60009017">
+                    android:textColor="#A6009017">
                 </TextView>
             </LinearLayout>
 
