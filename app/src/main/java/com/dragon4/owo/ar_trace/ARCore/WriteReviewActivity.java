@@ -464,6 +464,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
         setResult(RESULT_OK);
     }
 }
