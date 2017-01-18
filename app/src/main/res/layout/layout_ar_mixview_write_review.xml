@@ -113,6 +113,7 @@
                             android:text="좌표"
                             android:textColor="#989898"/>
                         <TextView
+                            android:id="@+id/ar_mixview_write_review_axis_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="37 14 52.4N 127 04 36.3E"
@@ -155,6 +156,7 @@
                             android:text="장소"
                             android:textColor="#989898"/>
                         <TextView
+                            android:id="@+id/ar_mixview_write_review_location_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="스타벅스 경희대국제캠퍼스점"

@@ -35,6 +35,7 @@ public class NaverCategoryDataProcessor implements DataProcessor{
             dataArray = root.getJSONObject("result").getJSONArray("station");
         }
 
+
         if(dataArray == null) {
             Log.i("Naver Category Error",": data nothing");
             return null;
@@ -47,8 +48,8 @@ public class NaverCategoryDataProcessor implements DataProcessor{
             if (datasource != DataSource.DATASOURCE.BUSSTOP) {
                 marker = processCategoryJsonObject(getObject, datasource);
             } else {
-             //   marker = processBusJsonObject(getObject, datasource);
-            //    Log.i("marker Count", marker.getTitle());
+                marker = processBusJsonObject(getObject, datasource);
+                Log.i("marker Count", marker.getTitle());
             }
             if (marker != null) {
                 markers.add(marker);
