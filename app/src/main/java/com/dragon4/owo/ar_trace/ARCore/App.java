@@ -13,7 +13,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         Typekit.getInstance()
-                .addNormal(Typekit.createFromAsset(this, "NanumBarunpenB.ttf"))
+                .addNormal(Typekit.createFromAsset(this, "NanumBarunpenR.ttf"))
                 .addBold(Typekit.createFromAsset(this, "NanumBarunpenB.ttf"))
                 .addItalic(Typekit.createFromAsset(this, "NanumBarunpenB.ttf"))
                 .addBoldItalic(Typekit.createFromAsset(this, "NanumBarunpenB.ttf"));

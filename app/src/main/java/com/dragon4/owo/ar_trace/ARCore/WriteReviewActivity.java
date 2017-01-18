@@ -79,7 +79,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         findViewById(R.id.ar_mixview_write_review_back).setOnClickListener(this);
         findViewById(R.id.ar_mixview_write_review_axis).setOnClickListener(this);
         findViewById(R.id.ar_mixview_write_review_location).setOnClickListener(this);
-        findViewById(R.id.ar_mixview_write_review_picture).setOnClickListener(this);
+        findViewById(R.id.ar_mixview_write_review_add).setOnClickListener(this);
         findViewById(R.id.ar_mixview_write_review_register).setOnClickListener(this);
 
         currentLat = getIntent().getDoubleExtra("lat",0.0);
@@ -93,14 +93,14 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                 break;
 
             case R.id.ar_mixview_write_review_axis:
-                middleImg.setImageResource(R.drawable.icon_rhombus_left_chosen);
+                chooseAxis();
                 break;
 
             case R.id.ar_mixview_write_review_location:
-                middleImg.setImageResource(R.drawable.icon_rhombus_right_chosen);
+                chooseLocation();
                 break;
 
-            case R.id.ar_mixview_write_review_picture:
+            case R.id.ar_mixview_write_review_add:
                 choosePictureCase();
                 break;
 
@@ -110,7 +110,15 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         }
     }
 
-    public void choosePictureCase() {
+    private void chooseAxis() {
+        middleImg.setImageResource(R.drawable.icon_rhombus_left_chosen);
+    }
+
+    private void chooseLocation() {
+        middleImg.setImageResource(R.drawable.icon_rhombus_right_chosen);
+    }
+
+    private void choosePictureCase() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/ARTrace/");
 
@@ -146,7 +154,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                     */
 
                     ImageView currentImageView = new ImageView(this);
-                    View picture = findViewById(R.id.ar_mixview_write_review_picture);
+                    View picture = findViewById(R.id.ar_mixview_write_review_add);
                     Bitmap scaledBitmap = Bitmap.createScaledBitmap(currentBitmap, picture.getMeasuredWidth(), picture.getMeasuredHeight(), true);
                     currentImageView.setImageBitmap(scaledBitmap);
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picture.getMeasuredWidth(), picture.getMeasuredHeight());
@@ -159,7 +167,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                     parent.addView(currentImageView, index);
 
                     //set id and register onclicklistener
-                    currentImageView.setId(R.id.ar_mixview_write_review_picture);
+                    currentImageView.setId(R.id.ar_mixview_write_review_add);
                     currentImageView.setOnClickListener(this);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -393,5 +401,8 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
     }
 
-
+    @Override
+    public void onDestroy() {
+        setResult(RESULT_OK);
+    }
 }
