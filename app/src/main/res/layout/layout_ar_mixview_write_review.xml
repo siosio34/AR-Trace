@@ -1,67 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <ScrollView
+    android:layout_height="match_parent"
+    android:background="#88000000">
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#BB999999">
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true">
+            <Button
+                android:id="@+id/ar_mixview_write_review_back"
+                android:layout_width="12dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="25dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/icon_back_"/>
+            <TextView
+                android:id="@+id/ar_mixview_write_review_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="2017년 1월 2일"
+                android:textSize="18sp"
+                android:textColor="#FFFFFF"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text=", 자취 남기기"
+                android:textSize="18sp"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+        <Button
+            android:id="@+id/ar_mixview_write_review_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:text="등록"
+            android:textSize="14sp"
+            android:textColor="#E770F886"
+            android:textStyle="bold"/>
+    </RelativeLayout>
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#878785" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerInParent="true">
-                    <Button
-                        android:id="@+id/ar_mixview_write_review_back"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_gravity="center_vertical"
-                        android:background="@drawable/icon_back_"/>
-                    <TextView
-                        android:id="@+id/ar_mixview_write_review_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="2017년 1월 2일"
-                        android:textSize="20sp"
-                        android:textColor="#FFFFFF"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text=", 자취 남기기"
-                        android:textSize="20sp"
-                        android:textColor="#FFFFFF"/>
-                </LinearLayout>
-                <Button
-                    android:id="@+id/ar_mixview_write_review_register"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_alignParentRight="true"
-                    android:background="@android:color/transparent"
-                    android:text="등록"
-                    android:textColor="#6CE180"/>
-            </RelativeLayout>
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="#878785" />
 
             <!--현재 위치-->
             <LinearLayout
@@ -69,8 +73,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="30dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginBottom="27dp"
+                android:layout_marginTop="27dp"
                 android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -79,8 +83,8 @@
                     android:layout_marginBottom="5dp"
                     android:orientation="horizontal">
                     <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:background="@drawable/icon_flaged_position"/>
                     <TextView
                         android:layout_width="wrap_content"
@@ -93,35 +97,40 @@
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:background="#EEEEEE"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="18dp"
+                    android:paddingRight="18dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:background="#E7FFFFFF"
                     android:orientation="horizontal">
                     <LinearLayout
                         android:id="@+id/ar_mixview_write_review_axis"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:orientation="vertical">
                         <TextView
+                            android:id="@+id/ar_mixview_write_review_axis_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
                             android:layout_marginBottom="8dp"
                             android:text="좌표"
-                            android:textColor="#989898"/>
+                            android:textSize="14sp"
+                            android:textColor="#A6000000"
+                            android:textStyle="bold"/>
                         <TextView
                             android:id="@+id/ar_mixview_write_review_axis_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="37 14 52.4N 127 04 36.3E"
-                            android:textColor="#CDCDCD"/>
+                            android:textSize="12sp"
+                            android:textColor="#A6000000"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="70dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:orientation="vertical">
@@ -133,8 +142,8 @@
                             android:background="#808080"/>
                         <ImageView
                             android:id="@+id/ar_mixview_write_review_middle_img"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:background="@drawable/icon_rhombus_left_chosen"/>
                         <View
                             android:layout_width="2dp"
@@ -146,21 +155,26 @@
                     <LinearLayout
                         android:id="@+id/ar_mixview_write_review_location"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:orientation="vertical">
                         <TextView
+                            android:id="@+id/ar_mixview_write_review_location_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
                             android:layout_marginBottom="8dp"
                             android:text="장소"
-                            android:textColor="#989898"/>
+                            android:textSize="14sp"
+                            android:textColor="#5B000000"
+                            android:textStyle="bold"/>
                         <TextView
                             android:id="@+id/ar_mixview_write_review_location_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="스타벅스 경희대국제캠퍼스점"
-                            android:textColor="#CDCDCD"/>
+                            android:textSize="12sp"
+                            android:textColor="#42000000"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -171,7 +185,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="27dp"
                 android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -180,8 +194,8 @@
                     android:layout_marginBottom="5dp"
                     android:orientation="horizontal">
                     <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:background="@drawable/icon_camera"/>
                     <TextView
                         android:layout_width="wrap_content"
@@ -192,40 +206,18 @@
                         android:textSize="16sp"
                         android:textColor="#FFFFFF"/>
                 </LinearLayout>
-                <LinearLayout
+                <TextView
+                    android:id="@+id/ar_mixview_write_review_add"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:orientation="horizontal"
-                    android:background="#EEEEEE">
-                    <TextView
-                        android:id="@+id/ar_mixview_write_review_picture"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:padding="40dp"
-                        android:gravity="center"
-                        android:background="@android:color/transparent"
-                        android:text="사진"
-                        android:textSize="20sp"
-                        android:textColor="#6CE180">
-                    </TextView>
-                    <View
-                        android:layout_width="2dp"
-                        android:layout_height="match_parent"
-                        android:background="#808080" />
-                    <TextView
-                        android:id="@+id/ar_mixview_write_review_video"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:padding="40dp"
-                        android:gravity="center"
-                        android:background="@android:color/transparent"
-                        android:text="동영상"
-                        android:textSize="20sp"
-                        android:textColor="#6CE180">
-                    </TextView>
-                </LinearLayout>
+                    android:background="#E7FFFFFF"
+                    android:gravity="center"
+                    android:text="추가하기"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#A6009017">
+                </TextView>
             </LinearLayout>
 
             <!--글-->
@@ -234,17 +226,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="27dp"
                 android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="18dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginBottom="5dp"
                     android:orientation="horizontal">
                     <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:background="@drawable/icon_pencil"/>
                     <TextView
                         android:layout_width="wrap_content"
@@ -267,12 +259,15 @@
                 <EditText
                     android:id="@+id/ar_mixview_write_review_content"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:background="#EEEEEE"
+                    android:layout_height="wrap_content"
+                    android:minHeight="150dp"
+                    android:background="#E7FFFFFF"
                     android:gravity="top|left"
-                    android:padding="20dp"
+                    android:padding="18dp"
                     android:hint="나의 발자취를 글로 남기세요."
-                    android:textColorHint="#B9B8B6">
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:textColorHint="#4B000000">
                 </EditText>
             </LinearLayout>
 

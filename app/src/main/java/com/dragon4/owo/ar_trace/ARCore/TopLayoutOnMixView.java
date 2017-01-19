@@ -50,14 +50,15 @@ import java.util.zip.Inflater;
  */
 
 public class TopLayoutOnMixView {
-    //리뷰를 위한 팝업뷰
-    private PopupWindow mPopupWindow;
-
+    public static int WRITE_REVIEW = 1;
     //네이버 지도
     private FragmentMapview naverFragment;
 
     //가장 상단의 레이아웃
     private View mainArView;
+
+    //expansion, reduction level
+    private int naver_map_level = 1;
 
     private Context context;
     public TopLayoutOnMixView(final Activity activity, final LayoutInflater inflater, FragmentManager manager) {
@@ -68,6 +69,32 @@ public class TopLayoutOnMixView {
         final LinearLayout searchbar = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_searchbar);
         final Button hideSearchbar = (Button) mainArView.findViewById(R.id.ar_mixview_hide_searchbar);
         final ListView searchListView = (ListView) mainArView.findViewById(R.id.ar_mixview_search_list);
+
+        mainArView.findViewById(R.id.ar_mixview_naverview_expand).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(naver_map_level < 3) {
+                    ViewGroup.LayoutParams params = mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).getLayoutParams();
+                    params.width *= 2;
+                    params.height *= 2;
+                    mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).setLayoutParams(params);
+
+                    naver_map_level++;
+                }
+            }
+        });
+        mainArView.findViewById(R.id.ar_mixview_naverview_reduce).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(naver_map_level > 1) {
+                    ViewGroup.LayoutParams params = mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).getLayoutParams();
+                    params.width /= 2;
+                    params.height /= 2;
+                    mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).setLayoutParams(params);
+                    naver_map_level--;
+                }
+            }
+        });
 
         Button searchBtn = (Button) mainArView.findViewById(R.id.ar_mixview_search);
         searchBtn.setOnClickListener(new View.OnClickListener() {
@@ -215,7 +242,9 @@ public class TopLayoutOnMixView {
                 NGeoPoint nGeoPoint = naverFragment.getCurrentLocation();
                 intent.putExtra("lat",nGeoPoint.getLatitude());
                 intent.putExtra("lon", nGeoPoint.getLongitude());
-                activity.startActivity(intent);
+
+                mainArView.setVisibility(View.GONE);
+                activity.startActivityForResult(intent, WRITE_REVIEW);
                 // TODO: 2017. 1. 12. 이미지뷰
             }
         });

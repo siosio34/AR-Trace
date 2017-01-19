@@ -1,19 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:id="@+id/ar_mixview"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <!-- 여기에 구현하면됨 -->
-    <LinearLayout
-        android:id="@+id/ar_mixview_naverview"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+    <RelativeLayout
+        android:id="@+id/ar_mixview_naverview_wrapper"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:background="#FFFFFF">
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ar_mixview_naverview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFFFF"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginRight="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true">
+            <Button
+                android:id="@+id/ar_mixview_naverview_expand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:background="#FFFFFF"
+                android:text="+"
+                android:textStyle="bold"
+                android:textSize="30sp" />
+            <Button
+                android:id="@+id/ar_mixview_naverview_reduce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:text="-"
+                android:textStyle="bold"
+                android:textSize="30sp"/>
+        </LinearLayout>
+    </RelativeLayout>
 
     <!-- searchbar -->
     <LinearLayout
@@ -73,7 +108,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="10dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true">
         <LinearLayout
@@ -84,33 +119,34 @@
             android:visibility="gone">
             <Button
                 android:id="@+id/ar_mixview_search"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginBottom="10dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="6dp"
                 android:background="@drawable/icon_search"/>
             <Button
                 android:id="@+id/ar_mixview_category"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginBottom="10dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="6dp"
                 android:background="@drawable/icon_category"/>
             <Button
                 android:id="@+id/ar_mixview_write_review"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginBottom="10dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="6dp"
                 android:background="@drawable/icon_write_review"/>
             <Button
                 android:id="@+id/ar_mixview_review_onoff"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginBottom="10dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="6dp"
                 android:background="@drawable/icon_others_review_off"/>
         </LinearLayout>
         <Button
             android:id="@+id/ar_mixview_buttonview_hide"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="25dp"
             android:background="@drawable/icon_menu_down"/>
     </LinearLayout>
     <LinearLayout

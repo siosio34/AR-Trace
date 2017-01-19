@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -74,8 +75,13 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
     private Double currentLat;
     private Double currentLon;
-
     private String placeName;
+
+    TextView axisTitle;
+    TextView axisNum;
+    TextView locationTitle;
+    TextView locationName;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,8 +99,12 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         findViewById(R.id.ar_mixview_write_review_back).setOnClickListener(this);
         findViewById(R.id.ar_mixview_write_review_axis).setOnClickListener(this);
         findViewById(R.id.ar_mixview_write_review_location).setOnClickListener(this);
-        findViewById(R.id.ar_mixview_write_review_picture).setOnClickListener(this);
+        findViewById(R.id.ar_mixview_write_review_add).setOnClickListener(this);
         findViewById(R.id.ar_mixview_write_review_register).setOnClickListener(this);
+        axisTitle = (TextView)findViewById(R.id.ar_mixview_write_review_axis_title);
+        axisNum = (TextView)findViewById(R.id.ar_mixview_write_review_axis_num);
+        locationTitle = (TextView)findViewById(R.id.ar_mixview_write_review_location_title);
+        locationName = (TextView)findViewById(R.id.ar_mixview_write_review_location_name);
 
         currentLat = getIntent().getDoubleExtra("lat",0.0);
         currentLon = getIntent().getDoubleExtra("lon",0.0);
@@ -136,14 +146,14 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                 break;
 
             case R.id.ar_mixview_write_review_axis:
-                middleImg.setImageResource(R.drawable.icon_rhombus_left_chosen);
+                chooseAxis();
                 break;
 
             case R.id.ar_mixview_write_review_location:
-                middleImg.setImageResource(R.drawable.icon_rhombus_right_chosen);
+                chooseLocation();
                 break;
 
-            case R.id.ar_mixview_write_review_picture:
+            case R.id.ar_mixview_write_review_add:
                 choosePictureCase();
                 break;
 
@@ -153,7 +163,23 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         }
     }
 
-    public void choosePictureCase() {
+    private void chooseAxis() {
+        middleImg.setImageResource(R.drawable.icon_rhombus_left_chosen);
+        axisTitle.setTextColor(Color.parseColor("#A6000000"));
+        axisNum.setTextColor(Color.parseColor("#A6000000"));
+        locationTitle.setTextColor(Color.parseColor("#5B000000"));
+        locationName.setTextColor(Color.parseColor("#42000000"));
+    }
+
+    private void chooseLocation() {
+        middleImg.setImageResource(R.drawable.icon_rhombus_right_chosen);
+        axisTitle.setTextColor(Color.parseColor("#5B000000"));
+        axisNum.setTextColor(Color.parseColor("#42000000"));
+        locationTitle.setTextColor(Color.parseColor("#A6000000"));
+        locationName.setTextColor(Color.parseColor("#A6000000"));
+    }
+
+    private void choosePictureCase() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/ARTrace/");
 
@@ -162,7 +188,6 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
         destination = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/ARTrace/" + System.currentTimeMillis() + ".jpg");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(destination));
-        // uploadImageToPythonServer(Uri.fromFile(destination));
         startActivityForResult(intent, REQUEST_IMAGE);
     }
 
@@ -190,7 +215,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                     */
 
                     ImageView currentImageView = new ImageView(this);
-                    View picture = findViewById(R.id.ar_mixview_write_review_picture);
+                    View picture = findViewById(R.id.ar_mixview_write_review_add);
                     Bitmap scaledBitmap = Bitmap.createScaledBitmap(currentBitmap, picture.getMeasuredWidth(), picture.getMeasuredHeight(), true);
                     currentImageView.setImageBitmap(scaledBitmap);
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picture.getMeasuredWidth(), picture.getMeasuredHeight());
@@ -203,7 +228,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                     parent.addView(currentImageView, index);
 
                     //set id and register onclicklistener
-                    currentImageView.setId(R.id.ar_mixview_write_review_picture);
+                    currentImageView.setId(R.id.ar_mixview_write_review_add);
                     currentImageView.setOnClickListener(this);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -431,5 +456,9 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        setResult(RESULT_OK);
+    }
 }
