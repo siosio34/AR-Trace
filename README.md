@@ -13,12 +13,22 @@
   
     2) File -> Import Existing Project -> PATH_CLONE_AR-Trace/AR-Trace
   
-# FireBase Server Setting
+# Server Setting   
+  
+    - FireBase Server Setting
     
-    1) Create FireBase Project - https://console.firebase.google.com/
+     1) Create FireBase Project - https://console.firebase.google.com/
 
-    2) FireBase Android Setting - https://firebase.google.com/docs/android/setup
-
+     2) FireBase Android Setting - https://firebase.google.com/docs/android/setup
+    
+     3) Download google-services.json in your Project
+    
+    - Python Server Setting
+    
+        In Processing ...
+    
+    
+    
 # Intro Video
 
 [![IMAGE ALT youtube](http://img.youtube.com/vi/V0eGnEXL0VQ/0.jpg)](http://www.youtube.com/watch?v=V0eGnEXL0VQ)
