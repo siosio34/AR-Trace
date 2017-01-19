@@ -19,7 +19,6 @@ public class Trace {
     private double lon;
     private String placeName; // 주소를 경도 위도로
     private Date writeDate; // 글쓴시간
-    private List<Comment> commentList;
 
     public String getLocationID() {
         return locationID;
@@ -93,13 +92,6 @@ public class Trace {
         this.writeDate = writeDate;
     }
 
-    public List<Comment> getCommentList() {
-        return commentList;
-    }
-
-    public void setCommentList(List<Comment> commentList) {
-        this.commentList = commentList;
-    }
 
     public String getThumbnailURL() {
         return thumbnailURL;
