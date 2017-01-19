@@ -77,7 +77,6 @@ public class HttpHandler extends AsyncTask<String, Void, String> {
             } catch (KeyManagementException e) {
                 e.printStackTrace();
             }
-
             HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
         }
 
@@ -95,6 +94,8 @@ public class HttpHandler extends AsyncTask<String, Void, String> {
             int responseCode = conn.getResponseCode();
             Log.i("ResponseCode : ", Integer.toString(responseCode));
 
+            // TODO: 2017. 1. 19. 에러코드일때 따로 예외처리해줘야됨
+
             InputStream in = new BufferedInputStream(conn.getInputStream());
             responseStr = convertStreamToString(in);
             Log.i("Response String", responseStr);
@@ -106,7 +107,6 @@ public class HttpHandler extends AsyncTask<String, Void, String> {
         } catch (Exception e) {
             Log.e(TAG, "Exception: " + e.getMessage());
         }
-
         return responseStr;
     }
 

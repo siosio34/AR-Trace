@@ -13,7 +13,7 @@ public class Trace {
     private String traceID; // 흔적 id 이미지 아이디 가 될예정
     private String content; // 글 내용
     private String imageURL;
-    private String thumbnailURL;
+    private String thumbnailURL; // 썸네일 유알엘
     private int likeNum; // 좋아요 갯수
     private double lat;
     private double lon;

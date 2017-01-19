@@ -75,6 +75,8 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
     private Double currentLat;
     private Double currentLon;
 
+    private String placeName;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +108,8 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         String requestReverseGeoAPI = DataSource.createNaverGeoAPIRequcetURL(currentLat,currentLon);
         try {
             String reverseGeoString = new HttpHandler().execute(requestReverseGeoAPI).get();
-            locationNameView.setText(parsingReverseGeoJson(reverseGeoString));
+            placeName = parsingReverseGeoJson(reverseGeoString);
+            locationNameView.setText(placeName);
             Log.i("parsing Address",locationNameView.getText().toString());
 
         } catch (InterruptedException | JSONException | ExecutionException e) {
@@ -227,17 +230,11 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-
-                // Location curLoc = mixContext.getCurrentLocation();
-                // Double lat = curLoc.getLatitude();
-                // Double lon = curLoc.getLongitude();
-
                 Trace trace = new Trace();
-                String requestLocationIdURL;
                 
                 //set location id of trace
-                // TODO: 2017. 1. 17. 해쉿값뽑아내기
-                trace.setLocationID("1");
+                String hashKey = MixUtils.makeHashStringMD5(currentLon,currentLon);
+                trace.setLocationID(hashKey);
 
                 //use key as trace id
                 trace.setTraceID(dataSnapshot.getKey());
@@ -249,27 +246,27 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                 else
                     trace.setContent("");
 
-                trace.setLat(currentLat);
-                trace.setLon(currentLon);
-
-                // image url, tumbnailurl 은 아래 함수서 뽑아냄
-
-                // like num은 어차피 0
-                // placeName 뽑아내야함
-                // userID가 없네... !
-
-                //add current date to trace
-                trace.setWriteDate(new Date());
-
-                //register trace
-                dataSnapshot.getRef().setValue(trace);
-
+                // 이미지 url , 썸네일 url 추가
                 if(currentBitmap != null)
                     uploadImageToServer(trace, dialog);
                 else {
                     Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
+
+                // 경도 위도
+                trace.setLat(currentLat);
+                trace.setLon(currentLon);
+
+                // 장소이름
+                trace.setPlaceName(placeName);
+
+                // 업로드 날짜
+                trace.setWriteDate(new Date());
+
+                //register trace
+                dataSnapshot.getRef().setValue(trace);
+
             }
 
             @Override
@@ -279,7 +276,6 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
             }
         });
     }
-
 
     private void uploadImageToPythonServer(final Uri fileURI) throws IOException {
         // TODO: 2017. 1. 16. 파일의 uri 가져오는거 ㄲ

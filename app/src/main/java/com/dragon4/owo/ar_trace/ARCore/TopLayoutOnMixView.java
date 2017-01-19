@@ -105,7 +105,7 @@ public class TopLayoutOnMixView {
                             String encodedQueryString = URLEncoder.encode(queryString, "UTF-8");
                             String searchURL = DataSource.createNaverSearchRequestURL(encodedQueryString);
                             String searchRawData = new HttpHandler().execute(searchURL).get();
-                            Toast.makeText(context, searchRawData, Toast.LENGTH_LONG).show();
+                            //Toast.makeText(context, searchRawData, Toast.LENGTH_LONG).show();
                             searchList = dataConvertor.load(searchRawData, DataSource.DATASOURCE.SEARCH, DataSource.DATAFORMAT.NAVER_SEARCH);
                             Toast.makeText(context, searchList.get(0).toString(), Toast.LENGTH_LONG).show();
                             // TODO: 2017. 1. 3.
@@ -150,7 +150,7 @@ public class TopLayoutOnMixView {
 
                     Log.i("dataArray", locationData.toString());
 
-                    ArrayList<String> list = new ArrayList<>();
+                    final ArrayList<String> list = new ArrayList<>();
                     for (int index = 0; index < locationData.length(); index++)
                         list.add(locationData.getString(index).substring(2, locationData.getString(index).length() - 2));
 
@@ -161,10 +161,9 @@ public class TopLayoutOnMixView {
                     searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            // if(naverFragment != null)
-                            //     naverFragment.findAndDrawRoot();
-                            // else
-                            //     Toast.makeText(MixView.this, "지도가 될때까지 기다려주세요.", Toast.LENGTH_SHORT).show();
+
+                            String queryString = list.get(i);
+                            searchText.setText(queryString);
                         }
                     });
 
