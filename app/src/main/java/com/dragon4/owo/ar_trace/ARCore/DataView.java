@@ -20,6 +20,7 @@ package com.dragon4.owo.ar_trace.ARCore;
 
 import android.graphics.Color;
 import android.location.Location;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -34,7 +35,7 @@ import java.util.ArrayList;
 
 
 /**
- * @author daniele & edit youngje
+ * @author daniele & youngje
  */
 
 
@@ -79,14 +80,6 @@ public class DataView {
     /**
      * MixView 클래스의 메뉴 항목과 메뉴 옵션들에 사용될 스트링의 상수값
      **/
-    public static final int EMPTY_LIST_STRING_ID = R.string.empty_list;
-    public static final int OPTION_NOT_AVAILABLE_STRING_ID = R.string.option_not_available;
-    public static final int EMPTY_LIST_STRIG_ID = R.string.empty_list;
-    public static final int MENU_ITEM_1 = R.string.menu_item_1;
-    public static final int MENU_ITEM_2 = R.string.menu_item_2;
-    public static final int MENU_ITEM_3 = R.string.menu_item_3;
-    public static final int MENU_ITEM_4 = R.string.menu_item_4;
-
 
     public static final int CONNECTION_ERROR_DIALOG_TEXT = R.string.connection_error_dialog;
     public static final int CONNECTION_ERROR_DIALOG_BUTTON1 = R.string.connection_error_dialog_button1;
@@ -96,28 +89,6 @@ public class DataView {
     public static final int CONNECTION_GPS_DIALOG_TEXT = R.string.connection_GPS_dialog_text;    //이 메세지가 계속 뜬다.
     public static final int CONNECTION_GPS_DIALOG_BUTTON1 = R.string.connection_GPS_dialog_button1;
     public static final int CONNECTION_GPS_DIALOG_BUTTON2 = R.string.connection_GPS_dialog_button2;
-
-    /*if in the listview option for a specific title no website is provided*/
-    public static final int NO_WEBINFO_AVAILABLE = R.string.no_website_available;
-
-    public static final int LICENSE_TITLE = R.string.license_title;
-    public static final int CLOSE_BUTTON = R.string.close_button;
-
-    /*Strings for general information*/
-    public static final int GENERAL_INFO_TITLE = R.string.general_info_title;
-    public static final int GENERAL_INFO_TEXT = R.string.general_info_text;
-    public static final int GPS_LONGITUDE = R.string.longitude;
-    public static final int GPS_LATITUDE = R.string.latitude;
-    public static final int GPS_ALTITUDE = R.string.altitude;
-    public static final int GPS_SPEED = R.string.speed;
-    public static final int GPS_ACCURACY = R.string.accuracy;
-    public static final int GPS_LAST_FIX = R.string.gps_last_fix;
-
-    public static final int MAP_MENU_NORMAL_MODE = R.string.map_menu_normal_mode;
-    public static final int MAP_MENU_SATELLITE_MODE = R.string.map_menu_satellite_mode;
-    public static final int MENU_CAM_MODE = R.string.map_menu_cam_mode;
-    public static final int MAP_MY_LOCATION = R.string.map_my_location;
-    public static final int MAP_CURRENT_LOCATION_CLICK = R.string.map_current_location_click;
 
     public static final int SEARCH_FAILED_NOTIFICATION = R.string.search_failed_notification;
     public static final int SOURCE_OPENSTREETMAP = R.string.source_openstreetmap;
@@ -326,7 +297,8 @@ public class DataView {
 
         }
 
-
+        // 조금 늦게그리기
+        // SystemClock.sleep(1000);
 
 		/* 다음 UI 이벤트를 받는다 */
         UIEvent evt = null;

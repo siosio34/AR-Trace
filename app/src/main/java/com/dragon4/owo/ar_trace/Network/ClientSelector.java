@@ -9,7 +9,7 @@ import java.util.List;
  * Created by joyeongje on 2017. 1. 18..
  */
 
-public interface ServerSelector {
+public interface ClientSelector {
     void uploadImageToServer(); // 파일 업로드 하는 함수
     void uploadTraceToServer(); // Trace 객체들을 올리는 함수
     List<Trace> getTraceDataFromServer(); // 서버 데이터들

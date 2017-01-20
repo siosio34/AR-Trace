@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.Model.Trace;
+import com.dragon4.owo.ar_trace.Network.Python.MultipartUtility;
 import com.dragon4.owo.ar_trace.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -110,17 +111,15 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         currentLon = getIntent().getDoubleExtra("lon",0.0);
 
         // 경도 위도
-        TextView axisView = (TextView)findViewById(R.id.ar_mixview_write_review_axis_num);
-        axisView.setText(String.valueOf(String.valueOf(currentLat) + " N " + String.valueOf(currentLon) + " E "));
+        axisNum.setText(String.valueOf(String.valueOf(currentLat) + " N " + String.valueOf(currentLon) + " E "));
 
         // 경도 위도를 좌표 변환후 주소로 표시.
-        TextView locationNameView = (TextView)findViewById(R.id.ar_mixview_write_review_location_name);
         String requestReverseGeoAPI = DataSource.createNaverGeoAPIRequcetURL(currentLat,currentLon);
         try {
             String reverseGeoString = new HttpHandler().execute(requestReverseGeoAPI).get();
             placeName = parsingReverseGeoJson(reverseGeoString);
-            locationNameView.setText(placeName);
-            Log.i("parsing Address",locationNameView.getText().toString());
+            locationName.setText(placeName);
+            Log.i("parsing Address",locationName.getText().toString());
 
         } catch (InterruptedException | JSONException | ExecutionException e) {
 
@@ -132,9 +131,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         JSONObject reverseObject = new JSONObject(reverseGeoString);
         JSONArray dataList = reverseObject.getJSONObject("result").getJSONArray("items");
         for(int i = 0 ; i < dataList.length(); i++) {
-            if(dataList.getJSONObject(i).getBoolean("isRoadAddress")) {
-                locationName = dataList.getJSONObject(i).getString("address");
-            }
+            locationName = dataList.getJSONObject(i).getString("address");
         }
         return locationName;
     }
