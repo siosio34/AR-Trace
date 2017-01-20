@@ -105,7 +105,6 @@ public class DataHandler implements Serializable{
 
 		for(ARMarker ma: markerList) {
 			ma.update(location);	// 위치를 업데이트 해 준다
-			// 나중엔 소셜 마커까지도!
 		}
 	}
 	

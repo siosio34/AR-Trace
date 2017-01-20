@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.Model.Trace;
+import com.dragon4.owo.ar_trace.Network.ClientSelector;
+import com.dragon4.owo.ar_trace.Network.Firebase.FirebaseClient;
 import com.dragon4.owo.ar_trace.Network.Python.MultipartUtility;
 import com.dragon4.owo.ar_trace.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -83,18 +85,22 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
     TextView locationTitle;
     TextView locationName;
 
+    private ClientSelector clientSelector;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_ar_mixview_write_review);
         loadActivity();
+
+        clientSelector = new FirebaseClient();
     }
 
     public void loadActivity() {
 
         context = getApplicationContext();
-        middleImg = (ImageView)findViewById(R.id.ar_mixview_write_review_middle_img);
+        middleImg = (ImageView) findViewById(R.id.ar_mixview_write_review_middle_img);
 
         //register onclick listener
         findViewById(R.id.ar_mixview_write_review_back).setOnClickListener(this);
@@ -102,24 +108,24 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         findViewById(R.id.ar_mixview_write_review_location).setOnClickListener(this);
         findViewById(R.id.ar_mixview_write_review_add).setOnClickListener(this);
         findViewById(R.id.ar_mixview_write_review_register).setOnClickListener(this);
-        axisTitle = (TextView)findViewById(R.id.ar_mixview_write_review_axis_title);
-        axisNum = (TextView)findViewById(R.id.ar_mixview_write_review_axis_num);
-        locationTitle = (TextView)findViewById(R.id.ar_mixview_write_review_location_title);
-        locationName = (TextView)findViewById(R.id.ar_mixview_write_review_location_name);
+        axisTitle = (TextView) findViewById(R.id.ar_mixview_write_review_axis_title);
+        axisNum = (TextView) findViewById(R.id.ar_mixview_write_review_axis_num);
+        locationTitle = (TextView) findViewById(R.id.ar_mixview_write_review_location_title);
+        locationName = (TextView) findViewById(R.id.ar_mixview_write_review_location_name);
 
-        currentLat = getIntent().getDoubleExtra("lat",0.0);
-        currentLon = getIntent().getDoubleExtra("lon",0.0);
+        currentLat = getIntent().getDoubleExtra("lat", 0.0);
+        currentLon = getIntent().getDoubleExtra("lon", 0.0);
 
         // 경도 위도
         axisNum.setText(String.valueOf(String.valueOf(currentLat) + " N " + String.valueOf(currentLon) + " E "));
 
         // 경도 위도를 좌표 변환후 주소로 표시.
-        String requestReverseGeoAPI = DataSource.createNaverGeoAPIRequcetURL(currentLat,currentLon);
+        String requestReverseGeoAPI = DataSource.createNaverGeoAPIRequcetURL(currentLat, currentLon);
         try {
             String reverseGeoString = new HttpHandler().execute(requestReverseGeoAPI).get();
             placeName = parsingReverseGeoJson(reverseGeoString);
             locationName.setText(placeName);
-            Log.i("parsing Address",locationName.getText().toString());
+            Log.i("parsing Address", locationName.getText().toString());
 
         } catch (InterruptedException | JSONException | ExecutionException e) {
 
@@ -130,7 +136,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         String locationName = "";
         JSONObject reverseObject = new JSONObject(reverseGeoString);
         JSONArray dataList = reverseObject.getJSONObject("result").getJSONArray("items");
-        for(int i = 0 ; i < dataList.length(); i++) {
+        for (int i = 0; i < dataList.length(); i++) {
             locationName = dataList.getJSONObject(i).getString("address");
         }
         return locationName;
@@ -155,7 +161,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                 break;
 
             case R.id.ar_mixview_write_review_register:
-                uploadTraceToServer();
+                makeTraceInstanceToServer();
                 break;
         }
     }
@@ -204,13 +210,6 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
                     currentBitmap = BitmapFactory.decodeStream(in, null, null);
 
-                    //bitmap is too large to be uploaded into a texture problem.
-                    //check max texture size
-                    /*
-                    int[] maxTextureSize = new int[1];
-                    GLES20.glGetIntegerv(GLES20.GL_MAX_TEXTURE_SIZE, maxTextureSize, 0);
-                    */
-
                     ImageView currentImageView = new ImageView(this);
                     View picture = findViewById(R.id.ar_mixview_write_review_add);
                     Bitmap scaledBitmap = Bitmap.createScaledBitmap(currentBitmap, picture.getMeasuredWidth(), picture.getMeasuredHeight(), true);
@@ -238,66 +237,96 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                 destination.delete();
             }
         }
-
     }
 
-    private void uploadTraceToServer() {
-        final ProgressDialog dialog = new ProgressDialog(this);
-        dialog.setMessage("잠시만 기다려주세요.");
-        dialog.show();
+    private void makeTraceInstanceToServer() {
+        Trace trace = new Trace();
+        //set location id of trace
+        String hashKey = MixUtils.makeHashStringMD5(currentLon, currentLon);
+        trace.setLocationID(hashKey);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("building").child(/*building id*/"1");
-        myRef.push().addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        //add content to trace
+        EditText content = (EditText) findViewById(R.id.ar_mixview_write_review_content);
+        if (content != null)
+            trace.setContent(content.getText().toString());
+        else
+            trace.setContent("");
+        // 이미지 url , 썸네일 url 추가
+        if (currentBitmap != null)
+            clientSelector.uploadImageToServer(trace,currentBitmap);
+           // uploadImageToServer(trace, dialog);
+        else {
+            //Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
+            //dialog.dismiss();
+        }
+        // 경도 위도
+        trace.setLat(currentLat);
+        trace.setLon(currentLon);
+        // 장소이름
+        trace.setPlaceName(placeName);
+        // 업로드 날짜
+        trace.setWriteDate(new Date());
 
-                Trace trace = new Trace();
-                
-                //set location id of trace
-                String hashKey = MixUtils.makeHashStringMD5(currentLon,currentLon);
-                trace.setLocationID(hashKey);
-
-                //use key as trace id
-                trace.setTraceID(dataSnapshot.getKey());
-
-                //add content to trace
-                EditText content = (EditText)findViewById(R.id.ar_mixview_write_review_content);
-                if(content != null)
-                    trace.setContent(content.getText().toString());
-                else
-                    trace.setContent("");
-
-                // 이미지 url , 썸네일 url 추가
-                if(currentBitmap != null)
-                    uploadImageToServer(trace, dialog);
-                else {
-                    Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
-
-                // 경도 위도
-                trace.setLat(currentLat);
-                trace.setLon(currentLon);
-
-                // 장소이름
-                trace.setPlaceName(placeName);
-
-                // 업로드 날짜
-                trace.setWriteDate(new Date());
-
-                //register trace
-                dataSnapshot.getRef().setValue(trace);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "업로드에 실패하였습니다.", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
+        clientSelector.uploadTraceToServer(trace);
     }
+
+    //private void uploadTraceToServer() {
+    //    final ProgressDialog dialog = new ProgressDialog(this);
+    //    dialog.setMessage("잠시만 기다려주세요.");
+    //    dialog.show();
+//
+    //    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    //    DatabaseReference myRef = database.getReference("building").child(/*building id*/"1");
+    //    myRef.push().addListenerForSingleValueEvent(new ValueEventListener() {
+    //        @Override
+    //        public void onDataChange(DataSnapshot dataSnapshot) {
+//
+    //            Trace trace = new Trace();
+    //
+    //            //set location id of trace
+    //            String hashKey = MixUtils.makeHashStringMD5(currentLon,currentLon);
+    //            trace.setLocationID(hashKey);
+//
+    //            //use key as trace id
+    //            trace.setTraceID(dataSnapshot.getKey());
+//
+    //            //add content to trace
+    //            EditText content = (EditText)findViewById(R.id.ar_mixview_write_review_content);
+    //            if(content != null)
+    //                trace.setContent(content.getText().toString());
+    //            else
+    //                trace.setContent("");
+//
+    //            // 이미지 url , 썸네일 url 추가
+    //            if(currentBitmap != null)
+    //                uploadImageToServer(trace, dialog);
+    //            else {
+    //                Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
+    //                dialog.dismiss();
+    //            }
+//
+    //            // 경도 위도
+    //            trace.setLat(currentLat);
+    //            trace.setLon(currentLon);
+//
+    //            // 장소이름
+    //            trace.setPlaceName(placeName);
+//
+    //            // 업로드 날짜
+    //            trace.setWriteDate(new Date());
+//
+    //            //register trace
+    //            dataSnapshot.getRef().setValue(trace);
+//
+    //        }
+//
+    //        @Override
+    //        public void onCancelled(DatabaseError databaseError) {
+    //            Toast.makeText(getApplicationContext(), "업로드에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+    //            dialog.dismiss();
+    //        }
+    //    });
+    //}
 
     private void uploadImageToPythonServer(final Uri fileURI) throws IOException {
         // TODO: 2017. 1. 16. 파일의 uri 가져오는거 ㄲ
@@ -328,13 +357,13 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Log.i("response code",response);
+                Log.i("response code", response);
 
             }
         }).start();
 
     }
-
+/*
     private void uploadImageToServer(final Trace trace, final ProgressDialog dialog) {
         new Thread(new Runnable() {
             @Override
@@ -345,25 +374,25 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                 uploadFailThumbnailCount = 0;
                 final Object lock = new Object();
 
-                if(currentBitmap != null) {
+                if (currentBitmap != null) {
                     double scale = 0;
-                    if(currentBitmap.getWidth() > currentBitmap.getHeight())
+                    if (currentBitmap.getWidth() > currentBitmap.getHeight())
                         scale = currentBitmap.getWidth() / 256;
                     else
                         scale = currentBitmap.getHeight() / 256;
-                    if(scale == 0)
+                    if (scale == 0)
                         scale = 1;
 
                     ByteArrayOutputStream jpegOut = new ByteArrayOutputStream();
                     currentBitmap.compress(Bitmap.CompressFormat.JPEG, 70, jpegOut);
 
-                    Bitmap thumbnail = Bitmap.createScaledBitmap(currentBitmap, (int)(currentBitmap.getWidth() / scale), (int)(currentBitmap.getHeight() / scale), true);
+                    Bitmap thumbnail = Bitmap.createScaledBitmap(currentBitmap, (int) (currentBitmap.getWidth() / scale), (int) (currentBitmap.getHeight() / scale), true);
                     ByteArrayOutputStream jpegThumbnailOut = new ByteArrayOutputStream();
                     thumbnail.compress(Bitmap.CompressFormat.JPEG, 70, jpegThumbnailOut);
 
                     FirebaseStorage storage = FirebaseStorage.getInstance();
-                    StorageReference myRef = storage.getReference().child(trace.getLocationID()).child(trace.getTraceID()+".jpg");
-                    StorageReference thumbnailRef = storage.getReference().child(trace.getLocationID()).child("sn-"+trace.getTraceID()+".jpg");
+                    StorageReference myRef = storage.getReference().child(trace.getLocationID()).child(trace.getTraceID() + ".jpg");
+                    StorageReference thumbnailRef = storage.getReference().child(trace.getLocationID()).child("sn-" + trace.getTraceID() + ".jpg");
 
                     if (myRef.getName() == null || myRef.getName() != "") {
                         byte[] imageData = jpegOut.toByteArray();
@@ -375,7 +404,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                                 //dialog.setMessage("파일 업로드에 실패하였습니다. : " + fileName);
                                 uploadFailCount++;
                                 e.printStackTrace();
-                                if((uploadedCount + uploadFailCount + uploadFailThumbnailCount + uploadedThumbnailCount) == 2) {
+                                if ((uploadedCount + uploadFailCount + uploadFailThumbnailCount + uploadedThumbnailCount) == 2) {
                                     synchronized (lock) {
                                         lock.notify();
                                     }
@@ -392,7 +421,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                                 //trace.setImageURL(downloadUri.toString());
 
                                 uploadedCount++;
-                                if((uploadedCount + uploadFailCount + uploadFailThumbnailCount + uploadedThumbnailCount) == 2) {
+                                if ((uploadedCount + uploadFailCount + uploadFailThumbnailCount + uploadedThumbnailCount) == 2) {
                                     synchronized (lock) {
                                         lock.notify();
                                     }
@@ -409,7 +438,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                                 //dialog.setMessage("파일 업로드에 실패하였습니다. : " + fileName);
                                 uploadFailThumbnailCount++;
                                 e.printStackTrace();
-                                if((uploadedCount + uploadFailCount + uploadFailThumbnailCount + uploadedThumbnailCount) == 2) {
+                                if ((uploadedCount + uploadFailCount + uploadFailThumbnailCount + uploadedThumbnailCount) == 2) {
                                     synchronized (lock) {
                                         lock.notify();
                                     }
@@ -427,7 +456,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
                                 //Only the original thread that created a view hierarchy can touch its views.
                                 uploadedThumbnailCount++;
-                                if((uploadedCount + uploadFailCount + uploadFailThumbnailCount + uploadedThumbnailCount) == 2) {
+                                if ((uploadedCount + uploadFailCount + uploadFailThumbnailCount + uploadedThumbnailCount) == 2) {
                                     synchronized (lock) {
                                         lock.notify();
                                     }
@@ -451,7 +480,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
             }
         }).start();
         Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
-    }
+    } */
 
     @Override
     public void onDestroy() {
