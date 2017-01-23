@@ -22,8 +22,8 @@ public class FCMInstanceIDService extends FirebaseInstanceIdService {
     }
 
     private void sendRegistrationToServer(String token) {
-
         // TODO: 서버로 토큰값 보내야됨
+
     }
 
 
