@@ -21,17 +21,14 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
-import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
 import com.dragon4.owo.ar_trace.NaverMap.FragmentMapview;
 import com.dragon4.owo.ar_trace.R;
 import com.nhn.android.maps.maplib.NGeoPoint;
@@ -45,7 +42,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.zip.Inflater;
 
 /**
  * Created by mansu on 2017-01-15.
@@ -53,6 +49,8 @@ import java.util.zip.Inflater;
 
 public class TopLayoutOnMixView {
     public static int WRITE_REVIEW = 1;
+    public static int SEARCH_LIST = 2;
+
     //네이버 지도
     private FragmentMapview naverFragment;
 
@@ -153,6 +151,11 @@ public class TopLayoutOnMixView {
                             Toast.makeText(context, searchList.get(0).toString(), Toast.LENGTH_LONG).show();
                             // TODO: 2017. 1. 3.
 
+                            //go to search view
+                            Intent intent = new Intent(activity, SearchListActivity.class);
+                            intent.putExtra("searchName", searchText.getText().toString());
+                            mainArView.setVisibility(View.GONE);
+                            activity.startActivityForResult(intent, SEARCH_LIST);
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -204,12 +207,10 @@ public class TopLayoutOnMixView {
                     searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
                             String queryString = list.get(i);
                             searchText.setText(queryString);
                         }
                     });
-
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (ExecutionException e) {

@@ -854,9 +854,10 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == TopLayoutOnMixView.WRITE_REVIEW) {
+        if(requestCode == TopLayoutOnMixView.WRITE_REVIEW)
             findViewById(R.id.ar_mixview).setVisibility(View.VISIBLE);
-        }
+        else if(requestCode == TopLayoutOnMixView.SEARCH_LIST)
+            findViewById(R.id.ar_mixview).setVisibility(View.VISIBLE);
     }
 }
 
