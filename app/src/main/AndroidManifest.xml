@@ -52,7 +52,7 @@
         <service
             android:name=".FCM.FCMInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.INSTANCE_ID_EVENT."/>
+                <action android:name="com.google.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
 

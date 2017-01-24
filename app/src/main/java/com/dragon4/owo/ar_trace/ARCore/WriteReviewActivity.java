@@ -1,7 +1,6 @@
 package com.dragon4.owo.ar_trace.ARCore;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,22 +25,11 @@ import com.dragon4.owo.ar_trace.Network.ClientSelector;
 import com.dragon4.owo.ar_trace.Network.Firebase.FirebaseClient;
 import com.dragon4.owo.ar_trace.Network.Python.MultipartUtility;
 import com.dragon4.owo.ar_trace.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -252,8 +239,8 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         else
             trace.setContent("");
         // 이미지 url , 썸네일 url 추가
-        if (currentBitmap != null)
-            clientSelector.uploadImageToServer(trace,currentBitmap);
+        if (destination != null)
+            clientSelector.uploadImageToServer(trace,destination);
            // uploadImageToServer(trace, dialog);
         else {
             //Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
