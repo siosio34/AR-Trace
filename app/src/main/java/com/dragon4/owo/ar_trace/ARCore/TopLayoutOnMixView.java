@@ -3,6 +3,7 @@ package com.dragon4.owo.ar_trace.ARCore;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +14,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.*;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
@@ -58,7 +60,9 @@ public class TopLayoutOnMixView {
     private View mainArView;
 
     //expansion, reduction level
-    private int naver_map_level = 1;
+    private int naver_map_level = 0;
+    private int naver_map_max_level = 2;
+    private int[][] naver_map_size = {{130,130},{260,260}};
 
     private Context context;
     public TopLayoutOnMixView(final Activity activity, final LayoutInflater inflater, FragmentManager manager) {
@@ -73,25 +77,37 @@ public class TopLayoutOnMixView {
         mainArView.findViewById(R.id.ar_mixview_naverview_expand).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(naver_map_level < 3) {
-                    ViewGroup.LayoutParams params = mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).getLayoutParams();
-                    params.width *= 2;
-                    params.height *= 2;
-                    mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).setLayoutParams(params);
-
+                if(naver_map_level < naver_map_max_level) {
                     naver_map_level++;
+                    if(naver_map_level == naver_map_max_level) {
+                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).getLayoutParams();
+                        int tenMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, Resources.getSystem().getDisplayMetrics());
+                        params.setMargins(0, tenMargin, tenMargin, 0);
+                        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                        mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).setLayoutParams(params);
+                    }
+                    else {
+                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).getLayoutParams();
+                        params.setMargins(0, 0, 0, 0);
+                        params.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, naver_map_size[naver_map_level][0], Resources.getSystem().getDisplayMetrics());
+                        params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, naver_map_size[naver_map_level][1], Resources.getSystem().getDisplayMetrics());
+                        mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).setLayoutParams(params);
+                    }
                 }
             }
         });
         mainArView.findViewById(R.id.ar_mixview_naverview_reduce).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(naver_map_level > 1) {
-                    ViewGroup.LayoutParams params = mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).getLayoutParams();
-                    params.width /= 2;
-                    params.height /= 2;
-                    mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).setLayoutParams(params);
+                if(naver_map_level > 0) {
                     naver_map_level--;
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).getLayoutParams();
+                    int tenMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, Resources.getSystem().getDisplayMetrics());
+                    params.setMargins(0, tenMargin, tenMargin, 0);
+                    params.width = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, naver_map_size[naver_map_level][0], Resources.getSystem().getDisplayMetrics());
+                    params.height = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, naver_map_size[naver_map_level][1], Resources.getSystem().getDisplayMetrics());
+                    mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).setLayoutParams(params);
                 }
             }
         });
