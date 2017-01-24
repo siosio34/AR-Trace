@@ -45,8 +45,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ARCore.BaseActivity"/>
-
         <!-- Service Pacakage -->
 
         <service

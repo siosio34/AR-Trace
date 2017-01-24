@@ -51,12 +51,6 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
     //save file destination after taking picture.
     private File destination = null;
 
-    //count for upload image
-    private int uploadedCount;
-    private int uploadFailCount;
-    private int uploadedThumbnailCount;
-    private int uploadFailThumbnailCount;
-
     private Context context;
     // TODO: 2017. 1. 16. 인텐트로 넘기기전에 경도 위도를 받아오도록하자
 

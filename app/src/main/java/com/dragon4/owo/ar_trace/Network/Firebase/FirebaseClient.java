@@ -52,8 +52,8 @@ public class FirebaseClient implements ClientSelector{
     @Override
     public void uploadImageToServer(final Trace trace, final File file) {
 
-        FileInputStream in = null;
         try {
+            FileInputStream in = null;
             in = new FileInputStream(file);
             currentBitmap = BitmapFactory.decodeStream(in, null, null);
         } catch (FileNotFoundException e) {
