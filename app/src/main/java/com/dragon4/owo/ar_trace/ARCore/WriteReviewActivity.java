@@ -25,6 +25,7 @@ import com.dragon4.owo.ar_trace.Network.ClientSelector;
 import com.dragon4.owo.ar_trace.Network.Firebase.FirebaseClient;
 import com.dragon4.owo.ar_trace.Network.Python.MultipartUtility;
 import com.dragon4.owo.ar_trace.R;
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -467,5 +468,10 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
     public void onDestroy() {
         super.onDestroy();
         setResult(RESULT_OK);
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 }
