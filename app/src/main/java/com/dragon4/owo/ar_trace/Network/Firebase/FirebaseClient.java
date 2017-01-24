@@ -1,6 +1,7 @@
 package com.dragon4.owo.ar_trace.Network.Firebase;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -21,6 +22,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 /**
@@ -38,13 +42,23 @@ public class FirebaseClient implements ClientSelector{
     private int uploadedThumbnailCount = 0;
     private int uploadFailThumbnailCount = 0;
 
+    private Bitmap currentBitmap;
+
     private String makeTraceKey() {
         makeKey = myRef.push().getKey();
         return makeKey;
     }
 
     @Override
-    public void uploadImageToServer(final Trace trace, final Bitmap currentBitmap) {
+    public void uploadImageToServer(final Trace trace, final File file) {
+
+        try {
+            FileInputStream in = null;
+            in = new FileInputStream(file);
+            currentBitmap = BitmapFactory.decodeStream(in, null, null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         final String traceKey = makeTraceKey();
         trace.setTraceID(traceKey);

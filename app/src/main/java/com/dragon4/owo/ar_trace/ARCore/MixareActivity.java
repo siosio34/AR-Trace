@@ -18,6 +18,5 @@ public class MixareActivity extends Activity {
         Intent arIntent = new Intent(MixareActivity.this,MixView.class);
         startActivity(arIntent);
 
-
     }
 }
