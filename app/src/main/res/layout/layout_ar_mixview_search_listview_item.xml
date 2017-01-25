@@ -27,7 +27,7 @@
                 android:textStyle="bold"
                 android:textColor="#A5000000"/>
             <TextView
-                android:id="@+id/ar_mixview_search_listview_item_kind"
+                android:id="@+id/ar_mixview_search_listview_item_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"

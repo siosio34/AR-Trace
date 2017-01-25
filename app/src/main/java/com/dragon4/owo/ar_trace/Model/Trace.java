@@ -11,6 +11,7 @@ public class Trace {
 
     private String locationID; // 장소 id 부모노드가 될예정
     private String traceID; // 흔적 id 이미지 아이디 가 될예정
+    private String userID; // User id
     private String content; // 글 내용
     private String imageURL;
     private String thumbnailURL; // 썸네일 유알엘

@@ -3,6 +3,7 @@ package com.dragon4.owo.ar_trace.ARCore.data.DataProcessor;
 import android.util.Log;
 
 import com.dragon4.owo.ar_trace.ARCore.ARMarker;
+import com.dragon4.owo.ar_trace.ARCore.NaverSearchMarker;
 import com.dragon4.owo.ar_trace.ARCore.SocialARMarker;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 
@@ -52,16 +53,16 @@ public class NaverSearchDataProcessor implements DataProcessor {
         ARMarker marker = null;
         String naverWebLink = jo.getString("link");
 
-        marker = new SocialARMarker(jo.getString("title"),
+        marker = new NaverSearchMarker(jo.getString("title"),
                 jo.getDouble("mapx"),
                 jo.getDouble("mapy"),
                 0,
                 naverWebLink,
                 datasource,
-                datasource.toString());
-
-       // marker.setID(jo.getString("id"));
-
+                jo.getString("category"),
+                jo.getString("telephone"),
+                jo.getString("address")
+        );
         // 제공값은 카텍좌표계 값으로 제공된다.
         return marker;
     }

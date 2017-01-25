@@ -51,7 +51,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.hardware.Camera;
 import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
@@ -68,48 +67,24 @@ import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.text.Editable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.*;
-import android.view.KeyEvent;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dragon4.owo.ar_trace.ARCore.Activity.TopLayoutOnMixViewActivity;
 import com.dragon4.owo.ar_trace.ARCore.data.DataHandler;
 import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
 import com.dragon4.owo.ar_trace.ARCore.render.Matrix;
-import com.dragon4.owo.ar_trace.NaverMap.FragmentMapview;
 import com.dragon4.owo.ar_trace.R;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -392,7 +367,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                     LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT,
                     Gravity.BOTTOM));
 
-            TopLayoutOnMixView topLayoutOnMixView = new TopLayoutOnMixView(this, getLayoutInflater(), getSupportFragmentManager());
+            TopLayoutOnMixViewActivity topLayoutOnMixView = new TopLayoutOnMixViewActivity(this, getLayoutInflater(), getSupportFragmentManager());
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
             addContentView(topLayoutOnMixView.getMainArView(), params);
 
@@ -854,9 +829,9 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == TopLayoutOnMixView.WRITE_REVIEW)
+        if(requestCode == TopLayoutOnMixViewActivity.WRITE_REVIEW)
             findViewById(R.id.ar_mixview).setVisibility(View.VISIBLE);
-        else if(requestCode == TopLayoutOnMixView.SEARCH_LIST)
+        else if(requestCode == TopLayoutOnMixViewActivity.SEARCH_LIST)
             findViewById(R.id.ar_mixview).setVisibility(View.VISIBLE);
     }
 }

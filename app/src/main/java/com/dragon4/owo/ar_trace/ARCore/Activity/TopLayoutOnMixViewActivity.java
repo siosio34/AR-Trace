@@ -1,4 +1,4 @@
-package com.dragon4.owo.ar_trace.ARCore;
+package com.dragon4.owo.ar_trace.ARCore.Activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -27,6 +27,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dragon4.owo.ar_trace.ARCore.ARMarker;
+import com.dragon4.owo.ar_trace.ARCore.Activity.SearchListActivity;
+import com.dragon4.owo.ar_trace.ARCore.Activity.WriteReviewActivity;
+import com.dragon4.owo.ar_trace.ARCore.HttpHandler;
 import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.NaverMap.FragmentMapview;
@@ -47,7 +51,7 @@ import java.util.concurrent.ExecutionException;
  * Created by mansu on 2017-01-15.
  */
 
-public class TopLayoutOnMixView {
+public class TopLayoutOnMixViewActivity {
     public static int WRITE_REVIEW = 1;
     public static int SEARCH_LIST = 2;
 
@@ -63,7 +67,7 @@ public class TopLayoutOnMixView {
     private int[][] naver_map_size = {{130,130},{260,260}};
 
     private Context context;
-    public TopLayoutOnMixView(final Activity activity, final LayoutInflater inflater, FragmentManager manager) {
+    public TopLayoutOnMixViewActivity(final Activity activity, final LayoutInflater inflater, FragmentManager manager) {
         context = activity.getApplicationContext();
         mainArView = inflater.inflate(R.layout.activity_ar_mixview, null);
 
@@ -141,29 +145,10 @@ public class TopLayoutOnMixView {
                 switch (actionId) {
                     case EditorInfo.IME_ACTION_SEARCH:
                         String queryString = searchText.getText().toString();
-                        try {
-                            List<ARMarker> searchList = null;
-                            String encodedQueryString = URLEncoder.encode(queryString, "UTF-8");
-                            String searchURL = DataSource.createNaverSearchRequestURL(encodedQueryString);
-                            String searchRawData = new HttpHandler().execute(searchURL).get();
-                            //Toast.makeText(context, searchRawData, Toast.LENGTH_LONG).show();
-                            searchList = dataConvertor.load(searchRawData, DataSource.DATASOURCE.SEARCH, DataSource.DATAFORMAT.NAVER_SEARCH);
-                            Toast.makeText(context, searchList.get(0).toString(), Toast.LENGTH_LONG).show();
-                            // TODO: 2017. 1. 3.
-
-                            //go to search view
                             Intent intent = new Intent(activity, SearchListActivity.class);
-                            intent.putExtra("searchName", searchText.getText().toString());
+                            intent.putExtra("searchName", queryString);
                             mainArView.setVisibility(View.GONE);
                             activity.startActivityForResult(intent, SEARCH_LIST);
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } catch (ExecutionException e) {
-                            e.printStackTrace();
-                        }
-
                         break;
                     default:
                         Toast.makeText(context, "기본", Toast.LENGTH_LONG).show();
