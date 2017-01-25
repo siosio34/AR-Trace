@@ -2,6 +2,7 @@ package com.dragon4.owo.ar_trace.ARCore;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -65,6 +66,9 @@ public class SearchListActivity extends Activity implements View.OnClickListener
                 break;
 
             case R.id.ar_mixview_search_listview_review:
+                Intent intent = new Intent(SearchListActivity.this, ReviewActivity.class);
+                //TODO: 2017.01.25 need to pass trace data list
+                startActivity(intent);
                 break;
         }
     }
