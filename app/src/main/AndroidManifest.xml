@@ -61,13 +61,13 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ARCore.WriteReviewActivity"
+        <activity android:name=".ARCore.Activity.WriteReviewActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
+        <activity android:name=".ARCore.Activity.SearchListActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <activity android:name=".ARCore.SearchListActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-        <activity android:name=".ARCore.ReviewActivity"
+        <activity android:name=".ARCore.Activity.ReviewActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
 

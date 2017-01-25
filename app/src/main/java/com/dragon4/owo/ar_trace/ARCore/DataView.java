@@ -231,7 +231,6 @@ public class DataView {
                     if (mixContext.isDataSourceSelected(source))  { // 선택된것 ~
                             requestData(DataSource.createRequestCategoryURL(source, lat, lon, alt, radius), DataSource.dataFormatFromDataSource(source), source);
                             Log.i("데이터소스", source.toString());
-                            Toast.makeText(mixContext, "... 데이터 받는 중 ...", Toast.LENGTH_SHORT).show();
                     }
 
                 }

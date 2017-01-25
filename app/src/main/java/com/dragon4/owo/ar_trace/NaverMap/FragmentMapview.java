@@ -153,7 +153,7 @@ public class FragmentMapview extends Fragment {
                 Toast.makeText(getContext(), errInfo.toString(), Toast.LENGTH_LONG).show();
                 return;
             }else{
-                Toast.makeText(getContext(), placeMark.toString(), Toast.LENGTH_LONG).show();
+               // Toast.makeText(getContext(), placeMark.toString(), Toast.LENGTH_LONG).show();
             }
         }
     };

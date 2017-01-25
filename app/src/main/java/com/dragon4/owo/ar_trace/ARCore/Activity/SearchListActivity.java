@@ -1,4 +1,4 @@
-package com.dragon4.owo.ar_trace.ARCore;
+package com.dragon4.owo.ar_trace.ARCore.Activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,13 +15,22 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.dragon4.owo.ar_trace.ARCore.ARMarker;
+import com.dragon4.owo.ar_trace.ARCore.HttpHandler;
+import com.dragon4.owo.ar_trace.ARCore.NaverSearchMarker;
+import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
+import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.Network.Firebase.FirebaseClient;
 import com.dragon4.owo.ar_trace.R;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Mansu on 2017-01-24.
@@ -34,20 +43,37 @@ public class SearchListActivity extends Activity implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_ar_mixview_search_listview);
-        searchName = (TextView)findViewById(R.id.ar_mixview_search_listview_search_text);
-        searchName.setText(getIntent().getStringExtra("searchName"));
 
+        DataConvertor dataConvertor = new DataConvertor();
+
+        String queryString = getIntent().getStringExtra("searchName");
+        searchName = (TextView)findViewById(R.id.ar_mixview_search_listview_search_text);
+        searchName.setText(queryString);
+
+        List<ARMarker> searchList = null;
+        String encodedQueryString = null;
+        try {
+            encodedQueryString = URLEncoder.encode(queryString, "UTF-8");
+            String searchURL = DataSource.createNaverSearchRequestURL(encodedQueryString);
+            String searchRawData = new HttpHandler().execute(searchURL).get();
+            searchList = dataConvertor.load(searchRawData, DataSource.DATASOURCE.SEARCH, DataSource.DATAFORMAT.NAVER_SEARCH);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        //Toast.makeText(context, searchRawData, Toast.LENGTH_LONG).show();
         ListView listView = (ListView)findViewById(R.id.ar_mixview_search_listview);
 
         //TODO: 2017.01.24 리스트 데이터 가져와서 추가할 것.
-        List<ARMarker> dataList = new ArrayList<>();
-        for(int i=0; i<10; i++)
-            dataList.add(new ARMarker() {
-                @Override
-                public int getMaxObjects() {
-                    return 0;
-                }
-            });
+        List<NaverSearchMarker> dataList = new ArrayList<>();
+        for(int i = 0 ; i < searchList.size(); i++) {
+            dataList.add((NaverSearchMarker)searchList.get(i));
+        }
 
         SearchListViewAdapter adapter = new SearchListViewAdapter(getLayoutInflater());
         adapter.setDataList(dataList);
@@ -74,7 +100,7 @@ public class SearchListActivity extends Activity implements View.OnClickListener
     }
 
     private class SearchListViewAdapter extends BaseAdapter {
-        private List<ARMarker> dataList = new ArrayList<>();
+        private List<NaverSearchMarker> dataList = new ArrayList<>();
         private String currentText;
         private LayoutInflater inflater;
 
@@ -102,18 +128,19 @@ public class SearchListActivity extends Activity implements View.OnClickListener
             view = inflater.inflate(R.layout.layout_ar_mixview_search_listview_item, null);
             TextView name = (TextView) view.findViewById(R.id.ar_mixview_search_listview_item_name);
             TextView callNumber = (TextView) view.findViewById(R.id.ar_mixview_search_listview_item_call_number);
-            TextView kind = (TextView) view.findViewById(R.id.ar_mixview_search_listview_item_kind);
+            TextView category = (TextView) view.findViewById(R.id.ar_mixview_search_listview_item_category);
+            TextView address = (TextView) view.findViewById(R.id.ar_mixview_search_listview_item_address);
 
-            //TODO: 2017.01.24 데이터 추가 부분
-            /*
             name.setText(dataList.get(i).getTitle());
-            callNumber.setText(dataList.get(i).get);
-            kind.setText(dataList.get(i).);
-            */
+            callNumber.setText(dataList.get(i).getTelephone());
+            category.setText(dataList.get(i).getCategory());
+            address.setText(dataList.get(i).getAddress());
+
+
             return view;
         }
 
-        public void setDataList(List<ARMarker> dataList) {
+        public void setDataList(List<NaverSearchMarker> dataList) {
             this.dataList = dataList;
         }
 
@@ -131,4 +158,6 @@ public class SearchListActivity extends Activity implements View.OnClickListener
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
+
+
 }

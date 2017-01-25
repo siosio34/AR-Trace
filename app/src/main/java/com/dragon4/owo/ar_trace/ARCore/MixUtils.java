@@ -25,7 +25,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 // 유틸 클래스
-class MixUtils {
+public class MixUtils {
 	// JSON 데이터의 파싱 작업을 수행
 	public static String parseAction(String action) {
 		Log.i("parseaction",action);
