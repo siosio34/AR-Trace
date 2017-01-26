@@ -137,7 +137,6 @@ public class TopLayoutOnMixViewActivity {
         fragmentTransaction.add(R.id.ar_mixview_naverview, naverFragment);
         fragmentTransaction.commit();
 
-        final DataConvertor dataConvertor = new DataConvertor();
         final EditText searchText = (EditText) mainArView.findViewById(R.id.ar_mixview_search_text);
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

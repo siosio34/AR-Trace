@@ -2,12 +2,14 @@ package com.dragon4.owo.ar_trace.ARCore.Activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,10 @@ import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.Network.Firebase.FirebaseClient;
 import com.dragon4.owo.ar_trace.R;
 import com.tsengvn.typekit.TypekitContextWrapper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -88,6 +94,7 @@ public class SearchListActivity extends Activity implements View.OnClickListener
                 break;
 
             case R.id.ar_mixview_search_listview_navi:
+
                 break;
 
             case R.id.ar_mixview_search_listview_review:
@@ -120,17 +127,49 @@ public class SearchListActivity extends Activity implements View.OnClickListener
         }
 
         @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
+        public View getView(final int i, View view, ViewGroup viewGroup) {
             view = inflater.inflate(R.layout.layout_ar_mixview_search_listview_item, null);
             TextView name = (TextView) view.findViewById(R.id.ar_mixview_search_listview_item_name);
             TextView callNumber = (TextView) view.findViewById(R.id.ar_mixview_search_listview_item_call_number);
             TextView category = (TextView) view.findViewById(R.id.ar_mixview_search_listview_item_category);
             TextView address = (TextView) view.findViewById(R.id.ar_mixview_search_listview_item_address);
 
-            name.setText(dataList.get(i).getTitle());
-            callNumber.setText(dataList.get(i).getTelephone());
-            category.setText(dataList.get(i).getCategory());
-            address.setText(dataList.get(i).getAddress());
+            final NaverSearchMarker currentData = dataList.get(i);
+            TextView navi = (TextView)view.findViewById(R.id.ar_mixview_search_listview_navi);
+            navi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //DataConvertor dataConvertor = new DataConvertor();
+                    String encodedQueryString = null;
+                    try {
+                        encodedQueryString = URLEncoder.encode(currentData.getAddress(), "UTF-8");
+                        String requestURL = DataSource.createNaverGeoAPIRequestURL(encodedQueryString);
+                        String rawData = new HttpHandler().execute(requestURL).get();
+                        Log.i("rawData", rawData);
+
+                         JSONObject root = new JSONObject(rawData);
+                         JSONArray dataArray = root.getJSONObject("result").getJSONArray("items");
+                         JSONObject dataObject = dataArray.getJSONObject(0).getJSONObject("point");
+                         Log.i("rawCoordData", String.valueOf(dataObject.getDouble("x")));
+                       // JSONArray locationData = dataArray.getJSONArray(0);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
+            name.setText(currentData.getTitle());
+            callNumber.setText(currentData.getTelephone());
+            category.setText(currentData.getCategory());
+            address.setText(currentData.getAddress());
+
 
 
             return view;

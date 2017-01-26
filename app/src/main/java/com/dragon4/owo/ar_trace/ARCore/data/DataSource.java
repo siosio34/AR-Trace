@@ -207,11 +207,19 @@ public class DataSource {
         return ret;
     }
 
-    public static String createNaverGeoAPIRequcetURL(double lat, double lon) {
+    public static String createNaverGeoAPIRequestURL(String locationName) {
+        String ret;
+        ret =  "https://openapi.naver.com/v1/map/geocode?query=" + locationName;
+        Log.i("NaverGeoURL", ret);
+
+        return ret;
+    }
+
+    public static String createNaverReverseGeoAPIRequcetURL(double lat, double lon) {
         String ret;
         String queryLocation = String.valueOf(lon)+","+String.valueOf(lat);
         ret = "https://openapi.naver.com/v1/map/reversegeocode?query=" + queryLocation;
-        Log.i("NaverGeoURL", ret);
+        Log.i("NaverReverseGeoURL", ret);
         return ret;
     }
 

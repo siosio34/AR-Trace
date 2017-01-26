@@ -1,6 +1,8 @@
 package com.dragon4.owo.ar_trace.ARCore;
 
 import android.os.AsyncTask;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -116,7 +118,6 @@ public class HttpHandler extends AsyncTask<String, Void, String> {
         StringBuilder sb = new StringBuilder();
         String line;
         try {
-
             while ((line = reader.readLine()) != null) {
                 sb.append(line + '\n');
             }
@@ -130,7 +131,12 @@ public class HttpHandler extends AsyncTask<String, Void, String> {
             }
         }
 
-        return sb.toString();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            return Html.fromHtml(sb.toString(),Html.FROM_HTML_MODE_LEGACY).toString();
+        } else {
+            return Html.fromHtml(sb.toString()).toString();
+        }
+
     }
 
 }

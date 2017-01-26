@@ -1,5 +1,6 @@
 package com.dragon4.owo.ar_trace.ARCore.data.DataProcessor;
 
+import android.text.Html;
 import android.util.Log;
 
 import com.dragon4.owo.ar_trace.ARCore.ARMarker;
@@ -53,7 +54,8 @@ public class NaverSearchDataProcessor implements DataProcessor {
         ARMarker marker = null;
         String naverWebLink = jo.getString("link");
 
-        marker = new NaverSearchMarker(jo.getString("title"),
+        marker = new NaverSearchMarker(
+                jo.getString("title"),
                 jo.getDouble("mapx"),
                 jo.getDouble("mapy"),
                 0,

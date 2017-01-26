@@ -104,7 +104,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         axisNum.setText(String.valueOf(String.valueOf(currentLat) + " N " + String.valueOf(currentLon) + " E "));
 
         // 경도 위도를 좌표 변환후 주소로 표시.
-        String requestReverseGeoAPI = DataSource.createNaverGeoAPIRequcetURL(currentLat, currentLon);
+        String requestReverseGeoAPI = DataSource.createNaverReverseGeoAPIRequcetURL(currentLat, currentLon);
         try {
             String reverseGeoString = new HttpHandler().execute(requestReverseGeoAPI).get();
             placeName = parsingReverseGeoJson(reverseGeoString);
@@ -327,6 +327,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                // 추가 파라미터.
                 multipart.addFormField("param_name_1", "param_value");
                 multipart.addFormField("param_name_2", "param_value");
                 multipart.addFormField("param_name_3", "param_value");
