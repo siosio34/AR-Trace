@@ -3,12 +3,7 @@ package com.dragon4.owo.ar_trace.ARCore.Activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +18,6 @@ import com.dragon4.owo.ar_trace.ARCore.HttpHandler;
 import com.dragon4.owo.ar_trace.ARCore.NaverSearchMarker;
 import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
-import com.dragon4.owo.ar_trace.Network.Firebase.FirebaseClient;
 import com.dragon4.owo.ar_trace.R;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
@@ -36,8 +30,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
-import static android.widget.Toast.LENGTH_SHORT;
 
 /**
  * Created by Mansu on 2017-01-24.
@@ -162,10 +154,10 @@ public class SearchListActivity extends Activity implements View.OnClickListener
                             // TODO: 2017. 1. 26. 이 액티비티를 종료시키고  TopLayoutOnMixVew 즉 메인화면에서 네비를 실행시킬려면 여기서 경도,위도 보내줘야함
                             // // TODO: 2017. 1. 26. 실행해보면 알수 있듯이  TopLayoutOnMixViewActivity 이게 명시적인 액티비티가 아니라네 
                             //// TODO: 2017. 1. 26. 메니페스트에 등록 안시켜놓은거보면 내가 알던거랑 다른거같은데 이값보내는거해결좀 
-                            Intent naviIntent = new Intent(SearchListActivity.this,TopLayoutOnMixViewActivity.class);
+                            Intent naviIntent = new Intent();
                             naviIntent.putExtra("lat", dataObject.getString("y"));
                             naviIntent.putExtra("lon", dataObject.getString("x"));
-                            startActivity(naviIntent);
+                            setResult(RESULT_OK, naviIntent);
                             finish();
                         } else {
                             Toast.makeText(getApplicationContext(), "해당 지역의 좌표를 받아올 수 없습니다", Toast.LENGTH_LONG).show();

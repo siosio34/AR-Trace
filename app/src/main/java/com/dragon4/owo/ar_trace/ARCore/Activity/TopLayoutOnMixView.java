@@ -51,7 +51,7 @@ import java.util.concurrent.ExecutionException;
  * Created by mansu on 2017-01-15.
  */
 
-public class TopLayoutOnMixViewActivity {
+public class TopLayoutOnMixView {
     public static int WRITE_REVIEW = 1;
     public static int SEARCH_LIST = 2;
 
@@ -67,7 +67,7 @@ public class TopLayoutOnMixViewActivity {
     private int[][] naver_map_size = {{130,130},{260,260}};
 
     private Context context;
-    public TopLayoutOnMixViewActivity(final Activity activity, final LayoutInflater inflater, FragmentManager manager) {
+    public TopLayoutOnMixView(final Activity activity, final LayoutInflater inflater, FragmentManager manager) {
         context = activity.getApplicationContext();
         mainArView = inflater.inflate(R.layout.activity_ar_mixview, null);
 

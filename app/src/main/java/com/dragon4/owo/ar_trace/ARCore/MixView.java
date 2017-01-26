@@ -76,7 +76,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dragon4.owo.ar_trace.ARCore.Activity.TopLayoutOnMixViewActivity;
+import com.dragon4.owo.ar_trace.ARCore.Activity.TopLayoutOnMixView;
 import com.dragon4.owo.ar_trace.ARCore.data.DataHandler;
 import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
@@ -367,7 +367,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                     LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT,
                     Gravity.BOTTOM));
 
-            TopLayoutOnMixViewActivity topLayoutOnMixView = new TopLayoutOnMixViewActivity(this, getLayoutInflater(), getSupportFragmentManager());
+            TopLayoutOnMixView topLayoutOnMixView = new TopLayoutOnMixView(this, getLayoutInflater(), getSupportFragmentManager());
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
             addContentView(topLayoutOnMixView.getMainArView(), params);
 
@@ -829,10 +829,14 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == TopLayoutOnMixViewActivity.WRITE_REVIEW)
-            findViewById(R.id.ar_mixview).setVisibility(View.VISIBLE);
-        else if(requestCode == TopLayoutOnMixViewActivity.SEARCH_LIST)
-            findViewById(R.id.ar_mixview).setVisibility(View.VISIBLE);
+        findViewById(R.id.ar_mixview).setVisibility(View.VISIBLE);
+        if(requestCode == TopLayoutOnMixView.WRITE_REVIEW) {
+
+        }
+        else if(resultCode == RESULT_OK && requestCode == TopLayoutOnMixView.SEARCH_LIST) {
+            String lat = data.getExtras().getString("lat");
+            String lon = data.getExtras().getString("lon");
+        }
     }
 }
 
