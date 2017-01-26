@@ -98,6 +98,9 @@ public class SearchListActivity extends Activity implements View.OnClickListener
                 break;
 
             case R.id.ar_mixview_search_listview_review:
+                Intent intent = new Intent(SearchListActivity.this, ReviewActivity.class);
+                //TODO: 2017.01.25 need to pass trace data list
+                startActivity(intent);
                 break;
         }
     }
