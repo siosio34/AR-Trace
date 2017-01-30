@@ -871,7 +871,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
         else if(resultCode == RESULT_OK && requestCode == TopLayoutOnMixView.SEARCH_LIST) {
             double lat = Double.valueOf(data.getExtras().getString("lat")).doubleValue();
             double lon = Double.valueOf(data.getExtras().getString("lon")).doubleValue();
-            TopLayoutOnMixView.hideSearchBar();
+            topLayoutOnMixView.cancelSearchBar();
 
             //검색리스트에서 길찾기를 눌렀을 경우 네비안내
             if(navigator != null)
@@ -1111,7 +1111,7 @@ class TopLayoutOnMixView {
 
         final LinearLayout parentButtonView = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_parent_buttonview);
         searchbar = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_searchbar);
-        Button hideSearchbar = (Button) mainArView.findViewById(R.id.ar_mixview_hide_searchbar);
+        hideSearchbar = (Button) mainArView.findViewById(R.id.ar_mixview_hide_searchbar);
         final ListView searchListView = (ListView) mainArView.findViewById(R.id.ar_mixview_search_list);
 
         mainArView.findViewById(R.id.ar_mixview_naverview_expand).setOnClickListener(new View.OnClickListener() {
@@ -1324,8 +1324,9 @@ class TopLayoutOnMixView {
 
     }
 
-    public void hideSearchBar() {
-
+    public void cancelSearchBar() {
+        searchText.setText("");
+        searchbar.setVisibility(View.GONE);
     }
 
     private class SearchViewAdapter extends BaseAdapter {
