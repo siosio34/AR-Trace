@@ -78,7 +78,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         setContentView(R.layout.layout_ar_mixview_write_review);
         loadActivity();
 
-        clientSelector = new FirebaseClient();
+        clientSelector = new FirebaseClient(); // 추후에 파이썬 서버 버젼도 가능케 할 예정
     }
 
     public void loadActivity() {
@@ -164,6 +164,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         axisNum.setTextColor(Color.parseColor("#42000000"));
         locationTitle.setTextColor(Color.parseColor("#A6000000"));
         locationName.setTextColor(Color.parseColor("#A6000000"));
+
     }
 
     private void choosePictureCase() {
@@ -226,8 +227,8 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
     private void makeTraceInstanceToServer() {
         Trace trace = new Trace();
         //set location id of trace
-        String hashKey = MixUtils.makeHashStringMD5(currentLon, currentLon);
-        trace.setLocationID(hashKey);
+        //String hashKey = MixUtils.makeHashStringMD5(currentLon, currentLon); // 길거리일때 .
+        trace.setLocationID(placeName); // 장소의 이름으로 키값을 설정한다
 
         //add content to trace
         EditText content = (EditText) findViewById(R.id.ar_mixview_write_review_content);
@@ -240,6 +241,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
             clientSelector.uploadImageToServer(trace,destination);
            // uploadImageToServer(trace, dialog);
         else {
+            Toast.makeText(getApplicationContext()," 이미지가 존재하지않습니다 ", Toast.LENGTH_SHORT). show();
             //Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
             //dialog.dismiss();
         }

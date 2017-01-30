@@ -13,6 +13,23 @@ public class User {
     private String userEmail;
     private String userImageURL;
 
+    private static User currentUser = new User();
+
+    public static User getMyInstance() {
+        return currentUser;
+    }
+    public static void setMyInstance(User user) { currentUser = user;}
+
+    public User() {}
+
+    public User(String userId, String userName, String userEmail, String userImageURL) {
+        this.userId = userId;
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userImageURL = userImageURL;
+    }
+
+
     public String getUserId() {
         return userId;
     }

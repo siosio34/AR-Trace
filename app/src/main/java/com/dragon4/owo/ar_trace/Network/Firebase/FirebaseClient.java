@@ -201,18 +201,5 @@ public class FirebaseClient implements ClientSelector{
         return null;
     }
 
-    @Override
-    public void registerUser(User user) {
 
-    }
-
-    @Override
-    public void checkUser(String user_id) {
-
-    }
-
-    @Override
-    public User login() {
-        return null;
-    }
 }

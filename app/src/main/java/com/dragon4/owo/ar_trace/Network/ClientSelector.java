@@ -18,8 +18,5 @@ public interface ClientSelector {
     void uploadTraceToServer(Trace trace); // Trace 객체들을 올리는 함수
     List<Trace> getTraceDataFromServer(); // 서버 데이터들
 
-    void registerUser(User user); // 회원등록
-    void checkUser(String user_id); // 유저 아이디 존재여부체크
-    User login(); // 로그인.
 
 }

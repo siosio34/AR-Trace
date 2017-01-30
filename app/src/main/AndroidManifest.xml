@@ -18,31 +18,20 @@
         android:name=".ARCore.App"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".MainActivity" />
+
+        <activity
+            android:name=".ARCore.Activity.GoogleSignActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".ARCore.MixView"
             android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-
-                <!--<action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                -->
-
-                <data
-                    android:mimeType="application/mixare-json"
-                    android:scheme="http" />
-                <data
-                    android:mimeType="application/mixare-json"
-                    android:scheme="content" />
-                <data
-                    android:mimeType="application/mixare-json"
-                    android:scheme="file" />
-            </intent-filter>
         </activity>
 
         <!-- Service Pacakage -->
@@ -60,6 +49,11 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
+
+
+        <activity android:name=".ARCore.Activity.DialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            />
 
         <activity android:name=".ARCore.Activity.WriteReviewActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
