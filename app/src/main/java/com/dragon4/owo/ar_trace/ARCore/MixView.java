@@ -869,14 +869,15 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
 
         }
         else if(resultCode == RESULT_OK && requestCode == TopLayoutOnMixView.SEARCH_LIST) {
-            String lat = data.getExtras().getString("lat");
-            String lon = data.getExtras().getString("lon");
+            double lat = Double.valueOf(data.getExtras().getString("lat")).doubleValue();
+            double lon = Double.valueOf(data.getExtras().getString("lon")).doubleValue();
+            TopLayoutOnMixView.hideSearchBar();
+
             //검색리스트에서 길찾기를 눌렀을 경우 네비안내
             if(navigator != null)
                 navigator.run(lat, lon);
-            else {
-                //TODO: 2017.01.26 네비게이터가 NULL일경우는 MixView가 아직 초기화가 안됬을 경우임. 그럴 경우는?
-            }
+            else
+                Toast.makeText(this, "네비게이션 기능을 실행할 수 없습니다.", Toast.LENGTH_LONG).show();
         }
     }
 }
@@ -1087,6 +1088,12 @@ class TopLayoutOnMixView {
     //네이버 지도
     public FragmentMapview naverFragment;
 
+    //검색바 뷰들
+    private LinearLayout searchbar;
+    private Button searchBtn;
+    private Button hideSearchbar;
+    private EditText searchText;
+
     //가장 상단의 레이아웃
     public View mainArView;
 
@@ -1103,8 +1110,8 @@ class TopLayoutOnMixView {
         Toast.makeText(context,"이 화면으로 돌아옴",Toast.LENGTH_LONG).show();
 
         final LinearLayout parentButtonView = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_parent_buttonview);
-        final LinearLayout searchbar = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_searchbar);
-        final Button hideSearchbar = (Button) mainArView.findViewById(R.id.ar_mixview_hide_searchbar);
+        searchbar = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_searchbar);
+        Button hideSearchbar = (Button) mainArView.findViewById(R.id.ar_mixview_hide_searchbar);
         final ListView searchListView = (ListView) mainArView.findViewById(R.id.ar_mixview_search_list);
 
         mainArView.findViewById(R.id.ar_mixview_naverview_expand).setOnClickListener(new View.OnClickListener() {
@@ -1145,7 +1152,7 @@ class TopLayoutOnMixView {
             }
         });
 
-        Button searchBtn = (Button) mainArView.findViewById(R.id.ar_mixview_search);
+        searchBtn = (Button) mainArView.findViewById(R.id.ar_mixview_search);
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1173,7 +1180,7 @@ class TopLayoutOnMixView {
             Log.i(TAG, "Only FragmentActivity can use naver maps");
         }
 
-        final EditText searchText = (EditText) mainArView.findViewById(R.id.ar_mixview_search_text);
+        searchText = (EditText) mainArView.findViewById(R.id.ar_mixview_search_text);
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, android.view.KeyEvent event) {
@@ -1314,6 +1321,10 @@ class TopLayoutOnMixView {
 
         // 네이버 지도 추가
         // TODO: 2016. 12. 31. 배율 높이기 네이버 위치 리스너 만들기.
+
+    }
+
+    public void hideSearchBar() {
 
     }
 
