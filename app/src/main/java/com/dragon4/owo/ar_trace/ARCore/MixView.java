@@ -87,6 +87,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -864,14 +865,13 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        findViewById(R.id.ar_mixview).setVisibility(View.VISIBLE);
+        topLayoutOnMixView.mainArView.setVisibility(View.VISIBLE);
         if(requestCode == TopLayoutOnMixView.WRITE_REVIEW) {
 
         }
         else if(resultCode == RESULT_OK && requestCode == TopLayoutOnMixView.SEARCH_LIST) {
             double lat = Double.valueOf(data.getExtras().getString("lat")).doubleValue();
             double lon = Double.valueOf(data.getExtras().getString("lon")).doubleValue();
-            topLayoutOnMixView.cancelSearchBar();
 
             //검색리스트에서 길찾기를 눌렀을 경우 네비안내
             if(navigator != null)
@@ -879,6 +879,12 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             else
                 Toast.makeText(this, "네비게이션 기능을 실행할 수 없습니다.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!topLayoutOnMixView.onBackPressed())
+            finish();
     }
 }
 
@@ -1088,6 +1094,11 @@ class TopLayoutOnMixView {
     //네이버 지도
     public FragmentMapview naverFragment;
 
+    //뷰들
+    private LinearLayout parentButtonView;
+    private LinearLayout parentCategoryView;
+    private LinearLayout buttonViewLayout;
+
     //검색바 뷰들
     private LinearLayout searchbar;
     private Button searchBtn;
@@ -1098,60 +1109,97 @@ class TopLayoutOnMixView {
     public View mainArView;
 
     //expansion, reduction level
-    private int naver_map_level = 0;
-    private int naver_map_max_level = 2;
-    private int[][] naver_map_size = {{130,130},{260,260}};
+    private int naver_map_width = 130;
+    private int naver_map_height = 130;
 
     private LayoutInflater inflater;
+    private Context context;
     public TopLayoutOnMixView(final Context context) {
+        this.context = context;
         inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         mainArView = inflater.inflate(R.layout.activity_ar_mixview, null);
 
-        Toast.makeText(context,"이 화면으로 돌아옴",Toast.LENGTH_LONG).show();
+        //Toast.makeText(context,"이 화면으로 돌아옴",Toast.LENGTH_LONG).show();
 
-        final LinearLayout parentButtonView = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_parent_buttonview);
-        searchbar = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_searchbar);
-        hideSearchbar = (Button) mainArView.findViewById(R.id.ar_mixview_hide_searchbar);
+        // 네이버 지도 추가
+        // TODO: 2016. 12. 31. 배율 높이기 네이버 위치 리스너 만들기.
+        initButtonViews();
+        initNaverMap();
+        initSearchbar();
+    }
+
+    public void initButtonViews() {
+        parentButtonView = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_parent_buttonview);
+        parentCategoryView = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_parent_categoryview);
+
+        mainArView.findViewById(R.id.ar_mixview_search_erase).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchText.setText("");
+            }
+        });
+
+        mainArView.findViewById(R.id.ar_mixview_category).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                parentButtonView.setVisibility(View.GONE);
+                parentCategoryView.setVisibility(View.VISIBLE);
+            }
+        });
+        mainArView.findViewById(R.id.ar_mixview_category_hide).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                parentCategoryView.setVisibility(View.GONE);
+                parentButtonView.setVisibility(View.VISIBLE);
+            }
+        });
+
+
+        mainArView.findViewById(R.id.ar_mixview_write_review).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, WriteReviewActivity.class);
+                NGeoPoint nGeoPoint = naverFragment.getCurrentLocation();
+                intent.putExtra("lat",nGeoPoint.getLatitude());
+                intent.putExtra("lon", nGeoPoint.getLongitude());
+
+                mainArView.setVisibility(View.GONE);
+                ((Activity)context).startActivityForResult(intent, WRITE_REVIEW);
+                // TODO: 2017. 1. 12. 이미지뷰
+            }
+        });
+
+
+        final Button reviewOnOffBtn = (Button) mainArView.findViewById(R.id.ar_mixview_review_onoff);
+        reviewOnOffBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reviewOnOffBtn.setBackgroundResource(R.drawable.icon_others_review_off);
+                reviewOnOffBtn.setBackgroundResource(R.drawable.icon_others_review_on);
+            }
+        });
+
+        buttonViewLayout = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_buttonview);
+        final Button hideBtn = (Button) mainArView.findViewById(R.id.ar_mixview_buttonview_hide);
+        hideBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (buttonViewLayout.getVisibility() == View.GONE) {
+                    buttonViewLayout.setVisibility(View.VISIBLE);
+                    hideBtn.setBackgroundResource(R.drawable.icon_menu_up);
+                } else if (buttonViewLayout.getVisibility() == View.VISIBLE) {
+                    buttonViewLayout.setVisibility(View.GONE);
+                    hideBtn.setBackgroundResource(R.drawable.icon_menu_down);
+                }
+            }
+        });
+    }
+
+    public void initSearchbar() {
         final ListView searchListView = (ListView) mainArView.findViewById(R.id.ar_mixview_search_list);
 
-        mainArView.findViewById(R.id.ar_mixview_naverview_expand).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(naver_map_level < naver_map_max_level) {
-                    naver_map_level++;
-                    if(naver_map_level == naver_map_max_level) {
-                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).getLayoutParams();
-                        int tenMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, Resources.getSystem().getDisplayMetrics());
-                        params.setMargins(0, tenMargin, tenMargin, 0);
-                        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                        mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).setLayoutParams(params);
-                    }
-                    else {
-                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).getLayoutParams();
-                        params.setMargins(0, 0, 0, 0);
-                        params.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, naver_map_size[naver_map_level][0], Resources.getSystem().getDisplayMetrics());
-                        params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, naver_map_size[naver_map_level][1], Resources.getSystem().getDisplayMetrics());
-                        mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).setLayoutParams(params);
-                    }
-                }
-            }
-        });
-        mainArView.findViewById(R.id.ar_mixview_naverview_reduce).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(naver_map_level > 0) {
-                    naver_map_level--;
-                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).getLayoutParams();
-                    int tenMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, Resources.getSystem().getDisplayMetrics());
-                    params.setMargins(0, tenMargin, tenMargin, 0);
-                    params.width = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, naver_map_size[naver_map_level][0], Resources.getSystem().getDisplayMetrics());
-                    params.height = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, naver_map_size[naver_map_level][1], Resources.getSystem().getDisplayMetrics());
-                    mainArView.findViewById(R.id.ar_mixview_naverview_wrapper).setLayoutParams(params);
-                }
-            }
-        });
-
+        searchbar = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_searchbar);
+        hideSearchbar = (Button) mainArView.findViewById(R.id.ar_mixview_hide_searchbar);
         searchBtn = (Button) mainArView.findViewById(R.id.ar_mixview_search);
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1167,18 +1215,6 @@ class TopLayoutOnMixView {
                 parentButtonView.setVisibility(View.VISIBLE);
             }
         });
-
-        naverFragment = new FragmentMapview();
-        naverFragment.setArguments(new Bundle());
-
-        try {
-            FragmentTransaction fragmentTransaction = ((FragmentActivity) context).getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(R.id.ar_mixview_naverview, naverFragment);
-            fragmentTransaction.commit();
-        } catch(Exception e) {
-            e.printStackTrace();
-            Log.i(TAG, "Only FragmentActivity can use naver maps");
-        }
 
         searchText = (EditText) mainArView.findViewById(R.id.ar_mixview_search_text);
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -1256,77 +1292,70 @@ class TopLayoutOnMixView {
             }
         };
         searchText.addTextChangedListener(watcher);
-        mainArView.findViewById(R.id.ar_mixview_search_erase).setOnClickListener(new View.OnClickListener() {
+    }
+
+    public void initNaverMap() {
+        naverFragment = new FragmentMapview();
+        naverFragment.setArguments(new Bundle());
+
+        final Button expandView = (Button)mainArView.findViewById(R.id.ar_mixview_naverview_expand);
+        expandView.setOnClickListener(new View.OnClickListener() {
+            boolean isFull = false;
             @Override
             public void onClick(View view) {
-                searchText.setText("");
-            }
-        });
-
-        mainArView.findViewById(R.id.ar_mixview_category).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mainArView.findViewById(R.id.ar_mixview_parent_buttonview).setVisibility(View.GONE);
-                mainArView.findViewById(R.id.ar_mixview_parent_categoryview).setVisibility(View.VISIBLE);
-            }
-        });
-        mainArView.findViewById(R.id.ar_mixview_category_hide).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mainArView.findViewById(R.id.ar_mixview_parent_categoryview).setVisibility(View.GONE);
-                mainArView.findViewById(R.id.ar_mixview_parent_buttonview).setVisibility(View.VISIBLE);
-            }
-        });
-
-
-        mainArView.findViewById(R.id.ar_mixview_write_review).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, WriteReviewActivity.class);
-                NGeoPoint nGeoPoint = naverFragment.getCurrentLocation();
-                intent.putExtra("lat",nGeoPoint.getLatitude());
-                intent.putExtra("lon", nGeoPoint.getLongitude());
-
-                mainArView.setVisibility(View.GONE);
-                ((Activity)context).startActivityForResult(intent, WRITE_REVIEW);
-                // TODO: 2017. 1. 12. 이미지뷰
-            }
-        });
-
-
-        final Button reviewOnOffBtn = (Button) mainArView.findViewById(R.id.ar_mixview_review_onoff);
-        reviewOnOffBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                reviewOnOffBtn.setBackgroundResource(R.drawable.icon_others_review_off);
-                reviewOnOffBtn.setBackgroundResource(R.drawable.icon_others_review_on);
-            }
-        });
-
-        final LinearLayout buttonViewLayout = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_buttonview);
-        final Button hideBtn = (Button) mainArView.findViewById(R.id.ar_mixview_buttonview_hide);
-        hideBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (buttonViewLayout.getVisibility() == View.GONE) {
-                    buttonViewLayout.setVisibility(View.VISIBLE);
-                    hideBtn.setBackgroundResource(R.drawable.icon_menu_up);
-                } else if (buttonViewLayout.getVisibility() == View.VISIBLE) {
-                    buttonViewLayout.setVisibility(View.GONE);
-                    hideBtn.setBackgroundResource(R.drawable.icon_menu_down);
+                RelativeLayout navermapWrapper = (RelativeLayout)mainArView.findViewById(R.id.ar_mixview_naverview_wrapper);
+                if(isFull) {
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, naver_map_width, Resources.getSystem().getDisplayMetrics()),
+                            (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, naver_map_height, Resources.getSystem().getDisplayMetrics()));
+                    int tenMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, Resources.getSystem().getDisplayMetrics());
+                    params.setMargins(0, tenMargin, tenMargin, 0);
+                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                    navermapWrapper.setLayoutParams(params);
+                    expandView.setBackgroundResource(R.drawable.ic_minimap_zoom_in);
+                    isFull = false;
+                }
+                else {
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+                    params.setMargins(0, 0, 0, 0);
+                    navermapWrapper.setLayoutParams(params);
+                    expandView.setBackgroundResource(R.drawable.ic_minimap_zoom_out);
+                    isFull = true;
                 }
             }
         });
 
-
-        // 네이버 지도 추가
-        // TODO: 2016. 12. 31. 배율 높이기 네이버 위치 리스너 만들기.
-
+        try {
+            FragmentTransaction fragmentTransaction = ((FragmentActivity) context).getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(R.id.ar_mixview_naverview, naverFragment);
+            fragmentTransaction.commit();
+        } catch(Exception e) {
+            e.printStackTrace();
+            Log.i(TAG, "Only FragmentActivity can use naver maps");
+        }
     }
 
-    public void cancelSearchBar() {
+    public void cancelSearchbar() {
         searchText.setText("");
         searchbar.setVisibility(View.GONE);
+    }
+
+    public boolean onBackPressed() {
+        if(searchbar.getVisibility() != View.GONE) {
+            cancelSearchbar();
+            parentButtonView.setVisibility(View.VISIBLE);
+            return true;
+        }
+        else if(parentCategoryView.getVisibility() != View.GONE) {
+            parentCategoryView.setVisibility(View.GONE);
+            parentButtonView.setVisibility(View.VISIBLE);
+            return true;
+        }
+        else if(buttonViewLayout.getVisibility() != View.GONE) {
+            buttonViewLayout.setVisibility(View.GONE);
+            return true;
+        }
+        return false;
     }
 
     private class SearchViewAdapter extends BaseAdapter {
