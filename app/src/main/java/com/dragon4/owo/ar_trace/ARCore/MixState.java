@@ -66,7 +66,6 @@ public class MixState {
 
     // 이벤트 처리
     public boolean handleEvent(MixContext ctx, String onPress, String title, PhysicalPlace log) {
-
         DialogSelectOption(ctx, title, log, onPress);
         return true;
     }
@@ -90,48 +89,11 @@ public class MixState {
                             } catch (Exception e) {
                             }
                         } else if (id == 1) {
-                            // 네비게이션
-                            final Intent naviBroadReceiver = new Intent();
-                            naviBroadReceiver.setAction("NAVI");
-
-                            loopThread = new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    while (!Thread.currentThread().isInterrupted() && !MixState.enterNaviEnd) {
-                                        try {
-
-                                            String url = DataSource.createNaverMapRequestURL(ctx.getCurrentLocation().getLongitude(), ctx.getCurrentLocation().getLatitude(), log.getLongitude(), log.getLatitude());
-                                            String result = "";
-                                            String guide = "";
-                                            result = new HttpHandler().execute(url).get();
-                                            FragmentMapview.naverMapView.findAndDrawRoot(result);
-                                            guide = parsingNaverNaviJson(result);
-
-                                            if (!guide.equals("end")) {
-                                                // 브로드 캐스트 리시버로 전달하는 부분
-                                                naviBroadReceiver.putExtra("GUIDE", guide);
-                                                ctx.sendBroadcast(naviBroadReceiver);
-                                            } else {
-                                                guide = "목적지에 가까워져 네비게이션이 자동종료됩니다.";
-                                                naviBroadReceiver.putExtra("GUIDE", guide);
-                                                ctx.sendBroadcast(naviBroadReceiver);
-                                                loopThread.interrupt();
-                                            }
-                                            Thread.sleep(5000); // 5초마다 갱신
-
-                                        } catch (ExecutionException e) {
-                                            e.printStackTrace();
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-
-                                }
-
-                            });
-                            loopThread.start();
+                            Navigator navigator = Navigator.getNavigator();
+                            if(navigator != null)
+                                navigator.run(log.getLatitude(), log.getLongitude());
+                            else
+                                Toast.makeText(ctx, "네비게이션 기능을 사용할 수 없습니다.", Toast.LENGTH_LONG).show();
                           }
 
                         }
@@ -142,31 +104,6 @@ public class MixState {
         alertDialog.show();
     }
 
-    public String parsingNaverNaviJson(String naviStirng) throws JSONException {
-        String temp;
-        JSONObject jObject = new JSONObject(naviStirng);
-        int distance = jObject.getJSONObject("result").getJSONObject("summary").getInt("totalDistance");
-
-        if(distance < 40) {
-            temp = "end";
-            return temp;
-        }
-
-        JSONArray jArray = jObject.getJSONObject("result").getJSONArray("route").getJSONObject(0).getJSONArray("point");
-        JSONObject firstRoute = jArray.getJSONObject(1);
-
-        if(firstRoute == null) {
-            temp = "end";
-            return temp;
-        }
-
-        else {
-            temp = firstRoute.getJSONObject("guide").getString("name");
-            Log.i("temp",temp);
-
-        }
-        return temp;
-    }
     // 현재의 방위각을 리턴
     public float getCurBearing() {
         return curBearing;

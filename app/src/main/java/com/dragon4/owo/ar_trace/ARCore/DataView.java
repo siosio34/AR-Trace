@@ -196,7 +196,6 @@ public class DataView {
         // 완성된 요청을 다운로더에 제출한다
         mixContext.getDownloader().submitJob(request);
         state.nextLStatus = MixState.PROCESSING;    // 다음 상태는 처리중으로
-
     }
 
     // 실제로 스크린에 그려주는 메소드
