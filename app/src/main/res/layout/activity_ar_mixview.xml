@@ -19,6 +19,7 @@
             android:id="@+id/ar_mixview_naverview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             android:background="#FFFFFF"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true" />
@@ -36,11 +37,6 @@
                 android:layout_height="40dp"
                 android:layout_marginBottom="2dp"
                 android:background="@drawable/ic_minimap_zoom_in" />
-            <Button
-                android:id="@+id/ar_mixview_naverview_reduce"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/ic_minimap_zoom_out" />
         </LinearLayout>
     </RelativeLayout>
 
