@@ -11,7 +11,6 @@ public class Trace {
 
     private String locationID; // 장소 id 부모노드가 될예정
     private String traceID; // 흔적 id 이미지 아이디 가 될예정
-    private String userID; // User id
     private String content; // 글 내용
     private String imageURL;
     private String thumbnailURL; // 썸네일 유알엘
@@ -20,6 +19,9 @@ public class Trace {
     private double lon;
     private String placeName; // 주소를 경도 위도로
     private Date writeDate; // 글쓴시간
+
+    private String userImageUrl; // user Image URL
+    private String userName; // 유저이름
 
     public String getLocationID() {
         return locationID;
@@ -93,12 +95,27 @@ public class Trace {
         this.writeDate = writeDate;
     }
 
-
     public String getThumbnailURL() {
         return thumbnailURL;
     }
 
     public void setThumbnailURL(String thumbnailURL) {
         this.thumbnailURL = thumbnailURL;
+    }
+
+    public String getUserImageUrl() {
+        return userImageUrl;
+    }
+
+    public void setUserImageUrl(String userImageUrl) {
+        this.userImageUrl = userImageUrl;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

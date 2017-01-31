@@ -78,7 +78,6 @@ public class DataSource {
 
     }
 
-
     // 아이콘 비트맵의 게터
     public static Bitmap getBitmap(String ds) {
         Bitmap bitmap = null;

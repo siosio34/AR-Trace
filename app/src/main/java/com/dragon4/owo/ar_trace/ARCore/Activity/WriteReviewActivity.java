@@ -23,6 +23,7 @@ import com.dragon4.owo.ar_trace.ARCore.MixUtils;
 import com.dragon4.owo.ar_trace.ARCore.HttpHandler;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.Model.Trace;
+import com.dragon4.owo.ar_trace.Model.User;
 import com.dragon4.owo.ar_trace.Network.ClientSelector;
 import com.dragon4.owo.ar_trace.Network.Firebase.FirebaseClient;
 import com.dragon4.owo.ar_trace.Network.Python.MultipartUtility;
@@ -37,6 +38,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
@@ -55,7 +58,6 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
     private File destination = null;
 
     private Context context;
-    // TODO: 2017. 1. 16. 인텐트로 넘기기전에 경도 위도를 받아오도록하자
 
     //choosed bitmap
     private Bitmap currentBitmap = null;
@@ -63,6 +65,8 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
     private Double currentLat;
     private Double currentLon;
     private String placeName;
+
+    private User currentUser;
 
     TextView axisTitle;
     TextView axisNum;
@@ -79,6 +83,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         loadActivity();
 
         clientSelector = new FirebaseClient(); // 추후에 파이썬 서버 버젼도 가능케 할 예정
+        currentUser = User.getMyInstance();
     }
 
     public void loadActivity() {
@@ -105,15 +110,46 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
         // 경도 위도를 좌표 변환후 주소로 표시.
         String requestReverseGeoAPI = DataSource.createNaverReverseGeoAPIRequcetURL(currentLat, currentLon);
+
         try {
+            // 주소 얻기
             String reverseGeoString = new HttpHandler().execute(requestReverseGeoAPI).get();
-            placeName = parsingReverseGeoJson(reverseGeoString);
-            locationName.setText(placeName);
+            String placeAddress;
+            placeAddress = parsingReverseGeoJson(reverseGeoString);
+            placeName = placeAddress;
+            placeAddress = URLEncoder.encode(placeAddress,"UTF-8");
+            Log.i("placeAddress RealName", placeAddress);
+
+            // 주소로 장소 이름 얻기
+            String requestRealPlaceName = DataSource.createNaverSearchRequestURL(placeAddress);
+            String realPlaceNameString = new HttpHandler().execute(requestRealPlaceName).get();
+            Log.i("Place RealName JSON", realPlaceNameString);
+            String place = parsingPlaceNameJson(realPlaceNameString);
+            Log.i("parsing RealName JSON", place);
+
+            if(place.length() > 0 ) { // 장소이름이 검색될때.
+                placeName = place;
+                locationName.setText(placeName);
+            }
+
             Log.i("parsing Address", locationName.getText().toString());
 
         } catch (InterruptedException | JSONException | ExecutionException e) {
+            locationName.setText(placeName);
 
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
+    }
+
+    // 경기도 수원시 영통구 영통동 1078
+
+    public String parsingPlaceNameJson(String realPlaceNameString) throws JSONException {
+        String place = "";
+        JSONObject reverseObject = new JSONObject(realPlaceNameString);
+        JSONArray dataList = reverseObject.getJSONObject("result").getJSONArray("items");
+        place = dataList.getJSONObject(0).getString("title");
+        return place;
     }
 
     public String parsingReverseGeoJson(String reverseGeoString) throws JSONException {
@@ -146,6 +182,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
             case R.id.ar_mixview_write_review_register:
                 makeTraceInstanceToServer();
+
                 break;
         }
     }
@@ -186,10 +223,8 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         if (requestCode == REQUEST_IMAGE) {
             if (resultCode == RESULT_OK) {
                 try {
-
                     // if python server on
                     //uploadImageToPythonServer(Uri.fromFile(destination));
-
                     FileInputStream in = null;
                     in = new FileInputStream(destination);
 
@@ -237,7 +272,9 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         else
             trace.setContent("");
         // 이미지 url , 썸네일 url 추가
-        if (destination != null)
+
+        // TODO: 2017. 1. 30. 이거 에러구문 처리 다시해야됨 
+        if (currentBitmap != null)
             clientSelector.uploadImageToServer(trace,destination);
            // uploadImageToServer(trace, dialog);
         else {
@@ -245,229 +282,18 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
             //Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
             //dialog.dismiss();
         }
-        // 경도 위도
-        trace.setLat(currentLat);
-        trace.setLon(currentLon);
-        // 장소이름
-        trace.setPlaceName(placeName);
-        // 업로드 날짜
-        trace.setWriteDate(new Date());
+        trace.setLat(currentLat); // 경도
+        trace.setLon(currentLon); // 위도
+        trace.setPlaceName(placeName); // 장소이름
+        trace.setWriteDate(new Date()); // 업로드 날짜
+        trace.setUserName(currentUser.getUserName()); // 유조이름
+        trace.setUserImageUrl(currentUser.getUserImageURL()); // 유저 이미지 유알엘
 
         clientSelector.uploadTraceToServer(trace);
+        Toast.makeText(getApplicationContext(),"글이 등록되었습니다.", Toast.LENGTH_SHORT). show();
+        finish();
     }
 
-    //private void uploadTraceToServer() {
-    //    final ProgressDialog dialog = new ProgressDialog(this);
-    //    dialog.setMessage("잠시만 기다려주세요.");
-    //    dialog.show();
-//
-    //    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    //    DatabaseReference myRef = database.getReference("building").child(/*building id*/"1");
-    //    myRef.push().addListenerForSingleValueEvent(new ValueEventListener() {
-    //        @Override
-    //        public void onDataChange(DataSnapshot dataSnapshot) {
-//
-    //            Trace trace = new Trace();
-    //
-    //            //set location id of trace
-    //            String hashKey = MixUtils.makeHashStringMD5(currentLon,currentLon);
-    //            trace.setLocationID(hashKey);
-//
-    //            //use key as trace id
-    //            trace.setTraceID(dataSnapshot.getKey());
-//
-    //            //add content to trace
-    //            EditText content = (EditText)findViewById(R.id.ar_mixview_write_review_content);
-    //            if(content != null)
-    //                trace.setContent(content.getText().toString());
-    //            else
-    //                trace.setContent("");
-//
-    //            // 이미지 url , 썸네일 url 추가
-    //            if(currentBitmap != null)
-    //                uploadImageToServer(trace, dialog);
-    //            else {
-    //                Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
-    //                dialog.dismiss();
-    //            }
-//
-    //            // 경도 위도
-    //            trace.setLat(currentLat);
-    //            trace.setLon(currentLon);
-//
-    //            // 장소이름
-    //            trace.setPlaceName(placeName);
-//
-    //            // 업로드 날짜
-    //            trace.setWriteDate(new Date());
-//
-    //            //register trace
-    //            dataSnapshot.getRef().setValue(trace);
-//
-    //        }
-//
-    //        @Override
-    //        public void onCancelled(DatabaseError databaseError) {
-    //            Toast.makeText(getApplicationContext(), "업로드에 실패하였습니다.", Toast.LENGTH_SHORT).show();
-    //            dialog.dismiss();
-    //        }
-    //    });
-    //}
-
-    private void uploadImageToPythonServer(final Uri fileURI) throws IOException {
-        // TODO: 2017. 1. 16. 파일의 uri 가져오는거 ㄲ
-
-        final String charset = "UTF-8";
-        final String requestURL = "http://192.168.1.41:8009/upload";
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                MultipartUtility multipart = null;
-                try {
-                    multipart = new MultipartUtility(requestURL, charset);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                // 추가 파라미터.
-                multipart.addFormField("param_name_1", "param_value");
-                multipart.addFormField("param_name_2", "param_value");
-                multipart.addFormField("param_name_3", "param_value");
-                try {
-                    multipart.addFilePart("file", new File(fileURI.getPath()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                String response = null; // response from server.
-                try {
-                    response = multipart.finish();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Log.i("response code", response);
-
-            }
-        }).start();
-
-    }
-/*
-    private void uploadImageToServer(final Trace trace, final ProgressDialog dialog) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                uploadedCount = 0;
-                uploadFailCount = 0;
-                uploadedThumbnailCount = 0;
-                uploadFailThumbnailCount = 0;
-                final Object lock = new Object();
-
-                if (currentBitmap != null) {
-                    double scale = 0;
-                    if (currentBitmap.getWidth() > currentBitmap.getHeight())
-                        scale = currentBitmap.getWidth() / 256;
-                    else
-                        scale = currentBitmap.getHeight() / 256;
-                    if (scale == 0)
-                        scale = 1;
-
-                    ByteArrayOutputStream jpegOut = new ByteArrayOutputStream();
-                    currentBitmap.compress(Bitmap.CompressFormat.JPEG, 70, jpegOut);
-
-                    Bitmap thumbnail = Bitmap.createScaledBitmap(currentBitmap, (int) (currentBitmap.getWidth() / scale), (int) (currentBitmap.getHeight() / scale), true);
-                    ByteArrayOutputStream jpegThumbnailOut = new ByteArrayOutputStream();
-                    thumbnail.compress(Bitmap.CompressFormat.JPEG, 70, jpegThumbnailOut);
-
-                    FirebaseStorage storage = FirebaseStorage.getInstance();
-                    StorageReference myRef = storage.getReference().child(trace.getLocationID()).child(trace.getTraceID() + ".jpg");
-                    StorageReference thumbnailRef = storage.getReference().child(trace.getLocationID()).child("sn-" + trace.getTraceID() + ".jpg");
-
-                    if (myRef.getName() == null || myRef.getName() != "") {
-                        byte[] imageData = jpegOut.toByteArray();
-                        final UploadTask uploadTask = myRef.putBytes(imageData);
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                //Toast.makeText(getContext(), "사진 업로드에 실패하였습니다. 네트워크를 확인해주세요,", Toast.LENGTH_SHORT).show();
-                                //dialog.setMessage("파일 업로드에 실패하였습니다. : " + fileName);
-                                uploadFailCount++;
-                                e.printStackTrace();
-                                if ((uploadedCount + uploadFailCount + uploadFailThumbnailCount + uploadedThumbnailCount) == 2) {
-                                    synchronized (lock) {
-                                        lock.notify();
-                                    }
-                                }
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                //   dialog.dismiss();
-                                Uri downloadUri = taskSnapshot.getDownloadUrl();
-                                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                DatabaseReference databaseRef = database.getReference("building").child(trace.getLocationID()).child(trace.getTraceID()).child("imageURL");
-                                databaseRef.setValue(downloadUri.toString());
-                                //trace.setImageURL(downloadUri.toString());
-
-                                uploadedCount++;
-                                if ((uploadedCount + uploadFailCount + uploadFailThumbnailCount + uploadedThumbnailCount) == 2) {
-                                    synchronized (lock) {
-                                        lock.notify();
-                                    }
-                                }
-                            }
-                        });
-
-                        byte[] thumbnailData = jpegThumbnailOut.toByteArray();
-                        final UploadTask thumbNailUploadTask = thumbnailRef.putBytes(thumbnailData);
-                        thumbNailUploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                //Toast.makeText(getContext(), "사진 업로드에 실패하였습니다. 네트워크를 확인해주세요,", Toast.LENGTH_SHORT).show();
-                                //dialog.setMessage("파일 업로드에 실패하였습니다. : " + fileName);
-                                uploadFailThumbnailCount++;
-                                e.printStackTrace();
-                                if ((uploadedCount + uploadFailCount + uploadFailThumbnailCount + uploadedThumbnailCount) == 2) {
-                                    synchronized (lock) {
-                                        lock.notify();
-                                    }
-                                }
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Uri downloadUri = taskSnapshot.getDownloadUrl();
-                                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                DatabaseReference databaseRef = database.getReference("building").child(trace.getLocationID()).child(trace.getTraceID()).child("thumbnailURL");
-                                databaseRef.setValue(downloadUri.toString());
-
-                                //trace.setThumbnailURL(downloadUri.toString());
-
-                                //Only the original thread that created a view hierarchy can touch its views.
-                                uploadedThumbnailCount++;
-                                if ((uploadedCount + uploadFailCount + uploadFailThumbnailCount + uploadedThumbnailCount) == 2) {
-                                    synchronized (lock) {
-                                        lock.notify();
-                                    }
-                                }
-                            }
-                        });
-                    } else
-                        Toast.makeText(getApplicationContext(), "이미 존재하는 파일 이름입니다. 파일 이름을 변경해 주세요", Toast.LENGTH_SHORT).show();
-                }
-
-                synchronized (lock) {
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                dialog.dismiss();
-
-            }
-        }).start();
-        Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
-    } */
 
     @Override
     public void onDestroy() {

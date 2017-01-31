@@ -113,10 +113,7 @@ public class SearchListActivity extends Activity implements View.OnClickListener
             JSONObject dataObject = dataArray.getJSONObject(0).getJSONObject("point");
 
             if(dataObject != null) {
-                // TODO: 2017. 1. 26. 이 코드 에러
-                // TODO: 2017. 1. 26. 이 액티비티를 종료시키고  TopLayoutOnMixVew 즉 메인화면에서 네비를 실행시킬려면 여기서 경도,위도 보내줘야함
-                // // TODO: 2017. 1. 26. 실행해보면 알수 있듯이  TopLayoutOnMixViewActivity 이게 명시적인 액티비티가 아니라네
-                //// TODO: 2017. 1. 26. 메니페스트에 등록 안시켜놓은거보면 내가 알던거랑 다른거같은데 이값보내는거해결좀
+
                 Intent naviIntent = new Intent();
                 naviIntent.putExtra("lat", dataObject.getString("y"));
                 naviIntent.putExtra("lon", dataObject.getString("x"));

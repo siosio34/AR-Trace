@@ -182,6 +182,9 @@ public class FirebaseClient implements ClientSelector{
 
     @Override
     public void uploadTraceToServer(final Trace trace) {
+        Log.i("trace log", trace.getLocationID());
+        Log.i("trace log2", trace.getTraceID());
+
         DatabaseReference locationRef = myRef.child(trace.getLocationID()).child(trace.getTraceID());
         locationRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

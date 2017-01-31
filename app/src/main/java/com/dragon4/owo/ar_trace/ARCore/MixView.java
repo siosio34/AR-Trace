@@ -1107,8 +1107,6 @@ class TopLayoutOnMixView {
         inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         mainArView = inflater.inflate(R.layout.activity_ar_mixview, null);
 
-        Toast.makeText(context,"이 화면으로 돌아옴",Toast.LENGTH_LONG).show();
-
         final LinearLayout parentButtonView = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_parent_buttonview);
         searchbar = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_searchbar);
         hideSearchbar = (Button) mainArView.findViewById(R.id.ar_mixview_hide_searchbar);
