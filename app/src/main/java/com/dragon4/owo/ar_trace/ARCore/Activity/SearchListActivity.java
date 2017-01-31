@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.dragon4.owo.ar_trace.ARCore.ARMarker;
 import com.dragon4.owo.ar_trace.ARCore.HttpHandler;
 import com.dragon4.owo.ar_trace.ARCore.NaverSearchMarker;
-import com.dragon4.owo.ar_trace.ARCore.Navigator;
 import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.R;
@@ -69,7 +68,6 @@ public class SearchListActivity extends Activity implements View.OnClickListener
         //Toast.makeText(context, searchRawData, Toast.LENGTH_LONG).show();
         ListView listView = (ListView)findViewById(R.id.ar_mixview_search_listview);
 
-        //TODO: 2017.01.24 리스트 데이터 가져와서 추가할 것.
         List<NaverSearchMarker> dataList = new ArrayList<>();
         for(int i = 0 ; i < searchList.size(); i++) {
             dataList.add((NaverSearchMarker)searchList.get(i));
@@ -89,13 +87,16 @@ public class SearchListActivity extends Activity implements View.OnClickListener
                 break;
 
             case R.id.ar_mixview_search_listview_navi:
+                // TODO: 2017. 1. 31. 거리가 도보거리를 넘었을때 수정해야된다
                 runNavi((String)view.getTag());
                 break;
 
             case R.id.ar_mixview_search_listview_review:
-                Intent intent = new Intent(SearchListActivity.this, ReviewActivity.class);
-                //TODO: 2017.01.25 need to pass trace data list
+                Intent intent = new Intent(SearchListActivity.this, TraceActivity.class);
+                Log.i("주소", (String)view.getTag());
+                intent.putExtra("title", (String)view.getTag());
                 startActivity(intent);
+                finish();
                 break;
         }
     }
@@ -119,6 +120,7 @@ public class SearchListActivity extends Activity implements View.OnClickListener
                 naviIntent.putExtra("lon", dataObject.getString("x"));
                 setResult(RESULT_OK, naviIntent);
                 finish();
+
             } else {
                 Toast.makeText(getApplicationContext(), "해당 지역의 좌표를 받아올 수 없습니다", Toast.LENGTH_LONG).show();
             }
@@ -167,11 +169,27 @@ public class SearchListActivity extends Activity implements View.OnClickListener
             navi.setOnClickListener(SearchListActivity.this);
             navi.setTag(currentData.getAddress());
 
+            
+            // 리뷰 버튼 클릭시 활성화.
+            TextView reviewText = (TextView)view.findViewById(R.id.ar_mixview_search_listview_review);
+            reviewText.setOnClickListener(SearchListActivity.this);
+            reviewText.setTag(currentData.getAddress());
+
             // 데이터들 보여주기
             name.setText(currentData.getTitle());
             callNumber.setText(currentData.getTelephone());
             category.setText(currentData.getCategory());
-            address.setText(currentData.getAddress());
+
+
+            // 신주소 구주소 전환.
+            if(currentData.getRoadAddress().length() > 0) {
+                address.setText(currentData.getRoadAddress());
+            }
+            else {
+                address.setText(currentData.getAddress());
+            }
+
+            address.setTag(address.getText().toString());
 
             return view;
         }

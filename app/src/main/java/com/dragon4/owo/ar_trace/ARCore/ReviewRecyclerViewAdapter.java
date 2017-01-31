@@ -11,6 +11,7 @@ import com.dragon4.owo.ar_trace.Model.Trace;
 import com.dragon4.owo.ar_trace.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,9 +19,10 @@ import java.util.List;
  */
 
 public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter {
-    private List<Trace> traceList;
 
-    public static class ReviewViewHolder extends RecyclerView.ViewHolder {
+    public ArrayList<Trace> traceList;
+
+    public class ReviewViewHolder extends RecyclerView.ViewHolder {
         public ImageView userProfileView;
         public TextView userNameView;
         public ImageView imgView;
@@ -39,11 +41,11 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter {
         }
     }
 
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_ar_mixview_review_item, parent, false);
         ReviewViewHolder vh = new ReviewViewHolder(v);
-
         return vh;
     }
 
@@ -65,5 +67,5 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter {
         return traceList.size();
     }
 
-    public void setList(List<Trace> traceList) { this.traceList = traceList; }
+    public void setList(ArrayList<Trace> traceList) { this.traceList = traceList; }
 }

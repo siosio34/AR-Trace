@@ -182,7 +182,6 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
             case R.id.ar_mixview_write_review_register:
                 makeTraceInstanceToServer();
-
                 break;
         }
     }

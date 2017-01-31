@@ -63,7 +63,8 @@ public class NaverSearchDataProcessor implements DataProcessor {
                 datasource,
                 jo.getString("category"),
                 jo.getString("telephone"),
-                jo.getString("address")
+                jo.getString("address"),
+                jo.getString("roadAddress")
         );
         // 제공값은 카텍좌표계 값으로 제공된다.
         return marker;
