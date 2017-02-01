@@ -108,9 +108,6 @@ public class DataHandler implements Serializable{
 		}
 	}
 	
-	/**
-	 * @deprecated Nobody should get direct access to the list
-	 */
 	public List getMarkerList() {
 		return markerList;
 	}

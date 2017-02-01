@@ -380,11 +380,12 @@ public class FragmentMapview extends Fragment {
 
         poIdata.beginPOIdata(markerList.size());
         for(ARMarker marker : markerList)
-            poIdata.addPOIitem(marker.getLatitude(), marker.getLongitude(), "", naverCategory, 0);
+            poIdata.addPOIitem(marker.getLongitude(), marker.getLatitude(), "", naverCategory, 0);
         poIdata.endPOIdata();
 
         //create POI data overlay
         NMapPOIdataOverlay poIdataOverlay = mOverlayManager.createPOIdataOverlay(poIdata, null);
+        poIdataOverlay.showAllPOIdata(0);
     }
 
     public void clearCategoryMarker() {

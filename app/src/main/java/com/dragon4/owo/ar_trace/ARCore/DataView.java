@@ -262,7 +262,7 @@ public class DataView {
                     Log.i(MixView.TAG, "Adding Markers");
                     dataHandler.addMarkers(dRes.getARMarkers());
                     dataHandler.onLocationChanged(curFix);    // 위치를 재설정
-                    mixContext.mixView.drawCategoryMarkers(dRes.getARMarkers());
+                    mixContext.mixView.drawCategoryMarkers(dataHandler.getMarkerList());
                     // 특정 데이터 소스로부터 다운로드 받았음을 알림
                     // Toast.makeText(mixContext, mixContext.getResources().getString(R.string.download_received) + " " + dRes.source, Toast.LENGTH_SHORT).show();
                 }
