@@ -56,6 +56,16 @@ public class NMapPOIflagType {
     // Clickable callout에 보여지는 화살표
     public static final int CLICKABLE_ARROW = CUSTOM_END + 1;
 
+    //카테고리 버튼을 위한 값
+    public static final int CATEGORY = 0x0400;
+    public static final int CAFE = CATEGORY + 1;
+    public static final int BUS = CAFE + 1;
+    public static final int CONVENIENCE_STORE = BUS + 1;
+    public static final int RESTAURANT = CONVENIENCE_STORE + 1;
+    public static final int BANK = RESTAURANT + 1;
+    public static final int HOSPITAL = BANK + 1;
+    public static final int LODGEMENT = HOSPITAL + 1;
+
     public static boolean isBoundsCentered(int markerId) {
         boolean boundsCentered = false;
 

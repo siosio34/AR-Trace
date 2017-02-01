@@ -7,6 +7,7 @@ import android.location.Location;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 
+import com.dragon4.owo.ar_trace.ARCore.ARMarker;
 import com.dragon4.owo.ar_trace.R;
 import com.nhn.android.maps.NMapActivity;
 import com.nhn.android.maps.NMapCompassManager;
@@ -48,6 +49,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by joyeongje on 2016. 12. 31..
@@ -168,7 +170,6 @@ public class FragmentMapview extends Fragment {
         // register callout overlay view listener to customize it.
         mOverlayManager.setOnCalloutOverlayViewListener(onCalloutOverlayViewListener);
 
-
         //compass manager
         mMapCompassManager = new NMapCompassManager(getActivity());
 
@@ -184,7 +185,6 @@ public class FragmentMapview extends Fragment {
 			}
 
 			if (mMapLocationManager.isMyLocationEnabled()) {
-
 				if (!mMapView.isAutoRotateEnabled()) {
 					mMyLocationOverlay.setCompassHeadingVisible(true);
 
@@ -207,7 +207,6 @@ public class FragmentMapview extends Fragment {
                 }
 			}
         }
-
     }
 
     private final NMapOverlayManager.OnCalloutOverlayListener onCalloutOverlayListener = new NMapOverlayManager.OnCalloutOverlayListener() {
@@ -375,6 +374,23 @@ public class FragmentMapview extends Fragment {
         return currentLocation;
     }
 
+
+    public void drawCategoryMarkers(List<ARMarker> markerList, int naverCategory) {
+        NMapPOIdata poIdata = new NMapPOIdata(2, mMapViewerResourceProvider);
+
+        poIdata.beginPOIdata(markerList.size());
+        for(ARMarker marker : markerList)
+            poIdata.addPOIitem(marker.getLatitude(), marker.getLongitude(), "", naverCategory, 0);
+        poIdata.endPOIdata();
+
+        //create POI data overlay
+        NMapPOIdataOverlay poIdataOverlay = mOverlayManager.createPOIdataOverlay(poIdata, null);
+    }
+
+    public void clearCategoryMarker() {
+        mOverlayManager.clearOverlays();
+    }
+
     public void findAndDrawRoot(final String naviJson) {
             //find location
             getActivity().runOnUiThread(new Runnable() {
@@ -402,7 +418,6 @@ public class FragmentMapview extends Fragment {
 
                             //create POI data overlay
                             NMapPOIdataOverlay poIdataOverlay = mOverlayManager.createPOIdataOverlay(poIdata, null);
-
                             //show all POI data
                             //poIdataOverlay.showAllPOIdata(0);
 
@@ -434,6 +449,10 @@ public class FragmentMapview extends Fragment {
                 }
             });
 
+    }
+
+    public void cancelNavi() {
+        mOverlayManager.clearOverlays();
     }
 
     @Override
