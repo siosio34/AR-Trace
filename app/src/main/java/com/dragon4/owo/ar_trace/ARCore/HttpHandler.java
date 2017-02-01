@@ -43,7 +43,7 @@ public class HttpHandler extends AsyncTask<String, Void, String> {
         String clientSecret = "FgMzaRVgqt";//애플리케이션 클라이언트 시크릿값";
 
         if (urlStr.startsWith("file:\\")) ;
-        // TODO: 2016. 10. 2. 파일에서 읽어올경우 처리해야됨
+
 
         if (urlStr.startsWith("https://")) {
             HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
@@ -96,11 +96,14 @@ public class HttpHandler extends AsyncTask<String, Void, String> {
             int responseCode = conn.getResponseCode();
             Log.i("ResponseCode : ", Integer.toString(responseCode));
 
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                InputStream in = new BufferedInputStream(conn.getInputStream());
+                responseStr = convertStreamToString(in);
+                Log.i("Response String", responseStr);
+            }
             // TODO: 2017. 1. 19. 에러코드일때 따로 예외처리해줘야됨
 
-            InputStream in = new BufferedInputStream(conn.getInputStream());
-            responseStr = convertStreamToString(in);
-            Log.i("Response String", responseStr);
+
 
         } catch (MalformedURLException e) {
             Log.e(TAG, "MalformedURLException: " + e.getMessage());

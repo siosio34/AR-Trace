@@ -428,6 +428,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             doError(ex);    // 예외 발생시 에러 처리
         }
 
+        // 네비 토스트 띄우는 거시다
         IntentFilter naviBraodFilter = new IntentFilter();
         naviBraodFilter.addAction("NAVI");
         registerReceiver(naviRecevicer, naviBraodFilter);
