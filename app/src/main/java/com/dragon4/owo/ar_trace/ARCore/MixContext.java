@@ -89,7 +89,6 @@ public class MixContext extends ContextWrapper {
     // 각 데이터소스의 선택 여부를 저장할 해쉬맵
     private HashMap<DataSource.DATASOURCE, Boolean> selectedDataSources = new HashMap<DataSource.DATASOURCE, Boolean>();
 
-
     // 생성자. 어플리케이션의 컨텍스트를 받는다
     public MixContext(Context appCtx) {
         super(appCtx);
