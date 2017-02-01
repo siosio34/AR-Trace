@@ -184,6 +184,15 @@ public class NMapViewerResourceProvider extends NMapResourceProvider implements 
             // Direction POI icons: From, To
             new ResourceIdsOnMap(NMapPOIflagType.FROM, R.drawable.ic_map_start, R.drawable.ic_map_start_over),
             new ResourceIdsOnMap(NMapPOIflagType.TO, R.drawable.ic_map_arrive, R.drawable.ic_map_arrive_over),
+
+            //Category Buttons
+            new ResourceIdsOnMap(NMapPOIflagType.CAFE, R.drawable.ic_ar_cafe, R.drawable.ic_ar_cafe),
+            new ResourceIdsOnMap(NMapPOIflagType.BUS, R.drawable.ic_ar_bus, R.drawable.ic_ar_bus),
+            new ResourceIdsOnMap(NMapPOIflagType.CONVENIENCE_STORE, R.drawable.ic_ar_convenience_store, R.drawable.ic_ar_convenience_store),
+            new ResourceIdsOnMap(NMapPOIflagType.RESTAURANT, R.drawable.ic_ar_restaurant, R.drawable.ic_ar_restaurant),
+            new ResourceIdsOnMap(NMapPOIflagType.BANK, R.drawable.ic_ar_bank, R.drawable.ic_ar_bank),
+            new ResourceIdsOnMap(NMapPOIflagType.HOSPITAL, R.drawable.ic_ar_hospital, R.drawable.ic_ar_hospital),
+            new ResourceIdsOnMap(NMapPOIflagType.LODGEMENT, R.drawable.ic_ar_lodgement, R.drawable.ic_ar_lodgement),
     };
 
     /**

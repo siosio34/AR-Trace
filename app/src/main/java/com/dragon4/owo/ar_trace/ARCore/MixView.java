@@ -102,6 +102,7 @@ import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
 import com.dragon4.owo.ar_trace.ARCore.render.Matrix;
 import com.dragon4.owo.ar_trace.NaverMap.FragmentMapview;
+import com.dragon4.owo.ar_trace.NaverMap.NMapPOIflagType;
 import com.dragon4.owo.ar_trace.R;
 import com.nhn.android.maps.maplib.NGeoPoint;
 import com.tsengvn.typekit.TypekitContextWrapper;
@@ -172,7 +173,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     private int compassErrorDisplayed = 0;
 
     // MixView를 덮는 하나의 뷰 & 기능들
-    private TopLayoutOnMixView topLayoutOnMixView;
+    public TopLayoutOnMixView topLayoutOnMixView;
 
     //네비게이터 역할을 하는 클래스 추가
     private Navigator navigator;
@@ -886,6 +887,46 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     public void onBackPressed() {
         if(!topLayoutOnMixView.onBackPressed())
             finish();
+    }
+
+    public void drawCategoryMarkers(List<ARMarker> markerList) {
+        //DataSource.DATASOURCE.~~:
+
+        int naverCategory = -1;
+        switch (markerList.get(0).getDatasource()) {
+            case CAFE:
+                naverCategory = NMapPOIflagType.CAFE;
+                break;
+
+            case BUSSTOP:
+                naverCategory = NMapPOIflagType.BUS;
+                break;
+
+            case Convenience:
+                naverCategory = NMapPOIflagType.CONVENIENCE_STORE;
+                break;
+
+            case Restaurant:
+                naverCategory = NMapPOIflagType.RESTAURANT;
+                break;
+
+            case BANK:
+                naverCategory = NMapPOIflagType.BANK;
+                break;
+
+            case HOSPITAL:
+                naverCategory = NMapPOIflagType.HOSPITAL;
+                break;
+
+            case ACCOMMODATION:
+                naverCategory = NMapPOIflagType.LODGEMENT;
+                break;
+        }
+
+        if(naverCategory != -1) {
+            topLayoutOnMixView.naverFragment.clearCategoryMarker();
+            topLayoutOnMixView.naverFragment.drawCategoryMarkers(markerList, naverCategory);
+        }
     }
 }
 
