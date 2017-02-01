@@ -4,9 +4,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.dragon4.owo.ar_trace.ARCore.Activity.TraceActivity;
+import com.dragon4.owo.ar_trace.ARCore.ReviewRecyclerViewAdapter;
 import com.dragon4.owo.ar_trace.Model.Trace;
 import com.dragon4.owo.ar_trace.Model.User;
 import com.dragon4.owo.ar_trace.Network.ClientSelector;
@@ -25,7 +28,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by joyeongje on 2017. 1. 20..
@@ -41,6 +47,10 @@ public class FirebaseClient implements ClientSelector{
     private int uploadFailCount = 0;
     private int uploadedThumbnailCount = 0;
     private int uploadFailThumbnailCount = 0;
+
+    public FirebaseClient() {
+
+    }
 
     private Bitmap currentBitmap;
 
@@ -182,11 +192,16 @@ public class FirebaseClient implements ClientSelector{
 
     @Override
     public void uploadTraceToServer(final Trace trace) {
-        DatabaseReference locationRef = myRef.child(trace.getLocationID()).child(trace.getTraceID());
+
+        DatabaseReference locationRef = myRef.child(trace.getLocationID());
         locationRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                dataSnapshot.getRef().setValue(trace);
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put("lat", trace.getLat());
+                childUpdates.put("lon", trace.getLon());
+                dataSnapshot.getRef().setValue(childUpdates);
+                dataSnapshot.child("trace").child(trace.getTraceID()).getRef().setValue(trace);
             }
 
             @Override
@@ -197,9 +212,35 @@ public class FirebaseClient implements ClientSelector{
 
 
     @Override
-    public List<Trace> getTraceDataFromServer() {
-        return null;
+    public ArrayList<Trace> getTraceDataFromServer(String traceKey, final ReviewRecyclerViewAdapter mAdapter) {
+        // 하나의 장소에 대해서 리뷰들을 가져오는것.
+        final ArrayList<Trace> traceList = new ArrayList<>();
+        mAdapter.setList(traceList);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseRef = database.getReference("building").child(traceKey).child("trace");
+
+        databaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot child : dataSnapshot.getChildren() ) {
+                    Trace trace = child.getValue(Trace.class);
+                    traceList.add(trace);
+                }
+
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return traceList;
     }
+
+
 
 
 }

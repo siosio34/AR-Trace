@@ -61,7 +61,7 @@
         <activity android:name=".ARCore.Activity.SearchListActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <activity android:name=".ARCore.Activity.ReviewActivity"
+        <activity android:name=".ARCore.Activity.TraceActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
 

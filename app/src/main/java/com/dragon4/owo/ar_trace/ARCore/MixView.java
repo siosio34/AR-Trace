@@ -1160,7 +1160,6 @@ class TopLayoutOnMixView {
         inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         mainArView = inflater.inflate(R.layout.activity_ar_mixview, null);
 
-        //Toast.makeText(context,"이 화면으로 돌아옴",Toast.LENGTH_LONG).show();
 
         // 네이버 지도 추가
         // TODO: 2016. 12. 31. 배율 높이기 네이버 위치 리스너 만들기.
@@ -1168,6 +1167,7 @@ class TopLayoutOnMixView {
         initNaverMap();
         initSearchbar();
     }
+
 
     public void initButtonViews() {
         parentButtonView = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_parent_buttonview);

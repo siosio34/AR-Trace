@@ -13,14 +13,16 @@ public class NaverSearchMarker extends ARMarker {
     private String category;
     private String telephone;
     private String address;
+    private String roadAddress;
 
     public NaverSearchMarker(String title, double latitude, double longitude,
                           double altitude, String URL, DataSource.DATASOURCE datasource,
-                             String category,String telephone,String address) {
+                             String category,String telephone,String address, String roadAddress) {
         super(title, latitude, longitude, altitude, URL, datasource);
         this.category = category;
         this.telephone = telephone;
         this.address = address;
+        this.roadAddress = roadAddress;
 
     }
     @Override
@@ -51,5 +53,13 @@ public class NaverSearchMarker extends ARMarker {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getRoadAddress() {
+        return roadAddress;
+    }
+
+    public void setRoadAddress(String roadAddress) {
+        this.roadAddress = roadAddress;
     }
 }
