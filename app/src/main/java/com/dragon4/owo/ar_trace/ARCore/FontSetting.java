@@ -8,7 +8,7 @@ import com.tsengvn.typekit.Typekit;
  * Created by Mansu on 2017-01-02.
  */
 
-public class App extends Application {
+public class FontSetting extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
