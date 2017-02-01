@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,9 +20,12 @@
             android:textColor="#FFFFFFFF"/>
     </LinearLayout>
     <LinearLayout
-        android:layout_width="340dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical"
+        android:background="#F3FFFFFF">
         <ImageView
             android:id="@+id/ar_mixview_review_img"
             android:layout_width="match_parent"
@@ -31,6 +34,8 @@
             android:id="@+id/ar_mixview_review_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="42dp"
+            android:gravity="left|top"
             android:paddingTop="10dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
@@ -39,7 +44,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="14dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp">
@@ -51,6 +56,7 @@
                 android:textSize="12sp"
                 android:textColor="#5A000000"/>
             <LinearLayout
+                android:id="@+id/ar_mixview_review_like"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true">

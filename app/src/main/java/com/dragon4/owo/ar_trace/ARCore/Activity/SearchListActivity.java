@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -171,7 +172,7 @@ public class SearchListActivity extends Activity implements View.OnClickListener
 
             
             // 리뷰 버튼 클릭시 활성화.
-            TextView reviewText = (TextView)view.findViewById(R.id.ar_mixview_search_listview_review);
+            LinearLayout reviewText = (LinearLayout)view.findViewById(R.id.ar_mixview_search_listview_review);
             reviewText.setOnClickListener(SearchListActivity.this);
             reviewText.setTag(currentData.getAddress());
 

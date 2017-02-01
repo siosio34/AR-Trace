@@ -11,7 +11,9 @@ import com.dragon4.owo.ar_trace.Model.Trace;
 import com.dragon4.owo.ar_trace.R;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,7 +60,7 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter {
         //reviewHolder.userNameView.setText(trace.getUserName());
         Picasso.with(reviewHolder.imgView.getContext()).load(trace.getImageURL()).into(reviewHolder.imgView);
         reviewHolder.contentView.setText(trace.getContent());
-        reviewHolder.dateView.setText(trace.getWriteDate().toString());
+        reviewHolder.dateView.setText(MixUtils.getDateString(trace.getWriteDate()));
         reviewHolder.likeNumberView.setText(""+trace.getLikeNum());
     }
 

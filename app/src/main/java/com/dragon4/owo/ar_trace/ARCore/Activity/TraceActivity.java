@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.TextView;
 
 import com.dragon4.owo.ar_trace.ARCore.ReviewRecyclerViewAdapter;
@@ -24,17 +25,18 @@ import java.util.zip.CheckedInputStream;
  * Created by Mansu on 2017-01-25.
  */
 
-public class TraceActivity extends Activity {
+public class TraceActivity extends Activity implements View.OnClickListener {
 
-    ClientSelector clientSelector;
-
-     private ArrayList<Trace> traceList;
-     public ReviewRecyclerViewAdapter mAdapter;
+    private ClientSelector clientSelector;
+    private ArrayList<Trace> traceList;
+    public ReviewRecyclerViewAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_ar_mixview_review);
+        findViewById(R.id.ar_mixview_review_back).setOnClickListener(this);
+        findViewById(R.id.ar_mixview_review_add).setOnClickListener(this);
 
         Intent reviewIntent = getIntent();
         String reviewTitle = reviewIntent.getStringExtra("title");
@@ -54,7 +56,7 @@ public class TraceActivity extends Activity {
         //Log.i("악",traceList.get(0).getLocationID());
 
         TextView textView = (TextView) findViewById(R.id.ar_mixview_review_title);
-        textView.setText(reviewTitle);
+        textView.setText(reviewTitle + " 리뷰");
 
 
         //specify an adapter
@@ -62,5 +64,29 @@ public class TraceActivity extends Activity {
         //TODO: 2017.01.25 need trace data list.
         //adapter.setList(traceList);
 
+    }
+
+    public void clickLikeBtn(View parent) {
+        TextView likeNumber = (TextView)parent.findViewById(R.id.ar_mixview_review_like_number);
+        likeNumber.setText(""+(Integer.parseInt(likeNumber.getText().toString()) + 1));
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.ar_mixview_review_back:
+                finish();
+                break;
+
+            case R.id.ar_mixview_review_add:
+                Intent intent = new Intent(TraceActivity.this, WriteReviewActivity.class);
+                //TODO: intent에서 WriteReviewActivity에 어느걸 넘겨줘서 리뷰를 적어야하는가.
+                startActivity(intent);
+                break;
+
+            case R.id.ar_mixview_review_like:
+                clickLikeBtn((View)view.getParent());
+                break;
+        }
     }
 }

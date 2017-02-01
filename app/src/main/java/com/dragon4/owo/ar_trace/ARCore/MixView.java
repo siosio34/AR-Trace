@@ -82,6 +82,7 @@ import android.view.*;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -1267,6 +1268,8 @@ class TopLayoutOnMixView {
                         String queryString = searchText.getText().toString();
                         Intent intent = new Intent(context, SearchListActivity.class);
                         intent.putExtra("searchName", queryString);
+                        InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(mainArView.getWindowToken(), 0);
                         mainArView.setVisibility(View.GONE);
                         ((Activity)context).startActivityForResult(intent, SEARCH_LIST);
                         break;

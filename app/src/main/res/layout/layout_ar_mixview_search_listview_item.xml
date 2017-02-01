@@ -76,6 +76,7 @@
             android:layout_height="match_parent"
             android:background="#80000000" />
         <LinearLayout
+            android:id="@+id/ar_mixview_search_listview_review"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -83,7 +84,6 @@
             android:layout_marginTop="13dp"
             android:layout_marginBottom="13dp">
             <TextView
-                android:id="@+id/ar_mixview_search_listview_review"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="7dp"
@@ -92,6 +92,7 @@
                 android:textColor="#A5000000"
                 android:textStyle="bold"/>
             <TextView
+                android:id="@+id/ar_mixview_search_listview_review_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="(12)"
