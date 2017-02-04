@@ -192,7 +192,6 @@ public class FirebaseClient implements ClientSelector{
 
     @Override
     public void uploadTraceToServer(final Trace trace) {
-
         DatabaseReference locationRef = myRef.child(trace.getLocationID());
         locationRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -220,7 +219,7 @@ public class FirebaseClient implements ClientSelector{
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = database.getReference("building").child(traceKey).child("trace");
 
-        databaseRef.addValueEventListener(new ValueEventListener() {
+        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -239,8 +238,4 @@ public class FirebaseClient implements ClientSelector{
         });
         return traceList;
     }
-
-
-
-
 }

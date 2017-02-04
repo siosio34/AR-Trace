@@ -2,13 +2,15 @@ package com.dragon4.owo.ar_trace.ARCore.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
+    import android.view.ViewParent;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dragon4.owo.ar_trace.ARCore.ReviewRecyclerViewAdapter;
@@ -57,18 +59,11 @@ public class TraceActivity extends Activity implements View.OnClickListener {
 
         TextView textView = (TextView) findViewById(R.id.ar_mixview_review_title);
         textView.setText(reviewTitle + " 리뷰");
-
-
         //specify an adapter
 
         //TODO: 2017.01.25 need trace data list.
         //adapter.setList(traceList);
 
-    }
-
-    public void clickLikeBtn(View parent) {
-        TextView likeNumber = (TextView)parent.findViewById(R.id.ar_mixview_review_like_number);
-        likeNumber.setText(""+(Integer.parseInt(likeNumber.getText().toString()) + 1));
     }
 
     @Override
@@ -82,10 +77,6 @@ public class TraceActivity extends Activity implements View.OnClickListener {
                 Intent intent = new Intent(TraceActivity.this, WriteReviewActivity.class);
                 //TODO: intent에서 WriteReviewActivity에 어느걸 넘겨줘서 리뷰를 적어야하는가.
                 startActivity(intent);
-                break;
-
-            case R.id.ar_mixview_review_like:
-                clickLikeBtn((View)view.getParent());
                 break;
         }
     }

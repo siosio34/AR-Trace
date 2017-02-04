@@ -61,23 +61,25 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true">
                 <ImageView
+                    android:id="@+id/ar_mixview_review_like_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ic_like"/>
+                    android:background="@drawable/ic_like_cancel"/>
                 <TextView
+                    android:id="@+id/ar_mixview_review_like_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
                     android:text="좋아요"
                     android:textSize="12sp"
-                    android:textColor="#A5009017" />
+                    android:textColor="#5A000000" />
                 <TextView
                     android:id="@+id/ar_mixview_review_like_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="6"
+                    android:text="0"
                     android:textSize="12sp"
-                    android:textColor="#A5009017" />
+                    android:textColor="#5A000000" />
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
