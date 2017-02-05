@@ -434,7 +434,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
         IntentFilter naviBraodFilter = new IntentFilter();
         naviBraodFilter.addAction("NAVI");
         registerReceiver(naviRecevicer, naviBraodFilter);
-
     }
 
     // 인텐트 제어

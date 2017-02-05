@@ -32,6 +32,7 @@ public class TraceActivity extends Activity implements View.OnClickListener {
     private ClientSelector clientSelector;
     private ArrayList<Trace> traceList;
     public ReviewRecyclerViewAdapter mAdapter;
+    private String buildingID = "경기도 수원시 영통구 영통동 1078";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class TraceActivity extends Activity implements View.OnClickListener {
         recyclerView.setAdapter(mAdapter);
 
         clientSelector = new FirebaseClient();
-        clientSelector.getTraceDataFromServer("경기도 성남시 분당구 삼평동 703-3", mAdapter);
+        clientSelector.getTraceDataFromServer(buildingID, mAdapter);
 
         //Log.i("악",traceList.get(0).getLocationID());
 
@@ -76,6 +77,7 @@ public class TraceActivity extends Activity implements View.OnClickListener {
             case R.id.ar_mixview_review_add:
                 Intent intent = new Intent(TraceActivity.this, WriteReviewActivity.class);
                 //TODO: intent에서 WriteReviewActivity에 어느걸 넘겨줘서 리뷰를 적어야하는가.
+                intent.putExtra("buildingID", buildingID);
                 startActivity(intent);
                 break;
         }

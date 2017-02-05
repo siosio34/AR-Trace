@@ -54,8 +54,8 @@ public class FirebaseClient implements ClientSelector{
 
     private Bitmap currentBitmap;
 
-    private String makeTraceKey() {
-        makeKey = myRef.push().getKey();
+    private String makeTraceKey(String id) {
+        makeKey = myRef.child(id).push().getKey();
         return makeKey;
     }
 
@@ -69,9 +69,6 @@ public class FirebaseClient implements ClientSelector{
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
-        final String traceKey = makeTraceKey();
-        trace.setTraceID(traceKey);
 
         new Thread(new Runnable() {
             @Override
@@ -120,7 +117,7 @@ public class FirebaseClient implements ClientSelector{
                                 //   dialog.dismiss();
                                 Uri downloadUri = taskSnapshot.getDownloadUrl();
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                DatabaseReference databaseRef = database.getReference("building").child(trace.getLocationID()).child(trace.getTraceID()).child("imageURL");
+                                DatabaseReference databaseRef = database.getReference("building").child(trace.getLocationID()).child("trace").child(trace.getTraceID()).child("imageURL");
                                 databaseRef.setValue(downloadUri.toString());
                                 //trace.setImageURL(downloadUri.toString());
                                 Log.i("FirebaseClient", "이미지 업로드 완료");
@@ -154,7 +151,7 @@ public class FirebaseClient implements ClientSelector{
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 Uri downloadUri = taskSnapshot.getDownloadUrl();
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                DatabaseReference databaseRef = database.getReference("building").child(trace.getLocationID()).child(trace.getTraceID()).child("thumbnailURL");
+                                DatabaseReference databaseRef = database.getReference("building").child(trace.getLocationID()).child("trace").child(trace.getTraceID()).child("thumbnailURL");
                                 databaseRef.setValue(downloadUri.toString());
                                 Log.i("FirebaseClient", "썸네일 이미지 업로드 완료");
 
@@ -192,6 +189,9 @@ public class FirebaseClient implements ClientSelector{
 
     @Override
     public void uploadTraceToServer(final Trace trace) {
+        final String traceKey = makeTraceKey(trace.getLocationID());
+        trace.setTraceID(traceKey);
+
         DatabaseReference locationRef = myRef.child(trace.getLocationID());
         locationRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -208,7 +208,6 @@ public class FirebaseClient implements ClientSelector{
             }
         });
     }
-
 
     @Override
     public ArrayList<Trace> getTraceDataFromServer(String traceKey, final ReviewRecyclerViewAdapter mAdapter) {
