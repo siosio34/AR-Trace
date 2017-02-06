@@ -54,8 +54,8 @@ public class FirebaseClient implements ClientSelector{
 
     private Bitmap currentBitmap;
 
-    private String makeTraceKey() {
-        makeKey = myRef.push().getKey();
+    private String makeTraceKey(String id) {
+        makeKey = myRef.child(id).push().getKey();
         return makeKey;
     }
 
@@ -70,8 +70,6 @@ public class FirebaseClient implements ClientSelector{
             e.printStackTrace();
         }
 
-        final String traceKey = makeTraceKey();
-        trace.setTraceID(traceKey);
 
         new Thread(new Runnable() {
             @Override
@@ -192,6 +190,10 @@ public class FirebaseClient implements ClientSelector{
 
     @Override
     public void uploadTraceToServer(final Trace trace) {
+
+
+        final String traceKey = makeTraceKey(trace.getLocationID());
+        trace.setTraceID(traceKey);
 
         DatabaseReference locationRef = myRef.child(trace.getLocationID());
         locationRef.addListenerForSingleValueEvent(new ValueEventListener() {

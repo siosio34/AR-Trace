@@ -275,11 +275,8 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         // TODO: 2017. 1. 30. 이거 에러구문 처리 다시해야됨 
         if (currentBitmap != null)
             clientSelector.uploadImageToServer(trace,destination);
-           // uploadImageToServer(trace, dialog);
         else {
             Toast.makeText(getApplicationContext()," 이미지가 존재하지않습니다 ", Toast.LENGTH_SHORT). show();
-            //Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
-            //dialog.dismiss();
         }
         trace.setLat(currentLat); // 경도
         trace.setLon(currentLon); // 위도
