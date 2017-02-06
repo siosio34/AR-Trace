@@ -75,7 +75,6 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
     private ClientSelector clientSelector;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +82,8 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         loadActivity();
 
         clientSelector = new FirebaseClient(); // 추후에 파이썬 서버 버젼도 가능케 할 예정
+
+        // clientSelector = new PythonClient();
         currentUser = User.getMyInstance();
     }
 
@@ -250,8 +251,6 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                     //set id and register onclicklistener
                     currentImageView.setId(R.id.ar_mixview_write_review_add);
                     currentImageView.setOnClickListener(this);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -286,7 +285,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         trace.setLat(currentLat); // 경도
         trace.setLon(currentLon); // 위도
         trace.setPlaceName(placeName); // 장소이름
-        trace.setWriteDate(new Date()); // 업로드 날짜
+        trace.setWriteDate(new Date().getTime()); // 업로드 날짜
         trace.setUserName(currentUser.getUserName()); // 유조이름
         trace.setUserImageUrl(currentUser.getUserImageURL()); // 유저 이미지 유알엘
 

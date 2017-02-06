@@ -17,7 +17,6 @@ public class NavigationMarker extends ARMarker {
     private int totalDistance; // 총 거리
     // 마커 제이썬 리스트 마다 다름.
     private String type; // 좌,우,직진,횡단보도
-
     private String guide; // 가는 길 가이드 ex) 직선방향으로 5m!
     private int x;
     private int y;
