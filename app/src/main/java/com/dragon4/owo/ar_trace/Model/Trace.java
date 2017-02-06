@@ -1,6 +1,9 @@
 package com.dragon4.owo.ar_trace.Model;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -22,6 +25,8 @@ public class Trace {
 
     private String userImageUrl; // user Image URL
     private String userName; // 유저이름
+    @Exclude
+    private HashMap<String, String> likeUserList;
 
     public String getLocationID() {
         return locationID;
@@ -117,5 +122,13 @@ public class Trace {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public HashMap<String, String> getLikeUserList() {
+        return likeUserList;
+    }
+
+    public void setLikeUserList(HashMap<String, String> likeUserList) {
+        this.likeUserList = likeUserList;
     }
 }

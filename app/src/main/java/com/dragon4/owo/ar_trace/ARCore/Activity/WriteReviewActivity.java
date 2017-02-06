@@ -231,9 +231,14 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
                     ImageView currentImageView = new ImageView(this);
                     View picture = findViewById(R.id.ar_mixview_write_review_add);
-                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(currentBitmap, picture.getMeasuredWidth(), picture.getMeasuredHeight(), true);
-                    currentImageView.setImageBitmap(scaledBitmap);
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(picture.getMeasuredWidth(), picture.getMeasuredHeight());
+                    currentImageView.setImageBitmap(currentBitmap);
+
+                    double scale;
+                    if(currentBitmap.getWidth() > picture.getMeasuredWidth())
+                        scale = (double)picture.getMeasuredWidth() / currentBitmap.getWidth();
+                    else
+                        scale = 1;
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)(currentBitmap.getWidth() * scale), (int)(currentBitmap.getHeight() * scale));
                     currentImageView.setLayoutParams(params);
 
                     //delete current pictureview and add new pictureview
@@ -250,7 +255,6 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                destination.delete();
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "사진을 취소하셨습니다.", Toast.LENGTH_SHORT).show();
                 destination.delete();
@@ -275,6 +279,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         // TODO: 2017. 1. 30. 이거 에러구문 처리 다시해야됨 
         if (currentBitmap != null)
             clientSelector.uploadImageToServer(trace,destination);
+
         else {
             Toast.makeText(getApplicationContext()," 이미지가 존재하지않습니다 ", Toast.LENGTH_SHORT). show();
         }

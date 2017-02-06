@@ -70,7 +70,6 @@ public class FirebaseClient implements ClientSelector{
             e.printStackTrace();
         }
 
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -118,7 +117,7 @@ public class FirebaseClient implements ClientSelector{
                                 //   dialog.dismiss();
                                 Uri downloadUri = taskSnapshot.getDownloadUrl();
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                DatabaseReference databaseRef = database.getReference("building").child(trace.getLocationID()).child(trace.getTraceID()).child("imageURL");
+                                DatabaseReference databaseRef = database.getReference("building").child(trace.getLocationID()).child("trace").child(trace.getTraceID()).child("imageURL");
                                 databaseRef.setValue(downloadUri.toString());
                                 //trace.setImageURL(downloadUri.toString());
                                 Log.i("FirebaseClient", "이미지 업로드 완료");
@@ -152,7 +151,7 @@ public class FirebaseClient implements ClientSelector{
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 Uri downloadUri = taskSnapshot.getDownloadUrl();
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                DatabaseReference databaseRef = database.getReference("building").child(trace.getLocationID()).child(trace.getTraceID()).child("thumbnailURL");
+                                DatabaseReference databaseRef = database.getReference("building").child(trace.getLocationID()).child("trace").child(trace.getTraceID()).child("thumbnailURL");
                                 databaseRef.setValue(downloadUri.toString());
                                 Log.i("FirebaseClient", "썸네일 이미지 업로드 완료");
 
@@ -190,8 +189,6 @@ public class FirebaseClient implements ClientSelector{
 
     @Override
     public void uploadTraceToServer(final Trace trace) {
-
-
         final String traceKey = makeTraceKey(trace.getLocationID());
         trace.setTraceID(traceKey);
 
@@ -212,7 +209,6 @@ public class FirebaseClient implements ClientSelector{
         });
     }
 
-
     @Override
     public ArrayList<Trace> getTraceDataFromServer(String traceKey, final ReviewRecyclerViewAdapter mAdapter) {
         // 하나의 장소에 대해서 리뷰들을 가져오는것.
@@ -222,7 +218,7 @@ public class FirebaseClient implements ClientSelector{
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = database.getReference("building").child(traceKey).child("trace");
 
-        databaseRef.addValueEventListener(new ValueEventListener() {
+        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -241,8 +237,4 @@ public class FirebaseClient implements ClientSelector{
         });
         return traceList;
     }
-
-
-
-
 }
