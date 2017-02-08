@@ -37,13 +37,11 @@ public class HttpHandler extends AsyncTask<String, Void, String> {
         URL url = null;
         String responseStr = null;
         String urlStr = params[0];
+        String requestMethodParams = params[1];
         HttpURLConnection conn = null;
 
         String clientId = "FUYe3rcT2vNtJtk4aoK2";//애플리케이션 클라이언트 아이디값";
         String clientSecret = "FgMzaRVgqt";//애플리케이션 클라이언트 시크릿값";
-
-        if (urlStr.startsWith("file:\\")) ;
-
 
         if (urlStr.startsWith("https://")) {
             HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
@@ -82,6 +80,17 @@ public class HttpHandler extends AsyncTask<String, Void, String> {
             HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
         }
 
+
+        // get 요청
+        if(requestMethodParams.equals("GET")) {
+
+        }
+
+        // post 요청
+        else if(requestMethodParams.equals("POST")) {
+
+        }
+
         try {
             url = new URL(urlStr);
             conn = (HttpURLConnection) url.openConnection();
@@ -102,8 +111,6 @@ public class HttpHandler extends AsyncTask<String, Void, String> {
                 Log.i("Response String", responseStr);
             }
             // TODO: 2017. 1. 19. 에러코드일때 따로 예외처리해줘야됨
-
-
 
         } catch (MalformedURLException e) {
             Log.e(TAG, "MalformedURLException: " + e.getMessage());

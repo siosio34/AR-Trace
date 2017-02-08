@@ -327,13 +327,13 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
         }
     }
 
-
+    // 네비 데이터 브로드캐스트 리시버
     private BroadcastReceiver naviRecevicer = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals("NAVI")) {
                 String guide = intent.getStringExtra("GUIDE");
-                Snackbar.make(getWindow().getDecorView().getRootView(), guide, Snackbar.LENGTH_LONG)
+                Snackbar.make(getWindow().getDecorView().getRootView(), guide, Snackbar.LENGTH_INDEFINITE)
                         .setAction("종료", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -1161,9 +1161,6 @@ class TopLayoutOnMixView {
         inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         mainArView = inflater.inflate(R.layout.activity_ar_mixview, null);
 
-
-        // 네이버 지도 추가
-        // TODO: 2016. 12. 31. 배율 높이기 네이버 위치 리스너 만들기.
         initButtonViews();
         initNaverMap();
         initSearchbar();

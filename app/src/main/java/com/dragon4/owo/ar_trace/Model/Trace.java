@@ -21,7 +21,7 @@ public class Trace {
     private double lat;
     private double lon;
     private String placeName; // 주소를 경도 위도로
-    private Date writeDate; // 글쓴시간
+    private long writeDate; // 글쓴시간
 
     private String userImageUrl; // user Image URL
     private String userName; // 유저이름
@@ -92,11 +92,11 @@ public class Trace {
         this.placeName = placeName;
     }
 
-    public Date getWriteDate() {
+    public long getWriteDate() {
         return writeDate;
     }
 
-    public void setWriteDate(Date writeDate) {
+    public void setWriteDate(long writeDate) {
         this.writeDate = writeDate;
     }
 

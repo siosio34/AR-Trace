@@ -74,8 +74,8 @@ public class MixUtils {
 		return angle;
 	}
 
-	public static String getDateString(Date createDate) {
-		long timeDiff = System.currentTimeMillis() - createDate.getTime();
+	public static String getDateString(long createDate) {
+		long timeDiff = System.currentTimeMillis() - createDate;
 
 		if(timeDiff < 60000)
 			return "방금";

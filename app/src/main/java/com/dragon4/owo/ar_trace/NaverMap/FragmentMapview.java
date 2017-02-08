@@ -417,18 +417,8 @@ public class FragmentMapview extends Fragment {
 
                             poIdata.endPOIdata();
 
-                            //create POI data overlay
                             NMapPOIdataOverlay poIdataOverlay = mOverlayManager.createPOIdataOverlay(poIdata, null);
-                            //show all POI data
-                            //poIdataOverlay.showAllPOIdata(0);
 
-                            //set event listener to the overlay
-                            //poIdataOverlay.setOnStateChangeListener(onPOIdataStateChangeListener);
-
-                            //register callout overlay listener to customizeit.
-                            //mOverlayManager.setOnCalloutOverlayListener(onCalloutOverlayListener);
-
-                            //set path data points
                             NMapPathData pathData = new NMapPathData(route.length());
                             pathData.initPathData();
                             JSONArray path = route.getJSONObject(0).getJSONArray("point");

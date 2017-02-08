@@ -60,6 +60,11 @@ public class FirebaseClient implements ClientSelector{
     }
 
     @Override
+    public void uploadUserDataToServer(User user) {
+
+    }
+
+    @Override
     public void uploadImageToServer(final Trace trace, final File file) {
 
         try {
@@ -226,7 +231,6 @@ public class FirebaseClient implements ClientSelector{
                     Trace trace = child.getValue(Trace.class);
                     traceList.add(trace);
                 }
-
                 mAdapter.notifyDataSetChanged();
             }
 

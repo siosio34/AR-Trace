@@ -35,7 +35,6 @@ public class NaverNaviDataProcessor implements DataProcessor {
         //String startPoint = root.getJSONObject("startPoint").getString("name");
         //String endPoint = root.getJSONObject("endPoint").getString("name");
         dataArray = root.getJSONObject("result").getJSONArray("route");
-
         totalTime = root.getJSONObject("result").getJSONObject("summary").getInt("totalTime");
         totalDistance = root.getJSONObject("result").getJSONObject("summary").getInt("totalDistance");
 
