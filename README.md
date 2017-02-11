@@ -27,7 +27,10 @@
 
         todo Processing...
        
-           
+# Client & Firebase Server Structure
+
+![](https://ww1.sinaimg.cn/large/006tKfTcgy1fcmvrstxewj31a40uw76r.jpg)
+
 # Intro Video
 
 [![IMAGE ALT youtube](http://img.youtube.com/vi/V0eGnEXL0VQ/0.jpg)](http://www.youtube.com/watch?v=V0eGnEXL0VQ)
