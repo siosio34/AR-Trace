@@ -38,6 +38,12 @@
     - mixare - http://www.mixare.org/
     - naver API - https://developers.naver.com/
     - typekit - https://github.com/tsengvn/typekit
+    - Firebase RealTime database - https://firebase.google.com/docs/database/
+    - Firebase RealTime storage - https://firebase.google.com/docs/storage/
+    - Firebase auth - https://firebase.google.com/docs/auth/
+    - Firebase cloud messging - https://firebase.google.com/docs/cloud-messaging/
+    - Picasso - https://github.com/square/picasso
+    - gson - https://github.com/google/gson
 
 # Copyright
 ![alt AR-Trace](https://github.com/siosio34/AR-Trace/blob/master/docs/ar_trace_profile.png)
