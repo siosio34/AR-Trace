@@ -4,8 +4,7 @@
     길치들을 위한 증강화면위의 네비게이션을 통한 길안내
     FireBase or Python Server가 선택가능한 장소기반 SNS
     
-# Qucik Start
-
+# Qucik Start - Client
 
     Android App Client
 
