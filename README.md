@@ -1,9 +1,9 @@
 # AR-Trace
 
-    AR 기반 장소 검색 및 위치 파악
+    AR 기반 장소 검색 및 위치 파악
     길치들을 위한 AR + 네이버 지도를 이용한 길안내
-    Firebase or Python Server를 선택하는 Service Level 장소기반 SNS 
-    
+    Firebase or Python Server 선택가능한 장소기반 후기 SNS
+    
 # Qucik Start - Client
 
     Android App Client
@@ -14,7 +14,7 @@
     
 # Qucik Start - Server    
   
--  <b> Firebase Server Setting - if you don't have server or you want to use Firebase Server 
+-  <b>Firebase Server Setting - if you don't have server or you want to use Firebase Server 
     
         1) Create FireBase Project - https://console.firebase.google.com/
 
@@ -23,7 +23,7 @@
         3) Download google-services.json in your Project
         
      
--  <b> Python Server Setting - if you have server or you want to use python Server
+-  <b>Python Server Setting - if you have server or you want to use python Server
 
         todo Processing...
        
