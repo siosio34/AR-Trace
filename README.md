@@ -31,6 +31,10 @@
 
 ![](https://ww1.sinaimg.cn/large/006tKfTcgy1fcmvrstxewj31a40uw76r.jpg)
 
+# Client & Python Server Structure
+
+![](https://ww3.sinaimg.cn/large/006tKfTcgy1fcmwllfyouj312w0nadil.jpg)
+
 # Intro Video
 
 [![IMAGE ALT youtube](http://img.youtube.com/vi/V0eGnEXL0VQ/0.jpg)](http://www.youtube.com/watch?v=V0eGnEXL0VQ)
