@@ -1,14 +1,15 @@
 # AR-Trace
 
-    AR 기반 장소 검색 및 위치 파악
-    길치들을 위한 AR + 네이버 지도를 이용한 길안내
-    Firebase or Python Server 선택가능한 장소기반 후기 SNS
+    증강현실 기반 장소 검색 및 위치 파악
+    길치들을 위한 증강화면위의 네비게이션을 통한 길안내
+    FireBase or Python Server가 선택가능한 장소기반 SNS
     
-# Qucik Start - Client
+# Qucik Start
+
 
     Android App Client
 
-    1) Install Android-Studio : https://developer.android.com/studio/index.html?hl=ko
+    1) Install Android-Studio : https://developer.android.com/studio/index.html?hl=ko
   
     2) File -> Import Existing Project -> PATH_CLONE_AR-Trace/AR-Trace
     
