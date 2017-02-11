@@ -33,7 +33,7 @@
 
 # Client & Python Server Structure
 
-![](https://ww3.sinaimg.cn/large/006tKfTcgy1fcmwllfyouj312w0nadil.jpg)
+![](https://ww1.sinaimg.cn/large/006tKfTcgy1fcmwr9sk33j31680o2whb.jpg)
 
 # Intro Video
 
