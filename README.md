@@ -29,7 +29,17 @@
         then you set Firebase Server Setting now...!
 
         ...todo Processing...
-       
+        
+# Qucik Start - Server(Push)
+
+    - Google Cloud Messaging Will be deprecated so we use Firebase Cloud Messaging(FCM) for app Notify
+
+    - Firebase Cloud Messging Only Support Downstram message and you want to develop fully develop FCM
+    you must have to App Server
+    
+    - if you want push function run httpd Server push app server code with php 
+    (In path - PATH_CLONE_AR-Trace/AR-Trace/PushServer/PushServer.php)
+       
 # Client & Firebase Server Structure
 
 ![](https://ww1.sinaimg.cn/large/006tKfTcgy1fcmvrstxewj31a40uw76r.jpg)
