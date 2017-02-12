@@ -325,10 +325,6 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         if (currentBitmap != null)
             clientSelector.uploadImageToServer(trace,destination);
 
-        else {
-            Toast.makeText(getApplicationContext()," 이미지가 존재하지않습니다 ", Toast.LENGTH_SHORT). show();
-        }
-
         trace.setTraceID(placeName);
         trace.setLat(currentLat); // 경도
         trace.setLon(currentLon); // 위도
