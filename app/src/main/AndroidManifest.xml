@@ -60,7 +60,7 @@
         <activity android:name=".ARCore.Activity.WriteReviewActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
-        <activity android:name=".ARCore.Activity.ListParentActivity"
+        <activity android:name=".ARCore.Activity.SearchListActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <activity android:name=".ARCore.Activity.TraceActivity"

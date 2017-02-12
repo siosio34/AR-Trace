@@ -37,10 +37,6 @@ public class HttpHandler extends AsyncTask<String, Void, String> {
         URL url = null;
         String responseStr = null;
         String urlStr = params[0];
-<<<<<<< HEAD
-=======
-
->>>>>>> ecc5d9bb070eae094ccea9e4c2b06cc4a028bf64
         HttpURLConnection conn = null;
 
         String clientId = "FUYe3rcT2vNtJtk4aoK2";//애플리케이션 클라이언트 아이디값";
@@ -83,10 +79,6 @@ public class HttpHandler extends AsyncTask<String, Void, String> {
             HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
         }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> ecc5d9bb070eae094ccea9e4c2b06cc4a028bf64
         try {
             url = new URL(urlStr);
             conn = (HttpURLConnection) url.openConnection();

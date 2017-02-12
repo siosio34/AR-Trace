@@ -37,42 +37,9 @@ import java.util.concurrent.ExecutionException;
  */
 
 public class ListParentActivity extends Activity {
-    private List<NaverSearchMarker> dataList;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_ar_mixview_search_listview);
-
-        DataConvertor dataConvertor = new DataConvertor();
-
-        String queryString = getIntent().getStringExtra("searchName");
-        List<ARMarker> searchList = null;
-        String encodedQueryString = null;
-        try {
-            encodedQueryString = URLEncoder.encode(queryString, "UTF-8");
-            String searchURL = DataSource.createNaverSearchRequestURL(encodedQueryString);
-            String searchRawData = new HttpHandler().execute(searchURL).get();
-            searchList = dataConvertor.load(searchRawData, DataSource.DATASOURCE.SEARCH, DataSource.DATAFORMAT.NAVER_SEARCH);
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        //Toast.makeText(context, searchRawData, Toast.LENGTH_LONG).show();
-        ListView listView = (ListView)findViewById(R.id.ar_mixview_search_listview);
-
-        dataList = new ArrayList<>();
-        for(int i = 0 ; i < searchList.size(); i++)
-            dataList.add((NaverSearchMarker)searchList.get(i));
-
-        SearchListViewAdapter adapter = new SearchListViewAdapter(getLayoutInflater());
-        adapter.setDataList(dataList);
-        listView.setAdapter(adapter);
     }
 
     private void runNavi(String address) {

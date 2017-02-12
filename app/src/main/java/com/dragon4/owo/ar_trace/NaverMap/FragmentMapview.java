@@ -8,6 +8,7 @@ import android.provider.Settings;
 import android.support.v4.app.Fragment;
 
 import com.dragon4.owo.ar_trace.ARCore.ARMarker;
+import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.R;
 import com.nhn.android.maps.NMapActivity;
 import com.nhn.android.maps.NMapCompassManager;
@@ -49,6 +50,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -374,6 +376,12 @@ public class FragmentMapview extends Fragment {
         return currentLocation;
     }
 
+    private HashMap<Integer, NMapPOIdataOverlay> poidataOverlayHashMap = new HashMap<>();
+    public void removeCategoryMarkers(int naverCategory) {
+        mOverlayManager.removeOverlay(poidataOverlayHashMap.get(naverCategory));
+        poidataOverlayHashMap.remove(naverCategory);
+        mOverlayManager.populate();
+    }
 
     public void drawCategoryMarkers(List<ARMarker> markerList, int naverCategory) {
         NMapPOIdata poIdata = new NMapPOIdata(2, mMapViewerResourceProvider);
@@ -384,8 +392,9 @@ public class FragmentMapview extends Fragment {
         poIdata.endPOIdata();
 
         //create POI data overlay
-        NMapPOIdataOverlay poIdataOverlay = mOverlayManager.createPOIdataOverlay(poIdata, null);
-        poIdataOverlay.showAllPOIdata(0);
+        NMapPOIdataOverlay poidataOverlay = mOverlayManager.createPOIdataOverlay(poIdata, null);
+        poidataOverlay.showAllPOIdata(0);
+        poidataOverlayHashMap.put(naverCategory, poidataOverlay);
     }
 
     public void clearCategoryMarker() {

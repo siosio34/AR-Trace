@@ -93,7 +93,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dragon4.owo.ar_trace.ARCore.Activity.ListParentActivity;
+import com.dragon4.owo.ar_trace.ARCore.Activity.SearchListActivity;
 import com.dragon4.owo.ar_trace.ARCore.Activity.TraceActivity;
 import com.dragon4.owo.ar_trace.ARCore.Activity.WriteReviewActivity;
 import com.dragon4.owo.ar_trace.ARCore.data.DataHandler;
@@ -897,7 +897,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
 
     public void drawCategoryMarkers(List<ARMarker> markerList) {
         //DataSource.DATASOURCE.~~:
-
         int naverCategory = -1;
         switch (markerList.get(0).getDatasource()) {
             case CAFE:
@@ -929,10 +928,10 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                 break;
         }
 
-        if(naverCategory != -1) {
-            topLayoutOnMixView.naverFragment.clearCategoryMarker();
+        if(mixContext.isDataSourceSelected(markerList.get(0).getDatasource()))
             topLayoutOnMixView.naverFragment.drawCategoryMarkers(markerList, naverCategory);
-        }
+        else
+            topLayoutOnMixView.naverFragment.removeCategoryMarkers(naverCategory);
     }
 }
 
@@ -1271,7 +1270,7 @@ class TopLayoutOnMixView {
                 switch (actionId) {
                     case EditorInfo.IME_ACTION_SEARCH:
                         String queryString = searchText.getText().toString();
-                        Intent intent = new Intent(context, ListParentActivity.class);
+                        Intent intent = new Intent(context, SearchListActivity.class);
                         intent.putExtra("searchName", queryString);
                         InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(mainArView.getWindowToken(), 0);
