@@ -1,8 +1,8 @@
 package com.dragon4.owo.ar_trace.ARCore;
 
 import android.content.Intent;
-import android.util.Log;
 
+import com.dragon4.owo.ar_trace.ARCore.Marker.ARMarker;
 import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.NaverMap.FragmentMapview;
@@ -12,11 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
-import static android.R.id.list;
 
 /**
  * Created by Mansu on 2017-01-26.
@@ -53,7 +50,7 @@ public class Navigator {
                         NGeoPoint point = naverFragment.getCurrentLocation();
                         String url = DataSource.createNaverMapRequestURL(point.getLongitude(), point.getLatitude(), lon, lat);
                         // TODO: 2017. 2. 6.  최적화 후에 필요
-                        String result = new HttpHandler().execute(url).get();
+                        String result = new NaverHttpHandler().execute(url).get();
                         updateNaviStatus(result);
                         updateNavimap(result);
 
@@ -88,7 +85,6 @@ public class Navigator {
         naviBroadReceiver.setAction("NAVI");
 
         String guide = parsingNaverNaviJson(result);
-
 
         if(guide.equals("end")) {
             loopThread.interrupt();

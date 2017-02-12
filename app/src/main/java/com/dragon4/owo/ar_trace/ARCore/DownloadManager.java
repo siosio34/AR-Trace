@@ -20,6 +20,7 @@ package com.dragon4.owo.ar_trace.ARCore;
 
 import android.util.Log;
 
+import com.dragon4.owo.ar_trace.ARCore.Marker.ARMarker;
 import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 
@@ -142,7 +143,7 @@ public class DownloadManager implements Runnable {
 		
 		try {
 			// 컨텍스트, 리퀘스트가 있고 리퀘스트의 url 이 존재할 때
-			String tmp = new HttpHandler().execute(request.url).get();	// 스트링 형태로 변환
+			String tmp = new NaverHttpHandler().execute(request.url).get();	// 스트링 형태로 변환
 			if(ctx != null && tmp != null){
 
 				// JSON 데이터를 로드한다

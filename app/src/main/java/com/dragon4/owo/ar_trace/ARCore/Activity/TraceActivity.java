@@ -2,26 +2,15 @@ package com.dragon4.owo.ar_trace.ARCore.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-    import android.view.ViewParent;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.dragon4.owo.ar_trace.ARCore.ReviewRecyclerViewAdapter;
-import com.dragon4.owo.ar_trace.Model.Trace;
 import com.dragon4.owo.ar_trace.Network.ClientSelector;
 import com.dragon4.owo.ar_trace.Network.Firebase.FirebaseClient;
 import com.dragon4.owo.ar_trace.R;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.zip.CheckedInputStream;
 
 /**
  * Created by Mansu on 2017-01-25.
@@ -30,7 +19,7 @@ import java.util.zip.CheckedInputStream;
 public class TraceActivity extends Activity implements View.OnClickListener {
 
     private ClientSelector clientSelector;
-    public ReviewRecyclerViewAdapter mAdapter;
+    public TraceRecyclerViewAdapter mAdapter;
     private String buildingID = "경기도 수원시 영통구 영통동 1078";
 
     @Override
@@ -45,7 +34,7 @@ public class TraceActivity extends Activity implements View.OnClickListener {
         // use a linear layout manager
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        mAdapter = new ReviewRecyclerViewAdapter(clientSelector);
+        mAdapter = new TraceRecyclerViewAdapter(clientSelector);
         recyclerView.setAdapter(mAdapter);
 
         if(getIntent().getStringExtra("title") != null) {

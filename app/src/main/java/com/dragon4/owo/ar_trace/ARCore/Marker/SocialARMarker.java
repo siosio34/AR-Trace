@@ -22,12 +22,13 @@
  */
 
 
-package com.dragon4.owo.ar_trace.ARCore;
+package com.dragon4.owo.ar_trace.ARCore.Marker;
 
 
 import android.graphics.Bitmap;
 import android.location.Location;
 
+import com.dragon4.owo.ar_trace.ARCore.MixView;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
 
@@ -52,7 +53,7 @@ public class SocialARMarker extends ARMarker {
 		//0.85 radians ~= 45 degree
 		//minAltitude = sin(0.35)
 		//maxAltitude = sin(0.85)
-		double altitude = curGPSFix.getAltitude()+Math.sin(0.35)*distance+Math.sin(0.4)*(distance/(MixView.dataView.getRadius()*1000f/distance));
+		double altitude = curGPSFix.getAltitude()+Math.sin(0.35)*distance+Math.sin(0.4)*(distance/(MixView.getDataView().getRadius()*1000f/distance));
 		mGeoLoc.setAltitude(altitude - 0.2);
 		super.update(curGPSFix);
 

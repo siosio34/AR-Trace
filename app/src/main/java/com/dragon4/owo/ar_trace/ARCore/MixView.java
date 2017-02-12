@@ -93,9 +93,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dragon4.owo.ar_trace.ARCore.Activity.SearchListActivity;
+import com.dragon4.owo.ar_trace.ARCore.Activity.SearchListKeywordActivity;
 import com.dragon4.owo.ar_trace.ARCore.Activity.TraceActivity;
 import com.dragon4.owo.ar_trace.ARCore.Activity.WriteReviewActivity;
+import com.dragon4.owo.ar_trace.ARCore.Marker.ARMarker;
+import com.dragon4.owo.ar_trace.ARCore.Marker.Compatibility;
 import com.dragon4.owo.ar_trace.ARCore.data.DataHandler;
 import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
@@ -138,7 +140,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     private boolean isInited;    // 초기 세팅이 되어 있는가
     private MixContext mixContext;    // 메인 컨텍스트
     static PaintScreen dWindow;        // 스크린 윈도우
-    static DataView dataView;       // 데이터 뷰
+    private static DataView dataView;
     private Thread downloadThread;    // 마커의 내용을 다운로드 할 스레드
 
     // 연산에 사용될 임시 변수들
@@ -182,6 +184,10 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
+    }
+
+    static public DataView getDataView() {
+        return dataView;
     }
 
     // 노티피케이션 텍스트 뷰
@@ -1121,12 +1127,13 @@ class AugmentedView extends View {
             MixView.dWindow.setCanvas(canvas);    // 캔버스와 연결
 
             // 데이터 뷰가 초기화 되지 않았을 경우엔 초기화 처리
-            if (!MixView.dataView.isInited()) {
-                MixView.dataView.init(MixView.dWindow.getWidth(), MixView.dWindow.getHeight());
+            if (!MixView.getDataView().isInited()) {
+                MixView.getDataView().init(MixView.dWindow.getWidth(), MixView.dWindow.getHeight());
             }
 
             // 데이터 뷰의 데이터들을 윈도우에 그린다
-            MixView.dataView.draw(MixView.dWindow);
+            MixView.getDataView().draw(MixView.dWindow);
+
         } catch (Exception ex) {
             app.doError(ex);
         }
@@ -1270,7 +1277,7 @@ class TopLayoutOnMixView {
                 switch (actionId) {
                     case EditorInfo.IME_ACTION_SEARCH:
                         String queryString = searchText.getText().toString();
-                        Intent intent = new Intent(context, SearchListActivity.class);
+                        Intent intent = new Intent(context, SearchListKeywordActivity.class);
                         intent.putExtra("searchName", queryString);
                         InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(mainArView.getWindowToken(), 0);
@@ -1302,7 +1309,7 @@ class TopLayoutOnMixView {
                             String encodedQueryString = URLEncoder.encode(queryString, "UTF-8");
 
                             String tempCallbackUrl = "http://ac.map.naver.com/ac?q=" + encodedQueryString + "&st=10&r_lt=10&r_format=json";
-                            String rawData = new HttpHandler().execute(tempCallbackUrl).get();
+                            String rawData = new NaverHttpHandler().execute(tempCallbackUrl).get();
                             Log.i("rawData", rawData);
 
                             JSONObject root = new JSONObject(rawData);

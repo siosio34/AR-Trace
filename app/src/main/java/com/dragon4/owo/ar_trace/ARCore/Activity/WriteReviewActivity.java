@@ -6,11 +6,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -19,23 +20,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dragon4.owo.ar_trace.ARCore.MixUtils;
-import com.dragon4.owo.ar_trace.ARCore.HttpHandler;
-import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.Model.Trace;
 import com.dragon4.owo.ar_trace.Model.User;
 import com.dragon4.owo.ar_trace.Network.ClientSelector;
 import com.dragon4.owo.ar_trace.Network.Firebase.FirebaseClient;
-import com.dragon4.owo.ar_trace.Network.Python.MultipartUtility;
-import com.dragon4.owo.ar_trace.Network.Python.PythonClient;
 import com.dragon4.owo.ar_trace.R;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Exclude;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
 import org.json.JSONArray;
@@ -44,15 +33,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by mansu on 2017-01-16.
@@ -129,7 +111,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
         try {
             // 주소 얻기
-            String reverseGeoString = new HttpHandler().execute(requestReverseGeoAPI).get();
+            String reverseGeoString = new NaverHttpHandler().execute(requestReverseGeoAPI).get();
             String placeAddress;
             placeAddress = parsingReverseGeoJson(reverseGeoString);
             placeName = placeAddress;
@@ -138,7 +120,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
             // 주소로 장소 이름 얻기
             String requestRealPlaceName = DataSource.createNaverSearchRequestURL(placeAddress);
-            String realPlaceNameString = new HttpHandler().execute(requestRealPlaceName).get();
+            String realPlaceNameString = new NaverHttpHandler().execute(requestRealPlaceName).get();
             Log.i("Place RealName JSON", realPlaceNameString);
             String place = parsingPlaceNameJson(realPlaceNameString);
             Log.i("parsing RealName JSON", place);
@@ -232,6 +214,51 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         startActivityForResult(intent, REQUEST_IMAGE);
     }
 
+
+    public int exifOrientationToDegrees(int exifOrientation)
+    {
+        if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_90)
+        {
+            return 90;
+        }
+        else if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_180)
+        {
+            return 180;
+        }
+        else if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_270)
+        {
+            return 270;
+        }
+        return 0;
+    }
+
+    public Bitmap rotate(Bitmap bitmap, int degrees)
+    {
+        if(degrees != 0 && bitmap != null)
+        {
+            Matrix m = new Matrix();
+            m.setRotate(degrees, (float) bitmap.getWidth() / 2,
+                    (float) bitmap.getHeight() / 2);
+
+            try
+            {
+                Bitmap converted = Bitmap.createBitmap(bitmap, 0, 0,
+                        bitmap.getWidth(), bitmap.getHeight(), m, true);
+                if(bitmap != converted)
+                {
+                    bitmap.recycle();
+                    bitmap = converted;
+                }
+            }
+            catch(OutOfMemoryError ex)
+            {
+                // 메모리가 부족하여 회전을 시키지 못할 경우 그냥 원본을 반환합니다.
+            }
+        }
+        return bitmap;
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -241,10 +268,12 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
                 try {
                     // if python server on
                     //uploadImageToPythonServer(Uri.fromFile(destination));
-                    FileInputStream in = null;
-                    in = new FileInputStream(destination);
+                    currentBitmap = BitmapFactory.decodeFile(Uri.fromFile(destination).getPath());
 
-                    currentBitmap = BitmapFactory.decodeStream(in, null, null);
+                    ExifInterface exifInterface = new ExifInterface(Uri.fromFile(destination).getPath());
+                    int imageOrientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                    int exifInterfaceDegree = exifOrientationToDegrees(imageOrientation);
+                    currentBitmap = rotate(currentBitmap,exifInterfaceDegree);
 
                     ImageView currentImageView = new ImageView(this);
                     View picture = findViewById(R.id.ar_mixview_write_review_add);

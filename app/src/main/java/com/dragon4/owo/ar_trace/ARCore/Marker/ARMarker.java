@@ -16,11 +16,15 @@
  * You should have received a copy of the GNU General Public License along with 
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
-package com.dragon4.owo.ar_trace.ARCore;
+package com.dragon4.owo.ar_trace.ARCore.Marker;
 
 import android.location.Location;
 
 
+import com.dragon4.owo.ar_trace.ARCore.MixContext;
+import com.dragon4.owo.ar_trace.ARCore.MixState;
+import com.dragon4.owo.ar_trace.ARCore.MixUtils;
+import com.dragon4.owo.ar_trace.ARCore.PhysicalPlace;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
 import com.dragon4.owo.ar_trace.ARCore.gui.ScreenLine;
@@ -136,7 +140,7 @@ abstract public class ARMarker implements Comparable<ARMarker> {
 	}
 
 	// 카메라 마커. 최초 위치와 투영될 카메라, 추가되는 x, y 값을 인자로 받는다 
-	private void cCMarker(MixVector originalPoint, Camera viewCam, float addX, float addY, DataSource.DATASOURCE type) {
+	private void cCMarker(MixVector originalPoint, Camera viewCam, float addX, float addY) {
 		// 임시 속성들
 		MixVector tmpa = new MixVector(originalPoint);
 		MixVector tmpc = new MixVector(upV);
@@ -189,8 +193,8 @@ abstract public class ARMarker implements Comparable<ARMarker> {
 	}
 
 	// 그려질 위치를 계산
-	public void calcPaint(Camera viewCam, float addX, float addY, DataSource.DATASOURCE type) {
-		cCMarker(origin, viewCam, addX, addY, type);    // 카메라 마커를 생성
+	public void calcPaint(Camera viewCam, float addX, float addY) {
+		cCMarker(origin, viewCam, addX, addY);    // 카메라 마커를 생성
 		calcV(viewCam);    // 카메라의 고도를 계산
 	}
 

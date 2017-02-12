@@ -1,11 +1,9 @@
 package com.dragon4.owo.ar_trace.ARCore.data.DataProcessor;
 
-import android.text.Html;
 import android.util.Log;
 
-import com.dragon4.owo.ar_trace.ARCore.ARMarker;
-import com.dragon4.owo.ar_trace.ARCore.NaverSearchMarker;
-import com.dragon4.owo.ar_trace.ARCore.SocialARMarker;
+import com.dragon4.owo.ar_trace.ARCore.Marker.ARMarker;
+import com.dragon4.owo.ar_trace.ARCore.Marker.NaverSearchMarker;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 
 import org.json.JSONArray;

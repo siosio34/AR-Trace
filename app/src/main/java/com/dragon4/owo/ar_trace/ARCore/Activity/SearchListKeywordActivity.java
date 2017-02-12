@@ -5,9 +5,9 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.dragon4.owo.ar_trace.ARCore.ARMarker;
-import com.dragon4.owo.ar_trace.ARCore.HttpHandler;
-import com.dragon4.owo.ar_trace.ARCore.NaverSearchMarker;
+import com.dragon4.owo.ar_trace.ARCore.Marker.ARMarker;
+import com.dragon4.owo.ar_trace.ARCore.NaverHttpHandler;
+import com.dragon4.owo.ar_trace.ARCore.Marker.NaverSearchMarker;
 import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.R;
@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
  * Created by Mansu on 2017-02-12.
  */
 
-public class SearchListActivity extends ListParentActivity {
+public class SearchListKeywordActivity extends ListParentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,10 +43,9 @@ public class SearchListActivity extends ListParentActivity {
         List<ARMarker> searchList = null;
         String encodedQueryString = null;
         try {
-
             encodedQueryString = URLEncoder.encode(queryString, "UTF-8");
             String searchURL = DataSource.createNaverSearchRequestURL(encodedQueryString);
-            String searchRawData = new HttpHandler().execute(searchURL).get();
+            String searchRawData = new NaverHttpHandler().execute(searchURL).get();
             searchList = dataConvertor.load(searchRawData, DataSource.DATASOURCE.SEARCH, DataSource.DATAFORMAT.NAVER_SEARCH);
 
         } catch (UnsupportedEncodingException e) {

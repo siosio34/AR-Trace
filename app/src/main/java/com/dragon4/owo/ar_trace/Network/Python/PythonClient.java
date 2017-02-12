@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.dragon4.owo.ar_trace.ARCore.ReviewRecyclerViewAdapter;
+import com.dragon4.owo.ar_trace.ARCore.Activity.TraceRecyclerViewAdapter;
 import com.dragon4.owo.ar_trace.FCM.FCMWebServerConnector;
 import com.dragon4.owo.ar_trace.Model.Trace;
 import com.dragon4.owo.ar_trace.Model.User;
@@ -104,7 +104,7 @@ public class PythonClient implements ClientSelector{
     }
 
     @Override
-    public ArrayList<Trace> getTraceDataFromServer(String traceKey, ReviewRecyclerViewAdapter mAdapter) {
+    public ArrayList<Trace> getTraceDataFromServer(String traceKey, TraceRecyclerViewAdapter mAdapter) {
         pythonServerUrl = "";
         // 하나의 장소에 대해서 리뷰들을 가져오는것.
         final ArrayList<Trace> traceList = new ArrayList<>();

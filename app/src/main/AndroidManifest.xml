@@ -15,18 +15,21 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name=".ARCore.FontSetting"
+        android:name=".Configure.FontSetting"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity" />
-
         <activity
-            android:name=".ARCore.Activity.GoogleSignActivity">
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ARCore.Activity.GoogleSignActivity">
+
         </activity>
 
         <activity
@@ -52,7 +55,6 @@
             </intent-filter>
         </service>
 
-
         <activity android:name=".ARCore.Activity.DialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             />
@@ -60,7 +62,7 @@
         <activity android:name=".ARCore.Activity.WriteReviewActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
-        <activity android:name=".ARCore.Activity.SearchListActivity"
+        <activity android:name=".ARCore.Activity.SearchListKeywordActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <activity android:name=".ARCore.Activity.TraceActivity"

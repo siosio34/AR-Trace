@@ -18,12 +18,10 @@
  */
 package com.dragon4.owo.ar_trace.ARCore;
 
-import android.graphics.Color;
 import android.location.Location;
-import android.os.SystemClock;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.dragon4.owo.ar_trace.ARCore.Marker.ARMarker;
 import com.dragon4.owo.ar_trace.ARCore.data.DataHandler;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
@@ -286,7 +284,7 @@ public class DataView {
 
                     //addX, addY는 화면에 찍히는 좌표, 더오른쪽으로 할거면 x를 더하고 더 높이 띄울거면 y를 더한다
                     if (!frozen) {
-                        ma.calcPaint(cam, addX, addY, ma.datasource);
+                        ma.calcPaint(cam, addX, addY);
                     }
                     ma.draw(dw);
                 }

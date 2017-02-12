@@ -6,15 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.dragon4.owo.ar_trace.ARCore.Activity.DialogActivity;
-import com.dragon4.owo.ar_trace.ARCore.Activity.GoogleSignActivity;
-import com.dragon4.owo.ar_trace.ARCore.Activity.TraceActivity;
-import com.dragon4.owo.ar_trace.ARCore.ReviewRecyclerViewAdapter;
+import com.dragon4.owo.ar_trace.ARCore.Activity.TraceRecyclerViewAdapter;
 import com.dragon4.owo.ar_trace.FCM.FCMWebServerConnector;
 import com.dragon4.owo.ar_trace.Model.Trace;
 import com.dragon4.owo.ar_trace.Model.User;
@@ -38,7 +32,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -292,7 +285,7 @@ public class FirebaseClient implements ClientSelector {
     }
 
     @Override
-    public ArrayList<Trace> getTraceDataFromServer(String traceKey, final ReviewRecyclerViewAdapter mAdapter) {
+    public ArrayList<Trace> getTraceDataFromServer(String traceKey, final TraceRecyclerViewAdapter mAdapter) {
         // 하나의 장소에 대해서 리뷰들을 가져오는것.
         final ArrayList<Trace> traceList = new ArrayList<>();
         mAdapter.setList(traceList);

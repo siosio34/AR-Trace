@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.dragon4.owo.ar_trace.ARCore.Activity.GoogleSignActivity;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 
@@ -25,6 +26,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(com.dragon4.owo.ar_trace.R.layout.activity_main);
         //FCMInstanceIDService getTokenService = new FCMInstanceIDService();
 
+        Intent SignInIntent = new Intent(MainActivity.this,GoogleSignActivity.class);
+        startActivity(SignInIntent);
+
+        /*
         String token = FirebaseInstanceId.getInstance().getToken();
         Log.i(TAG,token);
 
@@ -34,9 +39,13 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "Key: " + key + " Value: " + value);
             }
         }
+        */
 
     }
 
+
+
+    /*
     private void checkAndRequestPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -66,4 +75,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    */
 }
