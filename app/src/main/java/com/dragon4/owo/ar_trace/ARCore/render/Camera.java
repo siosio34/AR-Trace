@@ -1,19 +1,19 @@
 /*
  * Copyright (C) 2010- Peer internet solutions
- * 
+ *
  * This file is part of mixare.
- * 
- * This program is free software: you can redistribute it and/or modify it 
- * under the terms of the GNU General Public License as published by 
- * the Free Software Foundation, either version 3 of the License, or 
- * (at your option) any later version. 
- * 
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License 
- * for more details. 
- * 
- * You should have received a copy of the GNU General Public License along with 
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
 package com.dragon4.owo.ar_trace.ARCore.render;
@@ -21,10 +21,10 @@ package com.dragon4.owo.ar_trace.ARCore.render;
 
 // 카메라 부분을 담당하는 클래스
 public class Camera {
-	
+
 	// 기본 뷰의 각도
 	public static final float DEFAULT_VIEW_ANGLE = (float) Math.toRadians(45);
-	
+
 	// 넓이와 높이
 	public int width, height;
 
@@ -68,16 +68,16 @@ public class Camera {
 	}
 
 	// 사영점을 설정(벡터 사영)
-	// 인자값으로는 본점(origin)과 투영점(dest), 투영점 계산에 사용될 x,y 값을 받음 
+	// 인자값으로는 본점(origin)과 투영점(dest), 투영점 계산에 사용될 x,y 값을 받음
 	public void projectPoint(MixVector orgPoint, MixVector prjPoint, float addX,
-			float addY) {
+							 float addY) {
 		prjPoint.x = dist * orgPoint.x / -orgPoint.z;
 		prjPoint.y = dist * orgPoint.y / -orgPoint.z;
 		prjPoint.z = orgPoint.z;
 		prjPoint.x = prjPoint.x + addX + width / 2;
 		prjPoint.y = -prjPoint.y + addY + height / 2;
 	}
-	
+
 	// 문자열 형태로 카메라의 정보를 출력
 	@Override
 	public String toString() {

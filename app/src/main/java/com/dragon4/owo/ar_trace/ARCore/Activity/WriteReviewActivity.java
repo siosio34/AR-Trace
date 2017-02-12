@@ -27,6 +27,7 @@ import com.dragon4.owo.ar_trace.Model.User;
 import com.dragon4.owo.ar_trace.Network.ClientSelector;
 import com.dragon4.owo.ar_trace.Network.Firebase.FirebaseClient;
 import com.dragon4.owo.ar_trace.Network.Python.MultipartUtility;
+import com.dragon4.owo.ar_trace.Network.Python.PythonClient;
 import com.dragon4.owo.ar_trace.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -93,7 +94,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
         clientSelector = new FirebaseClient(); // 추후에 파이썬 서버 버젼도 가능케 할 예정
 
-        // clientSelector = new PythonClient();
+       // clientSelector = new PythonClient();
         currentUser = User.getMyInstance();
     }
 
@@ -297,10 +298,12 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         else {
             Toast.makeText(getApplicationContext()," 이미지가 존재하지않습니다 ", Toast.LENGTH_SHORT). show();
         }
+
+        trace.setTraceID(placeName);
         trace.setLat(currentLat); // 경도
         trace.setLon(currentLon); // 위도
         trace.setPlaceName(placeName); // 장소이름
-        trace.setWriteDate(new Date().getTime()); // 업로드 날짜
+        trace.setWriteDate(new Date().getTime()); // 업로드    날짜
         trace.setUserName(currentUser.getUserName()); // 유조이름
         trace.setUserImageUrl(currentUser.getUserImageURL()); // 유저 이미지 유알엘
         trace.setUserToken(currentUser.getUserToken());

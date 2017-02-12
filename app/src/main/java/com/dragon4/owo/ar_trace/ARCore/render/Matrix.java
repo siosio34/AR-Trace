@@ -1,19 +1,19 @@
 /*
  * Copyright (C) 2010- Peer internet solutions
- * 
+ *
  * This file is part of mixare.
- * 
- * This program is free software: you can redistribute it and/or modify it 
- * under the terms of the GNU General Public License as published by 
- * the Free Software Foundation, either version 3 of the License, or 
- * (at your option) any later version. 
- * 
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License 
- * for more details. 
- * 
- * You should have received a copy of the GNU General Public License along with 
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
 package com.dragon4.owo.ar_trace.ARCore.render;
@@ -27,7 +27,7 @@ public class Matrix {
 
 	// 행렬의 값을 세팅. 각 값을 대입.
 	public void set(float a1, float a2, float a3, float b1, float b2,
-			float b3, float c1, float c2, float c3) {
+					float b3, float c1, float c2, float c3) {
 		this.a1 = a1;
 		this.a2 = a2;
 		this.a3 = a3;
@@ -41,7 +41,7 @@ public class Matrix {
 		this.c3 = c3;
 	}
 
-	// 행렬의 값을 세팅. 객체로 받음 
+	// 행렬의 값을 세팅. 객체로 받음
 	public void set(Matrix m) {
 		this.a1 = m.a1;
 		this.a2 = m.a2;
@@ -155,18 +155,18 @@ public class Matrix {
 		float a31 = c1;
 		float a32 = c2;
 		float a33 = c3;
-		
+
 		b1 = a12;
 		a2 = a21;
 		b3 = a32;
 		c2 = a23;
 		c1 = a13;
 		a3 = a31;
-		
+
 		a1 = a11;
 		b2 = a22;
 		c3 = a33;
-		
+
 	}
 
 	// 판별식을 이용한 판별(2x2)

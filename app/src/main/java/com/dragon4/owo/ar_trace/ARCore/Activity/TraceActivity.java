@@ -40,8 +40,19 @@ public class TraceActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.ar_mixview_review_back).setOnClickListener(this);
         findViewById(R.id.ar_mixview_review_add).setOnClickListener(this);
 
+<<<<<<< HEAD
         clientSelector = new FirebaseClient();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.ar_mixview_review_recyclerview);
+=======
+        Intent reviewIntent = getIntent();
+        String reviewTitle = reviewIntent.getStringExtra("title");
+        TextView textView = (TextView) findViewById(R.id.ar_mixview_review_title);
+        textView.setText(reviewTitle + " 리뷰");
+
+        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.ar_mixview_review_recyclerview);
+
+        // use a linear layout manager
+>>>>>>> ecc5d9bb070eae094ccea9e4c2b06cc4a028bf64
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         mAdapter = new ReviewRecyclerViewAdapter(clientSelector);
@@ -56,6 +67,7 @@ public class TraceActivity extends Activity implements View.OnClickListener {
 
             //Log.i("악",traceList.get(0).getLocationID());
 
+<<<<<<< HEAD
             TextView textView = (TextView) findViewById(R.id.ar_mixview_review_title);
             textView.setText(reviewTitle + " 리뷰");
         }
@@ -68,6 +80,9 @@ public class TraceActivity extends Activity implements View.OnClickListener {
             TextView textView = (TextView) findViewById(R.id.ar_mixview_review_title);
             textView.setText(bundle.getString("title") + " 리뷰");
         }
+=======
+
+>>>>>>> ecc5d9bb070eae094ccea9e4c2b06cc4a028bf64
         //specify an adapter
 
         //TODO: 2017.01.25 need trace data list.
