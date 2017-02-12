@@ -3,55 +3,6 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#88000000">
-    <LinearLayout
-        android:id="@+id/ar_mixview_search_listview_searchbar"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="true"
-                android:focusableInTouchMode="true">
-                <EditText
-                    android:id="@+id/ar_mixview_search_listview_search_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="5.5dp"
-                    android:paddingBottom="5.5dp"
-                    android:background="#E6FFFFFF"
-                    android:imeOptions="actionSearch"
-                    android:inputType="textNoSuggestions"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="#BE000000"/>
-                <Button
-                    android:id="@+id/ar_mixview_search_listview_search_erase"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="7dp"
-                    android:background="@drawable/icon_erase_all"/>
-            </RelativeLayout>
-            <!--
-            <ListView
-                android:id="@+id/ar_mixview_search_listview_search_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="30dp"
-                android:clickable="true"/>
-            -->
-        </LinearLayout>
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -78,6 +29,7 @@
                 android:textSize="12sp"
                 android:textColor="#FFFFFFFF"/>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -94,6 +46,7 @@
                 android:textSize="12sp"
                 android:textColor="#5AFFFFFF"/>
         </LinearLayout>
+
     </LinearLayout>
     <ListView
         android:id="@+id/ar_mixview_search_listview"

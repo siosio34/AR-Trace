@@ -26,7 +26,7 @@ public class SearchListKeywordActivity extends ListParentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_ar_mixview_search_listview);
+        setContentView(R.layout.layout_ar_mixview_search_keyword_listview);
 
         DataConvertor dataConvertor = new DataConvertor();
 

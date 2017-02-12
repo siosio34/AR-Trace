@@ -119,7 +119,6 @@ public class ListParentActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(ListParentActivity.this, TraceActivity.class);
-                    Log.i("주소", currentData.getAddress());
                     intent.putExtra("title", currentData.getAddress());
                     intent.putExtra("lat", currentData.getLatitude());
                     intent.putExtra("lon", currentData.getLongitude());
