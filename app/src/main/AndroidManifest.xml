@@ -35,8 +35,7 @@
         <activity
             android:name=".ARCore.MixView"
             android:launchMode="singleTop"
-
-            >
+            android:screenOrientation="portrait">
         </activity>
 
         <!-- Service Pacakage -->
@@ -57,16 +56,23 @@
 
         <activity android:name=".ARCore.Activity.DialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".ARCore.Activity.WriteReviewActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".ARCore.Activity.SearchListKeywordActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".ARCore.Activity.TraceActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

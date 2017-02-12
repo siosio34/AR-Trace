@@ -141,7 +141,6 @@ public class GoogleSignActivity extends DialogActivity implements
         IntentFilter loginFilter = new IntentFilter();
         loginFilter.addAction("LOGIN_SUCCESS");
         registerReceiver(loginReceiver,loginFilter);
-
     }
 
 
@@ -283,6 +282,8 @@ public class GoogleSignActivity extends DialogActivity implements
 
     private void moveToMapSearchActivity() {
         Intent intent = new Intent(GoogleSignActivity.this, MixView.class);
+        if(getIntent().getExtras() != null)
+            intent.putExtras(getIntent().getExtras());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

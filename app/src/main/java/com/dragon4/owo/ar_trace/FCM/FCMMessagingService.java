@@ -53,14 +53,17 @@ public class FCMMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
         // Check if message contains a data payload.
+        //data works background and foreground both
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+            sendNotification(remoteMessage.getData().get("message"));
         }
 
         // Check if message contains a notification payload.
+        //notification only work when foreground
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            sendNotification(remoteMessage.getNotification().getBody());
+            //sendNotification(remoteMessage.getNotification().getBody());
         }
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
@@ -79,7 +82,7 @@ public class FCMMessagingService extends FirebaseMessagingService {
 
             Intent intent = new Intent(this, MixView.class);
 
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_SINGLE_TOP);
             Bundle bundle = new Bundle();
             bundle.putString("userName", jsonObj.getString("userName"));
             bundle.putString("buildingID", jsonObj.getString("buildingID"));
@@ -105,7 +108,7 @@ public class FCMMessagingService extends FirebaseMessagingService {
             }
 
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent.FLAG_ONE_SHOT);
             Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                     .setSmallIcon(R.drawable.icon_convenience_store)
