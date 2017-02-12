@@ -179,6 +179,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     //네비게이터 역할을 하는 클래스 추가
     private Navigator navigator;
 
+    public static final int SHOW_TRACE = 3;
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
@@ -355,9 +356,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
         DataSource.createIcons(getResources());
 
         try {
-
-            handleIntent(getIntent());    // 인텐트 제어
-
             // 전원관리자
             final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             // 화면이 꺼지지 않게 하기위한 웨이크 락
@@ -406,6 +404,9 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
             addContentView(topLayoutOnMixView.mainArView, params);
 
+            //이거 맨위에 놔두면 topLayoutOnMixView 객체 없어서 터짐
+            handleIntent(getIntent());    // 인텐트 제어
+
             // 초기 세팅된 상태가 아니라면
             if (!isInited) {
                 mixContext = new MixContext(this);    // 컨텍스트 생성
@@ -447,7 +448,8 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             FCMMessagingService.clear(intent.getStringExtra("traceID"));
             Intent traceIntent = new Intent(this, TraceActivity.class);
             traceIntent.putExtras(intent.getExtras());
-            startActivity(traceIntent);
+            topLayoutOnMixView.mainArView.setVisibility(View.GONE);
+            startActivityForResult(traceIntent, SHOW_TRACE);
         }
     }
 
@@ -791,12 +793,14 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
 
     // 위치제공자가 불능의 경우
     public void onProviderDisabled(String provider) {
-        isGpsEnabled = locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if(locationMgr != null)
+            isGpsEnabled = locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     // 위치제공자가 사용 가능한 경우. 굳이 따로 나눌 필요가 있었을까?
     public void onProviderEnabled(String provider) {
-        isGpsEnabled = locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if(locationMgr != null)
+            isGpsEnabled = locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     // 상태 변화시 처리. 일단은 비워둔다
@@ -886,6 +890,8 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                 navigator.run(lat, lon);
             else
                 Toast.makeText(this, "네비게이션 기능을 실행할 수 없습니다.", Toast.LENGTH_LONG).show();
+        }
+        else if(resultCode == RESULT_OK && requestCode == MixView.SHOW_TRACE) {
         }
     }
 
@@ -1135,8 +1141,8 @@ class AugmentedView extends View {
 
 class TopLayoutOnMixView {
     static public String TAG = "TopLayoutOnMixView";
-    public static int WRITE_REVIEW = 1;
-    public static int SEARCH_LIST = 2;
+    public static final int WRITE_REVIEW = 1;
+    public static final int SEARCH_LIST = 2;
 
     //네이버 지도
     public FragmentMapview naverFragment;

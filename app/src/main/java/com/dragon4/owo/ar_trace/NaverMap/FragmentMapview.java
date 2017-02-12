@@ -361,7 +361,9 @@ public class FragmentMapview extends Fragment {
 
         @Override
         public void onLocationUpdateTimeout(NMapLocationManager locationManager) {
-            Toast.makeText(getContext(), "Your current location is temporarily unavailable.", Toast.LENGTH_LONG).show();
+            //앱 바로 끄면은 getContext()가 null이 나와서 터짐.
+            if(getContext() != null)
+                Toast.makeText(getContext(), "Your current location is temporarily unavailable.", Toast.LENGTH_LONG).show();
         }
 
         @Override
