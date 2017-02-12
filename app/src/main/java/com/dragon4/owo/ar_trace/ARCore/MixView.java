@@ -93,6 +93,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dragon4.owo.ar_trace.ARCore.Activity.SearchCategoryListActivity;
 import com.dragon4.owo.ar_trace.ARCore.Activity.SearchKeywordListActivity;
 import com.dragon4.owo.ar_trace.ARCore.Activity.TraceActivity;
 import com.dragon4.owo.ar_trace.ARCore.Activity.WriteReviewActivity;
@@ -117,6 +118,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -1174,6 +1176,7 @@ class TopLayoutOnMixView {
 
     private LayoutInflater inflater;
     private Context context;
+
     public TopLayoutOnMixView(final Context context) {
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
@@ -1183,7 +1186,6 @@ class TopLayoutOnMixView {
         initNaverMap();
         initSearchbar();
     }
-
 
     public void initButtonViews() {
         parentButtonView = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_parent_buttonview);
@@ -1219,13 +1221,25 @@ class TopLayoutOnMixView {
                 // TODO: 2017. 2. 12. wrieReviewActivity
                 // SearchActivity 로 먼저가야됨
 
-                Intent intent = new Intent(context, WriteReviewActivity.class);
                 NGeoPoint nGeoPoint = naverFragment.getCurrentLocation();
-                intent.putExtra("lat",nGeoPoint.getLatitude());
-                intent.putExtra("lon", nGeoPoint.getLongitude());
+                if(nGeoPoint == null)
+                    Toast.makeText(context, "아직 나의 위치가 갱신되지 않았습니다.", Toast.LENGTH_SHORT).show();
+                else {
+                    List<ARMarker> markers = MixView.getDataView().getDataHandler().getMarkerList();
+                    if(markers == null)
+                        Toast.makeText(context, "카테고리를 아무것도 선택하지 않으셨습니다.", Toast.LENGTH_SHORT).show();
+                    else {
+                        Intent intent = new Intent(context, SearchCategoryListActivity.class);
 
-                mainArView.setVisibility(View.GONE);
-                ((Activity)context).startActivityForResult(intent, WRITE_REVIEW);
+                        intent.putExtra("lat", nGeoPoint.getLatitude());
+                        intent.putExtra("lon", nGeoPoint.getLongitude());
+                        HashMap<String, List<ARMarker>> markerMap = new HashMap<String, List<ARMarker>>();
+                        markerMap.put("markerList", markers);
+                        intent.putExtra("markerList", markerMap);
+                        mainArView.setVisibility(View.GONE);
+                        ((Activity) context).startActivityForResult(intent, WRITE_REVIEW);
+                    }
+                }
             }
         });
 
