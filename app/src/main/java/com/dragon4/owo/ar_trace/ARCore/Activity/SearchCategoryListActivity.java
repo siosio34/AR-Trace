@@ -26,8 +26,9 @@ public class SearchCategoryListActivity extends ListParentActivity {
         HashMap<String, List<ARMarker>> markerMap = (HashMap<String, List<ARMarker>>)getIntent().getSerializableExtra("markerList");
         List<ARMarker> markerList = markerMap.get("markerList");
         List<NaverSearchMarker> dataList = new ArrayList<>();
-        for(int i = 0 ; i < markerList.size(); i++)
-            dataList.add((NaverSearchMarker)markerList.get(i));
+        for(int i = 0 ; i < markerList.size(); i++) {
+            dataList.add((NaverSearchMarker) markerList.get(i));
+        }
 
         SearchListViewAdapter adapter = new SearchListViewAdapter(getLayoutInflater());
         adapter.setDataList(dataList);

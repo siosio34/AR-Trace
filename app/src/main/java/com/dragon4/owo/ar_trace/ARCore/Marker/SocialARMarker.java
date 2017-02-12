@@ -32,9 +32,11 @@ import com.dragon4.owo.ar_trace.ARCore.MixView;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
 
+import java.io.Serializable;
+
 
 // 소셜 마커 클래스. 마커에서 확장(상속)
-public class SocialARMarker extends ARMarker {
+public class SocialARMarker extends ARMarker implements Serializable {
 	
 	public static final int MAX_OBJECTS=20;	// 최대 객체 수
 	public String getFlag;

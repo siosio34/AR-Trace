@@ -69,6 +69,11 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".ARCore.Activity.SearchCategoryListActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".ARCore.Activity.TraceActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:launchMode="singleTop"
