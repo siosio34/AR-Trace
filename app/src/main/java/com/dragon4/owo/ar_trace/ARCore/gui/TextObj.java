@@ -1,19 +1,19 @@
 /*
  * Copyright (C) 2010- Peer internet solutions
- * 
+ *
  * This file is part of mixare.
- * 
- * This program is free software: you can redistribute it and/or modify it 
- * under the terms of the GNU General Public License as published by 
- * the Free Software Foundation, either version 3 of the License, or 
- * (at your option) any later version. 
- * 
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License 
- * for more details. 
- * 
- * You should have received a copy of the GNU General Public License along with 
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
 package com.dragon4.owo.ar_trace.ARCore.gui;
@@ -43,7 +43,7 @@ public class TextObj implements ScreenObj {
 				   PaintScreen dw, boolean underline) {
 
 		// 경계는 흰색, 배경은 반투명한 검은색, 텍스트는 흰색, 텍스트 그림자는 반투명한 검은색
-		// 등으로 기본세팅 
+		// 등으로 기본세팅
 		this(txtInit, fontSizeInit, maxWidth, Color.rgb(255, 255, 255), Color
 						.argb(128, 0, 0, 0), Color.rgb(255, 255, 255), Color.argb(35, 0, 0, 0),
 				dw.getTextAsc() / 2, dw, underline);
@@ -80,7 +80,7 @@ public class TextObj implements ScreenObj {
 		txt = txtInit;
 		fontSize = fontSizeInit;
 
-		// 여백을 이용해 실제 영역의 넓이를 구하고, 라인의 높이를 구한다 
+		// 여백을 이용해 실제 영역의 넓이를 구하고, 라인의 높이를 구한다
 		areaWidth = maxWidth - pad * 2;
 		lineHeight = dw.getTextAsc() + dw.getTextDesc()
 				+ dw.getTextLead();
@@ -101,7 +101,7 @@ public class TextObj implements ScreenObj {
 			float lineWidth = dw.getTextWidth(line);
 
 			if (lineWidth > areaWidth) {
-				// If the first word is longer than lineWidth 
+				// If the first word is longer than lineWidth
 				// prevLine is empty and should be ignored
 				if(prevLine.length()>0)
 					lineList.add(prevLine);

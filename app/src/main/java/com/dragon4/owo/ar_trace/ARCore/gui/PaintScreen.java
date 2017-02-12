@@ -1,19 +1,19 @@
 /*
  * Copyright (C) 2010- Peer internet solutions
- * 
+ *
  * This file is part of mixare.
- * 
- * This program is free software: you can redistribute it and/or modify it 
- * under the terms of the GNU General Public License as published by 
- * the Free Software Foundation, either version 3 of the License, or 
- * (at your option) any later version. 
- * 
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License 
- * for more details. 
- * 
- * You should have received a copy of the GNU General Public License along with 
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
 package com.dragon4.owo.ar_trace.ARCore.gui;
@@ -65,7 +65,7 @@ public class PaintScreen {
 		return height;
 	}
 
-	// 페인트 객체의 채우기 여부를 결정. 인자로 boolean 값을 넘긴다 
+	// 페인트 객체의 채우기 여부를 결정. 인자로 boolean 값을 넘긴다
 	public void setFill(boolean fill) {
 		if (fill)
 			paint.setStyle(Paint.Style.FILL);
@@ -73,7 +73,7 @@ public class PaintScreen {
 			paint.setStyle(Paint.Style.STROKE);
 	}
 
-	// 색상을 설정. 인자는 정수형으로 명시되어 있지만 지정된 상수 및 변수값을 다 받을 수 있다. 
+	// 색상을 설정. 인자는 정수형으로 명시되어 있지만 지정된 상수 및 변수값을 다 받을 수 있다.
 	public void setColor(int c) {
 		paint.setColor(c);
 	}
@@ -83,7 +83,7 @@ public class PaintScreen {
 		paint.setStrokeWidth(w);
 	}
 
-	// 선을 그린다. 각각 x, y 값 두 개를 인자로 받는다 
+	// 선을 그린다. 각각 x, y 값 두 개를 인자로 받는다
 	public void paintLine(float x1, float y1, float x2, float y2) {
 		canvas.drawLine(x1, y1, x2, y2, paint);
 	}
@@ -92,7 +92,7 @@ public class PaintScreen {
 	public void paintRect(float x, float y, float width, float height) {
 		canvas.drawRect(x, y, x + width, y + height, paint);
 	}
-	
+
 	// 비트맵을 출력한다. 비트맵 객체와 출력지점 좌표 두 개를 인자로 받는다
 	public void paintBitmap(Bitmap bitmap, float left, float top) {
 		canvas.drawBitmap(bitmap, left, top, paint);
@@ -111,7 +111,7 @@ public class PaintScreen {
 
 	// 객체를 그린다. 스크린 객체와 출력될 좌표(x, y), 회전각과 확대수치를 받는다
 	public void paintObj(ScreenObj obj, float x, float y, float rotation,
-			float scale) {
+						 float scale) {
 		canvas.save();	// 현재 캔버스를 저장
 		canvas.translate(x + obj.getWidth() / 2, y + obj.getHeight() / 2);
 		canvas.rotate(rotation);

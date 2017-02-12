@@ -43,6 +43,8 @@ public class TraceActivity extends Activity implements View.OnClickListener {
 
         Intent reviewIntent = getIntent();
         String reviewTitle = reviewIntent.getStringExtra("title");
+        TextView textView = (TextView) findViewById(R.id.ar_mixview_review_title);
+        textView.setText(reviewTitle + " 리뷰");
 
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.ar_mixview_review_recyclerview);
 
@@ -58,8 +60,7 @@ public class TraceActivity extends Activity implements View.OnClickListener {
 
         //Log.i("악",traceList.get(0).getLocationID());
 
-        TextView textView = (TextView) findViewById(R.id.ar_mixview_review_title);
-        textView.setText(reviewTitle + " 리뷰");
+
         //specify an adapter
 
         //TODO: 2017.01.25 need trace data list.

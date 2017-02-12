@@ -52,6 +52,7 @@ public class PythonHTTPHandler extends AsyncTask<String, Void, String> {
                 connection.setDoOutput(true);
                 connection.setRequestMethod("POST");
 
+
                 // 데이터 전송
                 JSONObject traceObject = new JSONObject(requestString);
                 OutputStream outputStream = new BufferedOutputStream(connection.getOutputStream());

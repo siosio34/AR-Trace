@@ -1,17 +1,13 @@
 package com.dragon4.owo.ar_trace.Network.Python;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
-import com.dragon4.owo.ar_trace.ARCore.HttpHandler;
 import com.dragon4.owo.ar_trace.ARCore.ReviewRecyclerViewAdapter;
 import com.dragon4.owo.ar_trace.Model.Trace;
 import com.dragon4.owo.ar_trace.Model.User;
 import com.dragon4.owo.ar_trace.Network.ClientSelector;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -19,8 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
-
-import retrofit2.http.HTTP;
 
 /**
  * Created by joyeongje on 2017. 1. 20..
@@ -33,25 +27,34 @@ public class PythonClient implements ClientSelector{
 
     public PythonClient() {
         gson =  new GsonBuilder().create();
+        pythonServerUrl = "http://192.168.1.14:3331/";
     }
 
+
     @Override
-    public void uploadUserDataToServer(User user) {
+    public void uploadUserDataToServer(User currentUser, Context googleSignInContext){
+
+        final String uploadTraceURL = pythonServerUrl + "upload";
 
         pythonServerUrl = "";
 
         try {
-            String response = new PythonHTTPHandler().execute(pythonServerUrl,"POST",gson.toJson(user)).get();
+            String response = new PythonHTTPHandler().execute(pythonServerUrl,"POST",gson.toJson(currentUser)).get();
             Log.i("uploadTraceInstance",response);
 
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+
+        final Intent loginReceiver = new Intent();
+        loginReceiver.setAction("LOGIN_SUCCESS");
+        googleSignInContext.sendBroadcast(loginReceiver);
     }
 
     @Override
     public void uploadImageToServer(Trace trace, final File file) {
-        pythonServerUrl = "";
+
+        final String uploadTraceURL = pythonServerUrl + "upload";
         final String encodeFormat = "UTF-8";
 
         new Thread(new Runnable() {
@@ -62,7 +65,7 @@ public class PythonClient implements ClientSelector{
             public void run() {
 
                 try {
-                    multipartUtility = new MultipartUtility(pythonServerUrl,encodeFormat);
+                    multipartUtility = new MultipartUtility(uploadTraceURL,encodeFormat);
                     multipartUtility.addFilePart("file",new File(file.getPath()));
 
                     String response = multipartUtility.finish();
@@ -86,9 +89,11 @@ public class PythonClient implements ClientSelector{
 
     @Override
     public void uploadTraceToServer(Trace trace) {
-        pythonServerUrl = "";
+
+        String uploadTraceURL = pythonServerUrl + "review";
+
         try {
-            String response = new PythonHTTPHandler().execute(pythonServerUrl,"POST",gson.toJson(trace)).get();
+            String response = new PythonHTTPHandler().execute(uploadTraceURL,"POST",gson.toJson(trace)).get();
             Log.i("uploadTraceInstance",response);
 
         } catch (InterruptedException | ExecutionException e) {
@@ -120,26 +125,6 @@ public class PythonClient implements ClientSelector{
         }
 
 
-
-        //FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //DatabaseReference databaseRef = database.getReference("building").child(traceKey).child("trace");
-//
-        //databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-        //    @Override
-        //    public void onDataChange(DataSnapshot dataSnapshot) {
-//
-        //        for(DataSnapshot child : dataSnapshot.getChildren() ) {
-        //            Trace trace = child.getValue(Trace.class);
-        //            traceList.add(trace);
-        //        }
-        //        mAdapter.notifyDataSetChanged();
-        //    }
-//
-        //    @Override
-        //    public void onCancelled(DatabaseError databaseError) {
-//
-        //    }
-        //});
         return traceList;
     }
 }

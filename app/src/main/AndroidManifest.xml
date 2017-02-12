@@ -32,7 +32,8 @@
         <activity
             android:name=".ARCore.MixView"
             android:launchMode="singleTop"
-            android:screenOrientation="landscape">
+
+            >
         </activity>
 
         <!-- Service Pacakage -->

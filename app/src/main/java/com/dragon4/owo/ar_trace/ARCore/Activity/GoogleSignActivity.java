@@ -24,17 +24,20 @@
 
 package com.dragon4.owo.ar_trace.ARCore.Activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dragon4.owo.ar_trace.ARCore.MixContext;
 import com.dragon4.owo.ar_trace.ARCore.MixView;
 import com.dragon4.owo.ar_trace.Model.User;
+import com.dragon4.owo.ar_trace.Network.ClientSelector;
+import com.dragon4.owo.ar_trace.Network.Firebase.FirebaseClient;
 import com.dragon4.owo.ar_trace.R;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -79,6 +82,15 @@ public class GoogleSignActivity extends DialogActivity implements
 
     private GoogleApiClient mGoogleApiClient;
 
+    private BroadcastReceiver loginReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals("LOGIN_SUCCESS")) {
+                moveToMapSearchActivity();
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +121,7 @@ public class GoogleSignActivity extends DialogActivity implements
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 if (user != null) {
-                    checkBasicUser(user);
+                    loginUser(user);
 
                 } else {
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -117,7 +129,13 @@ public class GoogleSignActivity extends DialogActivity implements
             }
         };
 
+        IntentFilter loginFilter = new IntentFilter();
+        loginFilter.addAction("LOGIN_SUCCESS");
+        registerReceiver(loginReceiver,loginFilter);
+
     }
+
+
 
     // [START on_start_add_listener]
     @Override
@@ -134,6 +152,7 @@ public class GoogleSignActivity extends DialogActivity implements
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+        unregisterReceiver(loginReceiver);
     }
     // [END on_stop_remove_listener]
 
@@ -149,7 +168,9 @@ public class GoogleSignActivity extends DialogActivity implements
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
+
             } else {
+                
                 // Google Sign In failed, update UI appropriately
                 // [START_EXCLUDE]
                 //  updateUI(null);// [END_EXCLUDE]
@@ -229,61 +250,21 @@ public class GoogleSignActivity extends DialogActivity implements
     }
 
 
-    public void checkBasicUser(final FirebaseUser firebaseUser) { //  기존 유저 체크 뒤 정보 불러오기
-        System.out.println();
+    public void loginUser(final FirebaseUser firebaseUser) { //  기존 유저 체크 뒤 정보 불러오기
+
+        ClientSelector clientSelector = new FirebaseClient();
 
         // 새로 등록할 유저
-        final String uid = firebaseUser.getUid();
+        String uid = firebaseUser.getUid();
+        String photoUrl = firebaseUser.getDisplayName();
+        String email = firebaseUser.getEmail();;
+        String name = firebaseUser.getPhotoUrl().toString();
+
         Log.i("user information", uid);
+        User currentUser = new User(uid, name, email, photoUrl);
 
-        // Read from the database
-        myRef.child(uid).addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        showProgressDialog();
+        clientSelector.uploadUserDataToServer(currentUser,getApplicationContext());
 
-                        User userValue = dataSnapshot.getValue(User.class);
-
-                        if (userValue == null) {
-
-                            String photoUrl = null;
-                            String email = null;
-                            String name = null;
-
-                            name = firebaseUser.getDisplayName();
-                            email = firebaseUser.getEmail();
-                            photoUrl = firebaseUser.getPhotoUrl().toString();
-                            User userTemp = new User(uid, name, email, photoUrl);
-                            registerUser(uid, userTemp);
-                            User.setMyInstance(userTemp);
-
-                            Log.i("신규 유저 정보", User.getMyInstance().toString());
-                            moveToMapSearchActivity();
-                            hideProgressDialog();
-                        } else { // 존재할경우 -> 불러와야함
-
-                            User.setMyInstance(userValue);
-                            Log.i("기존 유저정보", User.getMyInstance().toString());
-                            moveToMapSearchActivity();
-                            hideProgressDialog();
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                        // Failed to read value
-                        Log.w(TAG, "Failed to read value.", error.toException());
-                    }
-                });
-
-    }
-
-
-
-    public void registerUser(String uid, User user) { // 새로운 유저 파이어 베이스에 등록
-        myRef.child(uid).setValue(user);
     }
 
     @Override

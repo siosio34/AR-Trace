@@ -1,5 +1,6 @@
 package com.dragon4.owo.ar_trace.Network;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.dragon4.owo.ar_trace.ARCore.ReviewRecyclerViewAdapter;
@@ -16,8 +17,11 @@ import java.util.List;
 
 public interface ClientSelector {
 
-    void uploadUserDataToServer(User user);
+   // boolean getUserInformation(String userId);
+    void uploadUserDataToServer(User user, final Context googleSignInContext);
+
     void uploadImageToServer(Trace trace, File file); // 파일 업로드 하는 함수
+
     void uploadTraceToServer(Trace trace); // Trace 객체들을 올리는 함수
     ArrayList<Trace> getTraceDataFromServer(String traceKey, ReviewRecyclerViewAdapter mAdapter); // 서버 데이터들
 

@@ -53,6 +53,7 @@ public class SearchListActivity extends Activity implements View.OnClickListener
         List<ARMarker> searchList = null;
         String encodedQueryString = null;
         try {
+
             encodedQueryString = URLEncoder.encode(queryString, "UTF-8");
             String searchURL = DataSource.createNaverSearchRequestURL(encodedQueryString);
             String searchRawData = new HttpHandler().execute(searchURL).get();
@@ -170,7 +171,6 @@ public class SearchListActivity extends Activity implements View.OnClickListener
             navi.setOnClickListener(SearchListActivity.this);
             navi.setTag(currentData.getAddress());
 
-            
             // 리뷰 버튼 클릭시 활성화.
             LinearLayout reviewText = (LinearLayout)view.findViewById(R.id.ar_mixview_search_listview_review);
             reviewText.setOnClickListener(SearchListActivity.this);

@@ -1,5 +1,7 @@
 package com.dragon4.owo.ar_trace.Network.Firebase;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -8,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.dragon4.owo.ar_trace.ARCore.Activity.DialogActivity;
+import com.dragon4.owo.ar_trace.ARCore.Activity.GoogleSignActivity;
 import com.dragon4.owo.ar_trace.ARCore.Activity.TraceActivity;
 import com.dragon4.owo.ar_trace.ARCore.ReviewRecyclerViewAdapter;
 import com.dragon4.owo.ar_trace.Model.Trace;
@@ -37,11 +41,14 @@ import java.util.Map;
  * Created by joyeongje on 2017. 1. 20..
  */
 
-public class FirebaseClient implements ClientSelector{
+public class FirebaseClient implements ClientSelector {
 
+    private static final String TAG = "FirebaseClient";
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("building");
-    String makeKey;
+    DatabaseReference myRef = database.getReference();
+
+    // TODO: 2017. 2. 6. 유저것도 할수 잇게...!
+
 
     private int uploadedCount = 0;
     private int uploadFailCount = 0;
@@ -55,12 +62,76 @@ public class FirebaseClient implements ClientSelector{
     private Bitmap currentBitmap;
 
     private String makeTraceKey(String id) {
-        makeKey = myRef.child(id).push().getKey();
-        return makeKey;
+        return myRef.child("building").child(id).push().getKey();
     }
 
+    /*
     @Override
-    public void uploadUserDataToServer(User user) {
+    public boolean getUserInformation(String userId) {
+
+        myRef.child("users").child(userId).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        User user = dataSnapshot.getValue(User.class);
+
+                        if (user == null) {
+
+
+
+                        } else {
+
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
+
+    }
+    */
+
+    @Override
+    public void uploadUserDataToServer(final User currentUser, final Context googleSignInContext) {
+
+        myRef.child("users").child(currentUser.getUserId()).addListenerForSingleValueEvent(
+
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        User getUserFromDB = dataSnapshot.getValue(User.class);
+                        if (getUserFromDB == null) {
+
+                            myRef.child("users").child(currentUser.getUserId()).setValue(currentUser);
+                            User.setMyInstance(currentUser);
+                            Log.i("신규 유저 정보", User.getMyInstance().toString());
+
+                        } else { // 존재할경우 -> 불러와야함
+
+                            User.setMyInstance(getUserFromDB);
+                            Log.i("기존 유저정보", User.getMyInstance().toString());
+                        }
+
+                        final Intent loginReceiver = new Intent();
+                        loginReceiver.setAction("LOGIN_SUCCESS");
+                        googleSignInContext.sendBroadcast(loginReceiver);
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG, "Failed to read value.", databaseError.toException());
+                    }
+
+                }
+        );
 
     }
 
@@ -190,15 +261,14 @@ public class FirebaseClient implements ClientSelector{
         }).start();
     }
 
-       // Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
+    // Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
 
     @Override
     public void uploadTraceToServer(final Trace trace) {
         final String traceKey = makeTraceKey(trace.getLocationID());
         trace.setTraceID(traceKey);
 
-        DatabaseReference locationRef = myRef.child(trace.getLocationID());
-        locationRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.child("building").child(trace.getLocationID()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> childUpdates = new HashMap<>();
@@ -227,7 +297,7 @@ public class FirebaseClient implements ClientSelector{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                for(DataSnapshot child : dataSnapshot.getChildren() ) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Trace trace = child.getValue(Trace.class);
                     traceList.add(trace);
                 }

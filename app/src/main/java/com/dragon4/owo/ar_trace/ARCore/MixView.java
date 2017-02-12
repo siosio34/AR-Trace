@@ -1197,6 +1197,10 @@ class TopLayoutOnMixView {
         mainArView.findViewById(R.id.ar_mixview_write_review).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                // TODO: 2017. 2. 12. wrieReviewActivity
+                // SearchActivity 로 먼저가야됨
+
                 Intent intent = new Intent(context, WriteReviewActivity.class);
                 NGeoPoint nGeoPoint = naverFragment.getCurrentLocation();
                 intent.putExtra("lat",nGeoPoint.getLatitude());
@@ -1204,7 +1208,6 @@ class TopLayoutOnMixView {
 
                 mainArView.setVisibility(View.GONE);
                 ((Activity)context).startActivityForResult(intent, WRITE_REVIEW);
-                // TODO: 2017. 1. 12. 이미지뷰
             }
         });
 
