@@ -1,8 +1,11 @@
 # AR-Trace
 
-    증강현실 기반 장소 검색 및 위치 파악
-    길치들을 위한 증강화면위의 네비게이션을 통한 길안내
-    FireBase or Python Server가 선택가능한 장소기반 SNS
+    This Project AR Search Place, Facilities And Navigating where you want to go by using Naver API.
+    Also you leave Trace and see other people's trace in for Places(In a word Place Based SNS)
+    Now is We use Firebase Server But also we make service level python server for want to do Service
+    In not Firebase Setting. In future client select Server environmet Firebase and Python also
+    we want to this Project will be good reference to someone for develop service and Production level
+    server and client Project  
     
 # Qucik Start - Client
 
