@@ -1287,47 +1287,56 @@ class TopLayoutOnMixView {
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String queryString = searchText.getText().toString();
-                try {
-                    List<ARMarker> searchList = null;
-                    String encodedQueryString = URLEncoder.encode(queryString, "UTF-8");
+            public void onTextChanged(final CharSequence charSequence, int i, int i1, int i2) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String queryString = searchText.getText().toString();
+                        try {
+                            List<ARMarker> searchList = null;
+                            String encodedQueryString = URLEncoder.encode(queryString, "UTF-8");
 
-                    String tempCallbackUrl = "http://ac.map.naver.com/ac?q=" + encodedQueryString + "&st=10&r_lt=10&r_format=json";
-                    String rawData = new HttpHandler().execute(tempCallbackUrl).get();
-                    Log.i("rawData", rawData);
+                            String tempCallbackUrl = "http://ac.map.naver.com/ac?q=" + encodedQueryString + "&st=10&r_lt=10&r_format=json";
+                            String rawData = new HttpHandler().execute(tempCallbackUrl).get();
+                            Log.i("rawData", rawData);
 
-                    JSONObject root = new JSONObject(rawData);
-                    JSONArray dataArray = root.getJSONArray("items");
-                    JSONArray locationData = dataArray.getJSONArray(0);
+                            JSONObject root = new JSONObject(rawData);
+                            JSONArray dataArray = root.getJSONArray("items");
+                            JSONArray locationData = dataArray.getJSONArray(0);
 
-                    Log.i("dataArray", locationData.toString());
+                            Log.i("dataArray", locationData.toString());
 
-                    final ArrayList<String> list = new ArrayList<>();
-                    for (int index = 0; index < locationData.length(); index++)
-                        list.add(locationData.getString(index).substring(2, locationData.getString(index).length() - 2));
+                            final ArrayList<String> list = new ArrayList<>();
+                            for (int index = 0; index < locationData.length(); index++)
+                                list.add(locationData.getString(index).substring(2, locationData.getString(index).length() - 2));
 
-                    SearchViewAdapter adapter = new SearchViewAdapter(inflater);
-                    adapter.setDataList(list);
-                    adapter.setCurrentText(charSequence.toString());
-                    searchListView.setAdapter(adapter);
-                    searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            String queryString = list.get(i);
-                            searchText.setText(queryString);
+                            ((Activity)context).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    SearchViewAdapter adapter = new SearchViewAdapter(inflater);
+                                    adapter.setDataList(list);
+                                    adapter.setCurrentText(charSequence.toString());
+                                    searchListView.setAdapter(adapter);
+                                    searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                            String queryString = list.get(i);
+                                            searchText.setText(queryString);
+                                        }
+                                    });
+                                }
+                            });
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    });
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+                    }
+                }).start();
             }
 
             @Override
