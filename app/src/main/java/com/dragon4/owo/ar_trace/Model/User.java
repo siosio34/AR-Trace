@@ -12,6 +12,7 @@ public class User {
     private String userName;
     private String userEmail;
     private String userImageURL;
+    private String userToken;
 
     private static User currentUser = new User();
 
@@ -60,5 +61,13 @@ public class User {
 
     public void setUserImageURL(String userImageURL) {
         this.userImageURL = userImageURL;
+    }
+
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
     }
 }

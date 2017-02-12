@@ -25,6 +25,9 @@ public class Trace {
 
     private String userImageUrl; // user Image URL
     private String userName; // 유저이름
+    private String userToken; // 유저토큰
+    private String userId; // 유저아이디
+
     @Exclude
     private HashMap<String, String> likeUserList;
 
@@ -130,5 +133,21 @@ public class Trace {
 
     public void setLikeUserList(HashMap<String, String> likeUserList) {
         this.likeUserList = likeUserList;
+    }
+
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

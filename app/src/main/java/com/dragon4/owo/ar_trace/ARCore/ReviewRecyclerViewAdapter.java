@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.dragon4.owo.ar_trace.Model.Trace;
 import com.dragon4.owo.ar_trace.Model.User;
+import com.dragon4.owo.ar_trace.Network.ClientSelector;
+import com.dragon4.owo.ar_trace.Network.Firebase.FirebaseClient;
 import com.dragon4.owo.ar_trace.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,6 +34,11 @@ import java.util.List;
 
 public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter {
     public ArrayList<Trace> traceList;
+    public ClientSelector clientSelector;
+
+    public ReviewRecyclerViewAdapter(ClientSelector clientSelector) {
+        this.clientSelector = clientSelector;
+    }
 
     public class ReviewViewHolder extends RecyclerView.ViewHolder {
         public ImageView userProfileView;
@@ -103,9 +110,11 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter {
                 reviewHolder.likeWrapper.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        reviewHolder.isLikeClicked = !reviewHolder.isLikeClicked;
-                        setLike(reviewHolder, Integer.parseInt(reviewHolder.likeNumberView.getText().toString()) + (reviewHolder.isLikeClicked ? 1 : -1));
-                        sendLikeToServer(reviewHolder.isLikeClicked, trace);
+                        if(!((FirebaseClient)clientSelector).isWorking()) {
+                            reviewHolder.isLikeClicked = !reviewHolder.isLikeClicked;
+                            setLike(reviewHolder, Integer.parseInt(reviewHolder.likeNumberView.getText().toString()) + (reviewHolder.isLikeClicked ? 1 : -1));
+                            clientSelector.sendTraceLikeToServer(reviewHolder.isLikeClicked, trace);
+                        }
                     }
                 });
             }
@@ -130,39 +139,6 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter {
             reviewHolder.likeTextView.setTextColor(Color.parseColor("#5A000000"));
             reviewHolder.likeIconView.setImageResource(R.drawable.ic_like_cancel);
         }
-    }
-
-    public void sendLikeToServer(final boolean isLikeClicked, Trace trace) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("building").child(trace.getLocationID()).child("trace").child(trace.getTraceID());
-        myRef.child("likeUserList").child(User.getMyInstance().getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(isLikeClicked)
-                    dataSnapshot.getRef().setValue("");
-                else
-                    dataSnapshot.getRef().removeValue();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-
-        myRef.child("likeNum").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(isLikeClicked)
-                    dataSnapshot.getRef().setValue((long)dataSnapshot.getValue() + 1);
-                else
-                    dataSnapshot.getRef().setValue((long)dataSnapshot.getValue() - 1);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     @Override

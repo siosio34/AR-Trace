@@ -25,7 +25,9 @@
 package com.dragon4.owo.ar_trace.ARCore.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -56,6 +58,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.POST;
 
 
 public class GoogleSignActivity extends DialogActivity implements
@@ -110,7 +121,6 @@ public class GoogleSignActivity extends DialogActivity implements
 
                 if (user != null) {
                     checkBasicUser(user);
-
                 } else {
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
@@ -244,7 +254,6 @@ public class GoogleSignActivity extends DialogActivity implements
                         showProgressDialog();
 
                         User userValue = dataSnapshot.getValue(User.class);
-
                         if (userValue == null) {
 
                             String photoUrl = null;
@@ -255,6 +264,8 @@ public class GoogleSignActivity extends DialogActivity implements
                             email = firebaseUser.getEmail();
                             photoUrl = firebaseUser.getPhotoUrl().toString();
                             User userTemp = new User(uid, name, email, photoUrl);
+                            if(User.getMyInstance().getUserToken() != null)
+                                userTemp.setUserToken(User.getMyInstance().getUserToken());
                             registerUser(uid, userTemp);
                             User.setMyInstance(userTemp);
 
@@ -262,8 +273,10 @@ public class GoogleSignActivity extends DialogActivity implements
                             moveToMapSearchActivity();
                             hideProgressDialog();
                         } else { // 존재할경우 -> 불러와야함
-
+                            if(User.getMyInstance().getUserToken() != null)
+                                userValue.setUserToken(User.getMyInstance().getUserToken());
                             User.setMyInstance(userValue);
+                            registerUser(uid, userValue);
                             Log.i("기존 유저정보", User.getMyInstance().toString());
                             moveToMapSearchActivity();
                             hideProgressDialog();
@@ -279,8 +292,6 @@ public class GoogleSignActivity extends DialogActivity implements
                 });
 
     }
-
-
 
     public void registerUser(String uid, User user) { // 새로운 유저 파이어 베이스에 등록
         myRef.child(uid).setValue(user);

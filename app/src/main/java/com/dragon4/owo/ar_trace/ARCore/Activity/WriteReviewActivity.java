@@ -119,7 +119,11 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         // 경도 위도
         axisNum.setText(String.valueOf(String.valueOf(currentLat) + " N " + String.valueOf(currentLon) + " E "));
 
-        // 경도 위도를 좌표 변환후 주소로 표시.
+        // 건물의 위치를 기반으로 리뷰를 씀. 여기서 주소좌표계는 31XXXXXX.XX구조 좌표게가 서로다름.
+        locationName.setText(getIntent().getStringExtra("buildingID"));
+
+        // 내 위치를 기반으로 주소를 가져오고 리뷰를 씀. 여기서 주소좌표계는 31.XXXXXX구조 좌표계가 서로 다름.
+        /*
         String requestReverseGeoAPI = DataSource.createNaverReverseGeoAPIRequcetURL(currentLat, currentLon);
 
         try {
@@ -151,6 +155,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        */
     }
 
     // 경기도 수원시 영통구 영통동 1078
@@ -298,6 +303,8 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         trace.setWriteDate(new Date().getTime()); // 업로드 날짜
         trace.setUserName(currentUser.getUserName()); // 유조이름
         trace.setUserImageUrl(currentUser.getUserImageURL()); // 유저 이미지 유알엘
+        trace.setUserToken(currentUser.getUserToken());
+        trace.setUserId(currentUser.getUserId());
 
         clientSelector.uploadTraceToServer(trace);
         Toast.makeText(getApplicationContext(),"글이 등록되었습니다.", Toast.LENGTH_SHORT). show();

@@ -69,7 +69,6 @@ import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -88,20 +87,21 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dragon4.owo.ar_trace.ARCore.Activity.SearchListActivity;
+import com.dragon4.owo.ar_trace.ARCore.Activity.ListParentActivity;
+import com.dragon4.owo.ar_trace.ARCore.Activity.TraceActivity;
 import com.dragon4.owo.ar_trace.ARCore.Activity.WriteReviewActivity;
 import com.dragon4.owo.ar_trace.ARCore.data.DataHandler;
 import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
 import com.dragon4.owo.ar_trace.ARCore.render.Matrix;
+import com.dragon4.owo.ar_trace.FCM.FCMMessagingService;
 import com.dragon4.owo.ar_trace.NaverMap.FragmentMapview;
 import com.dragon4.owo.ar_trace.NaverMap.NMapPOIflagType;
 import com.dragon4.owo.ar_trace.R;
@@ -442,6 +442,12 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);    // 쿼리 생성
             //  doMixSearch(query);    // 마커로부터 검색
+        }
+        else if(intent.getExtras() != null){
+            FCMMessagingService.clear(intent.getStringExtra("traceID"));
+            Intent traceIntent = new Intent(this, TraceActivity.class);
+            traceIntent.putExtras(intent.getExtras());
+            startActivity(traceIntent);
         }
     }
 
@@ -1262,7 +1268,7 @@ class TopLayoutOnMixView {
                 switch (actionId) {
                     case EditorInfo.IME_ACTION_SEARCH:
                         String queryString = searchText.getText().toString();
-                        Intent intent = new Intent(context, SearchListActivity.class);
+                        Intent intent = new Intent(context, ListParentActivity.class);
                         intent.putExtra("searchName", queryString);
                         InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(mainArView.getWindowToken(), 0);

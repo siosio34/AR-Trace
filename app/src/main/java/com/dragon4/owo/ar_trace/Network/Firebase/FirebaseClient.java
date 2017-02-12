@@ -6,10 +6,12 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dragon4.owo.ar_trace.ARCore.Activity.TraceActivity;
 import com.dragon4.owo.ar_trace.ARCore.ReviewRecyclerViewAdapter;
+import com.dragon4.owo.ar_trace.FCM.FCMWebServerConnector;
 import com.dragon4.owo.ar_trace.Model.Trace;
 import com.dragon4.owo.ar_trace.Model.User;
 import com.dragon4.owo.ar_trace.Network.ClientSelector;
@@ -19,6 +21,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -37,7 +41,7 @@ import java.util.Map;
  * Created by joyeongje on 2017. 1. 20..
  */
 
-public class FirebaseClient implements ClientSelector{
+public class FirebaseClient implements ClientSelector {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("building");
@@ -240,5 +244,65 @@ public class FirebaseClient implements ClientSelector{
             }
         });
         return traceList;
+    }
+
+    private boolean isWorking = false;
+    public boolean isWorking() {
+        return isWorking;
+    }
+
+    @Override
+    public void sendTraceLikeToServer(boolean isLikeClicked, Trace trace) {
+        if(!isWorking) {
+            isWorking = true;
+            sendTraceLikeToFirebase(isLikeClicked, trace);
+            if (isLikeClicked /*&& trace.getUserId().compareTo(User.getMyInstance().getUserId()) != 0*/) {
+                FCMWebServerConnector connector = new FCMWebServerConnector();
+                connector.sendLikePush(trace);
+            }
+        }
+    }
+
+    private void sendTraceLikeToFirebase(final boolean isLikeClicked, final Trace trace) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference myRef = database.getReference("building").child(trace.getLocationID()).child("trace").child(trace.getTraceID());
+
+        myRef.child("likeNum").runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                if(isLikeClicked)
+                    mutableData.setValue((long)mutableData.getValue() + 1);
+                else
+                    mutableData.setValue((long)mutableData.getValue() - 1);
+
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                if(databaseError == null && b == true)
+                    sendTraceLikeClickedUserToFirebase(myRef, isLikeClicked);
+                else
+                    sendTraceLikeToFirebase(isLikeClicked, trace);
+            }
+        });
+    }
+
+    private void sendTraceLikeClickedUserToFirebase(final DatabaseReference myRef, final boolean isLikeClicked) {
+        myRef.child("likeUserList").child(User.getMyInstance().getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (isLikeClicked)
+                    dataSnapshot.getRef().setValue("");
+                else
+                    dataSnapshot.getRef().removeValue();
+                isWorking = false;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                sendTraceLikeClickedUserToFirebase(myRef, isLikeClicked);
+            }
+        });
     }
 }

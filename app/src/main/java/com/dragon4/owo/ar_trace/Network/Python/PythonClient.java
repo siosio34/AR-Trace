@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.dragon4.owo.ar_trace.ARCore.HttpHandler;
 import com.dragon4.owo.ar_trace.ARCore.ReviewRecyclerViewAdapter;
+import com.dragon4.owo.ar_trace.FCM.FCMWebServerConnector;
 import com.dragon4.owo.ar_trace.Model.Trace;
 import com.dragon4.owo.ar_trace.Model.User;
 import com.dragon4.owo.ar_trace.Network.ClientSelector;
@@ -141,5 +142,14 @@ public class PythonClient implements ClientSelector{
         //    }
         //});
         return traceList;
+    }
+
+    @Override
+    public void sendTraceLikeToServer(final boolean isLikeClicked, Trace trace) {
+        //TODO: 2017-02-11 sendLikeToServer 파이썬 버전
+        if(isLikeClicked && trace.getUserId().compareTo(User.getMyInstance().getUserId()) != 0) {
+            FCMWebServerConnector connector = new FCMWebServerConnector();
+            connector.sendLikePush(trace);
+        }
     }
 }
