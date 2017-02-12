@@ -2,13 +2,10 @@ package com.dragon4.owo.ar_trace.NaverMap;
 
 import android.content.Intent;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 
-import com.dragon4.owo.ar_trace.ARCore.ARMarker;
-import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
+import com.dragon4.owo.ar_trace.ARCore.Marker.ARMarker;
 import com.dragon4.owo.ar_trace.R;
 import com.nhn.android.maps.NMapActivity;
 import com.nhn.android.maps.NMapCompassManager;
@@ -18,13 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.nhn.android.maps.NMapContext;
 import com.nhn.android.maps.NMapController;
 import com.nhn.android.maps.NMapLocationManager;
 import com.nhn.android.maps.NMapOverlay;
@@ -43,13 +36,11 @@ import com.nhn.android.mapviewer.overlay.NMapMyLocationOverlay;
 import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
 import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
 import com.nhn.android.mapviewer.overlay.NMapPathDataOverlay;
-import com.nhn.android.mapviewer.overlay.NMapResourceProvider;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 

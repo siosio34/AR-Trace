@@ -1,4 +1,4 @@
-package com.dragon4.owo.ar_trace.ARCore;
+package com.dragon4.owo.ar_trace.ARCore.Marker;
 
 import android.location.Location;
 
@@ -8,6 +8,7 @@ import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
 /**
  * Created by joyeongje on 2017. 1. 9..
  */
+
 
 public class NavigationMarker extends ARMarker {
 

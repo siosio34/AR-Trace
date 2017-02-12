@@ -1,4 +1,4 @@
-package com.dragon4.owo.ar_trace.ARCore;
+package com.dragon4.owo.ar_trace.Configure;
 
 import android.app.Application;
 

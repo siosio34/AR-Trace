@@ -29,8 +29,8 @@ import javax.net.ssl.X509TrustManager;
  * Created by joyeongje on 2016. 10. 2..
  */
 
-public class HttpHandler extends AsyncTask<String, Void, String> {
-    private static final String TAG = "HttpHandler";
+public class NaverHttpHandler extends AsyncTask<String, Void, String> {
+    private static final String TAG = "NaverHttpHandler";
 
     @Override
     protected String doInBackground(String... params) {

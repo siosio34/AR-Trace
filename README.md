@@ -24,8 +24,11 @@
         
      
 -  <b>Python Server Setting - if you have server or you want to use python Server
+        
+        but this Project in Processing... so you want to contribute our project 
+        then you set Firebase Server Setting now...!
 
-        todo Processing...
+        ...todo Processing...
        
 # Client & Firebase Server Structure
 

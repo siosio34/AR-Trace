@@ -32,7 +32,7 @@ import java.util.List;
 import android.location.Location;
 import android.util.Log;
 
-import com.dragon4.owo.ar_trace.ARCore.ARMarker;
+import com.dragon4.owo.ar_trace.ARCore.Marker.ARMarker;
 import com.dragon4.owo.ar_trace.ARCore.MixContext;
 import com.dragon4.owo.ar_trace.ARCore.MixView;
 

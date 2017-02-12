@@ -10,14 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dragon4.owo.ar_trace.ARCore.ARMarker;
-import com.dragon4.owo.ar_trace.ARCore.HttpHandler;
-import com.dragon4.owo.ar_trace.ARCore.NaverSearchMarker;
-import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
+import com.dragon4.owo.ar_trace.ARCore.NaverHttpHandler;
+import com.dragon4.owo.ar_trace.ARCore.Marker.NaverSearchMarker;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.R;
 import com.tsengvn.typekit.TypekitContextWrapper;
@@ -47,7 +44,7 @@ public class ListParentActivity extends Activity {
         try {
             encodedQueryString = URLEncoder.encode(address, "UTF-8");
             String requestURL = DataSource.createNaverGeoAPIRequestURL(encodedQueryString);
-            String rawData = new HttpHandler().execute(requestURL).get();
+            String rawData = new NaverHttpHandler().execute(requestURL).get();
             Log.i("rawData", rawData);
 
             JSONObject root = new JSONObject(rawData);

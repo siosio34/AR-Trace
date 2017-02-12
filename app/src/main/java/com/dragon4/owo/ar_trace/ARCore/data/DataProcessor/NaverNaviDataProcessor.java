@@ -2,8 +2,8 @@ package com.dragon4.owo.ar_trace.ARCore.data.DataProcessor;
 
 import android.util.Log;
 
-import com.dragon4.owo.ar_trace.ARCore.ARMarker;
-import com.dragon4.owo.ar_trace.ARCore.NavigationMarker;
+import com.dragon4.owo.ar_trace.ARCore.Marker.ARMarker;
+import com.dragon4.owo.ar_trace.ARCore.Marker.NavigationMarker;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 
 import org.json.JSONArray;

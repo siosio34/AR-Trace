@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with 
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
-package com.dragon4.owo.ar_trace.ARCore;
+package com.dragon4.owo.ar_trace.ARCore.Marker;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

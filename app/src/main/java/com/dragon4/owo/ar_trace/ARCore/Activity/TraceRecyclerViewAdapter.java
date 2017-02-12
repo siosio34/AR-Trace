@@ -1,4 +1,4 @@
-package com.dragon4.owo.ar_trace.ARCore;
+package com.dragon4.owo.ar_trace.ARCore.Activity;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.dragon4.owo.ar_trace.ARCore.MixUtils;
 import com.dragon4.owo.ar_trace.Model.Trace;
 import com.dragon4.owo.ar_trace.Model.User;
 import com.dragon4.owo.ar_trace.Network.ClientSelector;
@@ -32,11 +33,11 @@ import java.util.List;
  * Created by Mansu on 2017-01-25.
  */
 
-public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter {
+public class TraceRecyclerViewAdapter extends RecyclerView.Adapter {
     public ArrayList<Trace> traceList;
     public ClientSelector clientSelector;
 
-    public ReviewRecyclerViewAdapter(ClientSelector clientSelector) {
+    public TraceRecyclerViewAdapter(ClientSelector clientSelector) {
         this.clientSelector = clientSelector;
     }
 
