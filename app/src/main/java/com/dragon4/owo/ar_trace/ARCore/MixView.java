@@ -99,6 +99,7 @@ import com.dragon4.owo.ar_trace.ARCore.Activity.TraceActivity;
 import com.dragon4.owo.ar_trace.ARCore.Activity.WriteReviewActivity;
 import com.dragon4.owo.ar_trace.ARCore.Marker.ARMarker;
 import com.dragon4.owo.ar_trace.ARCore.Marker.Compatibility;
+import com.dragon4.owo.ar_trace.ARCore.Marker.SocialARMarker;
 import com.dragon4.owo.ar_trace.ARCore.data.DataHandler;
 import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
@@ -116,6 +117,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1225,20 +1227,12 @@ class TopLayoutOnMixView {
                 if(nGeoPoint == null)
                     Toast.makeText(context, "아직 나의 위치가 갱신되지 않았습니다.", Toast.LENGTH_SHORT).show();
                 else {
-                    List<ARMarker> markers = MixView.getDataView().getDataHandler().getMarkerList();
-                    if(markers == null)
-                        Toast.makeText(context, "카테고리를 아무것도 선택하지 않으셨습니다.", Toast.LENGTH_SHORT).show();
-                    else {
-                        Intent intent = new Intent(context, SearchCategoryListActivity.class);
+                    Intent intent = new Intent(context, SearchCategoryListActivity.class);
 
-                        intent.putExtra("lat", nGeoPoint.getLatitude());
-                        intent.putExtra("lon", nGeoPoint.getLongitude());
-                        HashMap<String, List<ARMarker>> markerMap = new HashMap<String, List<ARMarker>>();
-                        markerMap.put("markerList", markers);
-                        intent.putExtra("markerList", markerMap);
-                        mainArView.setVisibility(View.GONE);
-                        ((Activity) context).startActivityForResult(intent, WRITE_REVIEW);
-                    }
+                    intent.putExtra("lat", nGeoPoint.getLatitude());
+                    intent.putExtra("lon", nGeoPoint.getLongitude());
+                    mainArView.setVisibility(View.GONE);
+                    ((Activity) context).startActivityForResult(intent, WRITE_REVIEW);
                 }
             }
         });

@@ -56,7 +56,7 @@ public class SearchKeywordListActivity extends ListParentActivity {
             e.printStackTrace();
         }
 
-        //Toast.makeText(context, searchRawData, Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, searchRawData, Toast.LENGT1H_LONG).show();
         ListView listView = (ListView)findViewById(R.id.ar_mixview_search_listview);
 
         List<NaverSearchMarker> dataList = new ArrayList<>();
