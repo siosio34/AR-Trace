@@ -1229,16 +1229,6 @@ class TopLayoutOnMixView {
             }
         });
 
-
-        final Button reviewOnOffBtn = (Button) mainArView.findViewById(R.id.ar_mixview_review_onoff);
-        reviewOnOffBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                reviewOnOffBtn.setBackgroundResource(R.drawable.icon_others_review_off);
-                reviewOnOffBtn.setBackgroundResource(R.drawable.icon_others_review_on);
-            }
-        });
-
         buttonViewLayout = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_buttonview);
         final Button hideBtn = (Button) mainArView.findViewById(R.id.ar_mixview_buttonview_hide);
         hideBtn.setOnClickListener(new View.OnClickListener() {
