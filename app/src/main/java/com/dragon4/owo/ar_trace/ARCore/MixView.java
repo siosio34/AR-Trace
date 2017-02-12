@@ -93,7 +93,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dragon4.owo.ar_trace.ARCore.Activity.SearchListKeywordActivity;
+import com.dragon4.owo.ar_trace.ARCore.Activity.SearchKeywordListActivity;
 import com.dragon4.owo.ar_trace.ARCore.Activity.TraceActivity;
 import com.dragon4.owo.ar_trace.ARCore.Activity.WriteReviewActivity;
 import com.dragon4.owo.ar_trace.ARCore.Marker.ARMarker;
@@ -1283,7 +1283,7 @@ class TopLayoutOnMixView {
                 switch (actionId) {
                     case EditorInfo.IME_ACTION_SEARCH:
                         String queryString = searchText.getText().toString();
-                        Intent intent = new Intent(context, SearchListKeywordActivity.class);
+                        Intent intent = new Intent(context, SearchKeywordListActivity.class);
                         intent.putExtra("searchName", queryString);
                         InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(mainArView.getWindowToken(), 0);

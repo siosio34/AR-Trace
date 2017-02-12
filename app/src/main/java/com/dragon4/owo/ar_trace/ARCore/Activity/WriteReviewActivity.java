@@ -104,6 +104,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
         // 건물의 위치를 기반으로 리뷰를 씀. 여기서 주소좌표계는 31XXXXXX.XX구조 좌표게가 서로다름.
         locationName.setText(getIntent().getStringExtra("buildingID"));
+        placeName = getIntent().getStringExtra("buildingID");
 
         // 내 위치를 기반으로 주소를 가져오고 리뷰를 씀. 여기서 주소좌표계는 31.XXXXXX구조 좌표계가 서로 다름.
         /*

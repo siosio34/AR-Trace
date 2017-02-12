@@ -76,7 +76,7 @@
             android:layout_height="match_parent"
             android:background="#80000000" />
         <LinearLayout
-            android:id="@+id/ar_mixview_search_listview_review"
+            android:id="@+id/ar_mixview_search_listview_item_review"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -92,10 +92,10 @@
                 android:textColor="#A5000000"
                 android:textStyle="bold"/>
             <TextView
-                android:id="@+id/ar_mixview_search_listview_review_number"
+                android:id="@+id/ar_mixview_search_listview_item_review_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="(12)"
+                android:text="0"
                 android:textSize="12sp"
                 android:textColor="#A5000000"/>
         </LinearLayout>

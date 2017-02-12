@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.dragon4.owo.ar_trace.ARCore.Activity.TraceRecyclerViewAdapter;
 import com.dragon4.owo.ar_trace.FCM.FCMWebServerConnector;
@@ -322,7 +323,7 @@ public class FirebaseClient implements ClientSelector {
         if(!isWorking) {
             isWorking = true;
             sendTraceLikeToFirebase(isLikeClicked, trace);
-            if (isLikeClicked /*&& trace.getUserId().compareTo(User.getMyInstance().getUserId()) != 0*/) {
+            if (isLikeClicked && trace.getUserId().compareTo(User.getMyInstance().getUserId()) != 0) {
                 FCMWebServerConnector connector = new FCMWebServerConnector();
                 connector.sendLikePush(trace);
             }
@@ -368,6 +369,27 @@ public class FirebaseClient implements ClientSelector {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 sendTraceLikeClickedUserToFirebase(myRef, isLikeClicked);
+            }
+        });
+    }
+
+    @Override
+    public void getReviewNumberFromServer(String buildingID, final TextView reviewNumber) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("building").child(buildingID).child("trace");
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot != null) {
+                    reviewNumber.setText(dataSnapshot.getChildrenCount() + "");
+                }
+                else
+                    reviewNumber.setText("0");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

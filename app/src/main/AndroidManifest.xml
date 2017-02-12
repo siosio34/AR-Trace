@@ -64,7 +64,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".ARCore.Activity.SearchListKeywordActivity"
+        <activity android:name=".ARCore.Activity.SearchKeywordListActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>

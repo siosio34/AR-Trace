@@ -81,7 +81,7 @@ public class TraceRecyclerViewAdapter extends RecyclerView.Adapter {
         final ReviewViewHolder reviewHolder = (ReviewViewHolder)holder;
         //TODO: 2017.01.25 user profile and user name
         //Picasso.with(reviewHolder.userProfileView()).load(trace.getUserProfileURL()).into(reviewHolder.userProfileView);
-        //reviewHolder.userNameView.setText(trace.getUserName());
+        reviewHolder.userNameView.setText(trace.getUserName());
         Picasso.with(reviewHolder.imgView.getContext()).load(trace.getImageURL()).into(reviewHolder.imgView);
         reviewHolder.contentView.setText(trace.getContent());
         reviewHolder.dateView.setText(MixUtils.getDateString(trace.getWriteDate()));

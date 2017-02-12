@@ -16,6 +16,10 @@ import android.widget.Toast;
 import com.dragon4.owo.ar_trace.ARCore.NaverHttpHandler;
 import com.dragon4.owo.ar_trace.ARCore.Marker.NaverSearchMarker;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
+import com.dragon4.owo.ar_trace.Model.Trace;
+import com.dragon4.owo.ar_trace.Model.User;
+import com.dragon4.owo.ar_trace.Network.ClientSelector;
+import com.dragon4.owo.ar_trace.Network.Firebase.FirebaseClient;
 import com.dragon4.owo.ar_trace.R;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
@@ -23,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -99,6 +104,7 @@ public class ListParentActivity extends Activity {
             TextView callNumber = (TextView) view.findViewById(R.id.ar_mixview_search_listview_item_call_number);
             TextView category = (TextView) view.findViewById(R.id.ar_mixview_search_listview_item_category);
             TextView address = (TextView) view.findViewById(R.id.ar_mixview_search_listview_item_address);
+            TextView reviewNumber = (TextView) view.findViewById(R.id.ar_mixview_search_listview_item_review_number);
 
             final NaverSearchMarker currentData = dataList.get(i);
 
@@ -114,12 +120,12 @@ public class ListParentActivity extends Activity {
 
             
             // 리뷰 버튼 클릭시 활성화.
-            LinearLayout reviewText = (LinearLayout)view.findViewById(R.id.ar_mixview_search_listview_review);
+            LinearLayout reviewText = (LinearLayout)view.findViewById(R.id.ar_mixview_search_listview_item_review);
             reviewText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(ListParentActivity.this, TraceActivity.class);
-                    intent.putExtra("title", currentData.getAddress());
+                    intent.putExtra("title", currentData.getTitle());
                     intent.putExtra("lat", currentData.getLatitude());
                     intent.putExtra("lon", currentData.getLongitude());
                     startActivity(intent);
@@ -132,7 +138,8 @@ public class ListParentActivity extends Activity {
             name.setText(currentData.getTitle());
             callNumber.setText(currentData.getTelephone());
             category.setText(currentData.getCategory());
-
+            ClientSelector clientSelector = new FirebaseClient();
+            clientSelector.getReviewNumberFromServer(currentData.getTitle(), reviewNumber);
 
             // 신주소 구주소 전환.
             if(currentData.getRoadAddress().length() > 0) {

@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
  * Created by Mansu on 2017-02-12.
  */
 
-public class SearchListKeywordActivity extends ListParentActivity {
+public class SearchKeywordListActivity extends ListParentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
