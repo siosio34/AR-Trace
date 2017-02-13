@@ -21,7 +21,6 @@ public class SearchCategoryListActivity extends ListParentActivity {
         // TODO: 2017. 2. 12. 현재 카테고리 마커 넣고
         // 리스트뷰랑 어댑터 추가
 
-
     }
 
 

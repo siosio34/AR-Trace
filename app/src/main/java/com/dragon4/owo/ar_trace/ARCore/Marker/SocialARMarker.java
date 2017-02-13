@@ -36,12 +36,14 @@ import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
 // 소셜 마커 클래스. 마커에서 확장(상속)
 public class SocialARMarker extends ARMarker {
 	
-	public static final int MAX_OBJECTS=20;	// 최대 객체 수
+	public static final int MAX_OBJECTS = 20;	// 최대 객체 수
+
 	public String getFlag;
 	// 생성자. 타이틀과 위도, 경도, 고도, 그리고 URL과 데이터 소스를 인자로 받는다
 	public SocialARMarker(String title, double latitude, double longitude,
 						  double altitude, String URL, DataSource.DATASOURCE datasource, String flag) {
 		super(title, latitude, longitude, altitude, URL, datasource);
+
 		getFlag = flag;
 	}
 
@@ -91,4 +93,27 @@ public class SocialARMarker extends ARMarker {
 		return MAX_OBJECTS;
 	}
 
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getRoadAddress() {
+		return roadAddress;
+	}
+
+	public void setRoadAddress(String roadAddress) {
+		this.roadAddress = roadAddress;
+	}
 }
