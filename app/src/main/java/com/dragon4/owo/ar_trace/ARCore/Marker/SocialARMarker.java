@@ -93,27 +93,4 @@ public class SocialARMarker extends ARMarker {
 		return MAX_OBJECTS;
 	}
 
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	public String getRoadAddress() {
-		return roadAddress;
-	}
-
-	public void setRoadAddress(String roadAddress) {
-		this.roadAddress = roadAddress;
-	}
 }
