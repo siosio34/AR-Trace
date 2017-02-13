@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
  * Created by Mansu on 2017-02-12.
  */
 
-public class SearchListKeywordActivity extends ListParentActivity {
+public class SearchKeywordListActivity extends ListParentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +56,7 @@ public class SearchListKeywordActivity extends ListParentActivity {
             e.printStackTrace();
         }
 
-        //Toast.makeText(context, searchRawData, Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, searchRawData, Toast.LENGT1H_LONG).show();
         ListView listView = (ListView)findViewById(R.id.ar_mixview_search_listview);
 
         List<NaverSearchMarker> dataList = new ArrayList<>();

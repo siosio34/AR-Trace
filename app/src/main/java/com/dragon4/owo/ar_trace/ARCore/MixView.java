@@ -93,11 +93,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dragon4.owo.ar_trace.ARCore.Activity.SearchListKeywordActivity;
+import com.dragon4.owo.ar_trace.ARCore.Activity.SearchCategoryListActivity;
+import com.dragon4.owo.ar_trace.ARCore.Activity.SearchKeywordListActivity;
 import com.dragon4.owo.ar_trace.ARCore.Activity.TraceActivity;
 import com.dragon4.owo.ar_trace.ARCore.Activity.WriteReviewActivity;
 import com.dragon4.owo.ar_trace.ARCore.Marker.ARMarker;
 import com.dragon4.owo.ar_trace.ARCore.Marker.Compatibility;
+import com.dragon4.owo.ar_trace.ARCore.Marker.SocialARMarker;
 import com.dragon4.owo.ar_trace.ARCore.data.DataHandler;
 import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
@@ -115,8 +117,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -1174,6 +1178,7 @@ class TopLayoutOnMixView {
 
     private LayoutInflater inflater;
     private Context context;
+
     public TopLayoutOnMixView(final Context context) {
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
@@ -1183,7 +1188,6 @@ class TopLayoutOnMixView {
         initNaverMap();
         initSearchbar();
     }
-
 
     public void initButtonViews() {
         parentButtonView = (LinearLayout) mainArView.findViewById(R.id.ar_mixview_parent_buttonview);
@@ -1219,23 +1223,17 @@ class TopLayoutOnMixView {
                 // TODO: 2017. 2. 12. wrieReviewActivity
                 // SearchActivity 로 먼저가야됨
 
-                Intent intent = new Intent(context, WriteReviewActivity.class);
                 NGeoPoint nGeoPoint = naverFragment.getCurrentLocation();
-                intent.putExtra("lat",nGeoPoint.getLatitude());
-                intent.putExtra("lon", nGeoPoint.getLongitude());
+                if(nGeoPoint == null)
+                    Toast.makeText(context, "아직 나의 위치가 갱신되지 않았습니다.", Toast.LENGTH_SHORT).show();
+                else {
+                    Intent intent = new Intent(context, SearchCategoryListActivity.class);
 
-                mainArView.setVisibility(View.GONE);
-                ((Activity)context).startActivityForResult(intent, WRITE_REVIEW);
-            }
-        });
-
-
-        final Button reviewOnOffBtn = (Button) mainArView.findViewById(R.id.ar_mixview_review_onoff);
-        reviewOnOffBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                reviewOnOffBtn.setBackgroundResource(R.drawable.icon_others_review_off);
-                reviewOnOffBtn.setBackgroundResource(R.drawable.icon_others_review_on);
+                    intent.putExtra("lat", nGeoPoint.getLatitude());
+                    intent.putExtra("lon", nGeoPoint.getLongitude());
+                    mainArView.setVisibility(View.GONE);
+                    ((Activity) context).startActivityForResult(intent, WRITE_REVIEW);
+                }
             }
         });
 
@@ -1283,7 +1281,7 @@ class TopLayoutOnMixView {
                 switch (actionId) {
                     case EditorInfo.IME_ACTION_SEARCH:
                         String queryString = searchText.getText().toString();
-                        Intent intent = new Intent(context, SearchListKeywordActivity.class);
+                        Intent intent = new Intent(context, SearchKeywordListActivity.class);
                         intent.putExtra("searchName", queryString);
                         InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(mainArView.getWindowToken(), 0);

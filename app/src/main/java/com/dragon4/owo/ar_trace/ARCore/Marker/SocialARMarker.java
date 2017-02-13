@@ -27,17 +27,20 @@ package com.dragon4.owo.ar_trace.ARCore.Marker;
 
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.os.Parcelable;
 
 import com.dragon4.owo.ar_trace.ARCore.MixView;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
 
+import java.io.Serializable;
+
 
 // 소셜 마커 클래스. 마커에서 확장(상속)
-public class SocialARMarker extends ARMarker {
+public class SocialARMarker extends ARMarker implements Serializable {
 	
-	public static final int MAX_OBJECTS = 20;	// 최대 객체 수
 
+	public final int MAX_OBJECTS=20;	// 최대 객체 수
 	public String getFlag;
 	// 생성자. 타이틀과 위도, 경도, 고도, 그리고 URL과 데이터 소스를 인자로 받는다
 	public SocialARMarker(String title, double latitude, double longitude,

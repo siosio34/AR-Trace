@@ -20,7 +20,7 @@ public class TraceActivity extends Activity implements View.OnClickListener {
 
     private ClientSelector clientSelector;
     public TraceRecyclerViewAdapter mAdapter;
-    private String buildingID = "경기도 수원시 영통구 영통동 1078";
+    private String buildingID;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,8 @@ public class TraceActivity extends Activity implements View.OnClickListener {
             String reviewTitle = reviewIntent.getStringExtra("title");
             // use a linear layout manager
 
-            clientSelector.getTraceDataFromServer("경기도 성남시 분당구 삼평동 703-3", mAdapter);
+            buildingID = getIntent().getStringExtra("title");
+            clientSelector.getTraceDataFromServer(buildingID, mAdapter);
 
             //Log.i("악",traceList.get(0).getLocationID());
 
@@ -51,7 +52,8 @@ public class TraceActivity extends Activity implements View.OnClickListener {
         }
         else {
             Bundle bundle = getIntent().getExtras();
-            clientSelector.getTraceDataFromServer(bundle.getString("buildingID"), mAdapter);
+            buildingID = bundle.getString("buildingID");
+            clientSelector.getTraceDataFromServer(buildingID, mAdapter);
 
             //Log.i("악",traceList.get(0).getLocationID());
 

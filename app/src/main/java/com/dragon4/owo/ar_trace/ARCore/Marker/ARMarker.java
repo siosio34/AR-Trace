@@ -33,6 +33,7 @@ import com.dragon4.owo.ar_trace.ARCore.gui.TextObj;
 import com.dragon4.owo.ar_trace.ARCore.render.Camera;
 import com.dragon4.owo.ar_trace.ARCore.render.MixVector;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 
 /**
@@ -40,7 +41,7 @@ import java.text.DecimalFormat;
  */
 
 // 화면에 찍힐 마커를 담당할 클래스. Comparable 구현
-abstract public class ARMarker implements Comparable<ARMarker> {
+abstract public class ARMarker implements Comparable<ARMarker>, Serializable {
 
 	private String ID;    // ID값
 	protected String title;    // 타이틀

@@ -3,6 +3,7 @@ package com.dragon4.owo.ar_trace.Network.Python;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.dragon4.owo.ar_trace.ARCore.Activity.TraceRecyclerViewAdapter;
 import com.dragon4.owo.ar_trace.FCM.FCMWebServerConnector;
@@ -136,5 +137,10 @@ public class PythonClient implements ClientSelector{
             FCMWebServerConnector connector = new FCMWebServerConnector();
             connector.sendLikePush(trace);
         }
+    }
+
+    @Override
+    public void getReviewNumberFromServer(String title, TextView reviewNumber) {
+        //TODO: 2017-02-12 getReviewNumberFromServer 파이썬 버전
     }
 }

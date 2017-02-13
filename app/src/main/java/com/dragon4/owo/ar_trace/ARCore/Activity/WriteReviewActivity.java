@@ -104,6 +104,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
 
         // 건물의 위치를 기반으로 리뷰를 씀. 여기서 주소좌표계는 31XXXXXX.XX구조 좌표게가 서로다름.
         locationName.setText(getIntent().getStringExtra("buildingID"));
+        placeName = getIntent().getStringExtra("buildingID");
 
         // 내 위치를 기반으로 주소를 가져오고 리뷰를 씀. 여기서 주소좌표계는 31.XXXXXX구조 좌표계가 서로 다름.
         /*
@@ -323,10 +324,6 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         // TODO: 2017. 1. 30. 이거 에러구문 처리 다시해야됨 
         if (currentBitmap != null)
             clientSelector.uploadImageToServer(trace,destination);
-
-        else {
-            Toast.makeText(getApplicationContext()," 이미지가 존재하지않습니다 ", Toast.LENGTH_SHORT). show();
-        }
 
         trace.setTraceID(placeName);
         trace.setLat(currentLat); // 경도

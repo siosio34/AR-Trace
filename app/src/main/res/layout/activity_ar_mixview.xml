@@ -126,12 +126,6 @@
                 android:layout_height="40dp"
                 android:layout_marginBottom="6dp"
                 android:background="@drawable/icon_write_review"/>
-            <Button
-                android:id="@+id/ar_mixview_review_onoff"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginBottom="6dp"
-                android:background="@drawable/icon_others_review_off"/>
         </LinearLayout>
         <Button
             android:id="@+id/ar_mixview_buttonview_hide"
