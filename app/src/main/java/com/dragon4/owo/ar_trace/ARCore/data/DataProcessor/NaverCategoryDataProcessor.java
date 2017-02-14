@@ -20,6 +20,7 @@ import java.util.List;
 public class NaverCategoryDataProcessor implements DataProcessor{
 
     private String deleteSpecialCharacter(String str) {
+        // TODO: 2017. 2. 14. 다른 특수문자 있을경우 생각해야됨.
         return str.replace("."," ");
     }
 

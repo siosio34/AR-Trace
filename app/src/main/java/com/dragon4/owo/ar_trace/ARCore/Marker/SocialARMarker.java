@@ -41,14 +41,15 @@ public class SocialARMarker extends ARMarker implements Serializable {
 	
 
 	public final int MAX_OBJECTS=20;	// 최대 객체 수
-	public String getFlag;
+	private String flag;
 	// 생성자. 타이틀과 위도, 경도, 고도, 그리고 URL과 데이터 소스를 인자로 받는다
 	public SocialARMarker(String title, double latitude, double longitude,
 						  double altitude, String URL, DataSource.DATASOURCE datasource, String flag) {
 		super(title, latitude, longitude, altitude, URL, datasource);
-
-		getFlag = flag;
+		this.flag = flag;
 	}
+
+
 
 	// 마커 갱신
 	@Override
@@ -75,7 +76,7 @@ public class SocialARMarker extends ARMarker implements Serializable {
 		if (isVisible) {
 			float maxHeight = Math.round(dw.getHeight() / 10f) + 1;	// 최대 높이 계산
 			// 데이터 소스의 비트맵 파일을 읽어온다
-			Bitmap bitmap = DataSource.getBitmap(getFlag);
+			Bitmap bitmap = DataSource.getBitmap(flag);
 			
 			// 비트맵 파일이 읽혔다면 적절한 위치에 출력
 			if(bitmap!=null) {
@@ -96,4 +97,11 @@ public class SocialARMarker extends ARMarker implements Serializable {
 		return MAX_OBJECTS;
 	}
 
+	public String getFlag() {
+		return flag;
+	}
+
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
 }

@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by joyeongje on 2017. 2. 12..
+ * Created by joyeongje on 2017. 2. 12..s
  */
 
 public class SearchCategoryListActivity extends ListParentActivity {
@@ -32,7 +32,7 @@ public class SearchCategoryListActivity extends ListParentActivity {
             SocialARMarker socialARMarker = (SocialARMarker)markers.get(i);
             NaverSearchMarker naverSearchMarker = new NaverSearchMarker(socialARMarker.getTitle(), socialARMarker.getLatitude(), socialARMarker.getLongitude(),
                     socialARMarker.getAltitude(), socialARMarker.getURL(), socialARMarker.getDatasource(),
-                    "", "", "", "");
+                    socialARMarker.getFlag(), "", "", "");
             dataList.add(naverSearchMarker);
         }
 
