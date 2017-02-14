@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dragon4.owo.ar_trace.Configure.ClientInstance;
 import com.dragon4.owo.ar_trace.Model.Trace;
 import com.dragon4.owo.ar_trace.Model.User;
 import com.dragon4.owo.ar_trace.Network.ClientSelector;
@@ -74,7 +75,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         setContentView(R.layout.layout_ar_mixview_write_review);
         loadActivity();
 
-        clientSelector = new FirebaseClient(); // 추후에 파이썬 서버 버젼도 가능케 할 예정
+        clientSelector = ClientInstance.getInstanceClient(); // 추후에 파이썬 서버 버젼도 가능케 할 예정
 
        // clientSelector = new PythonClient();
         currentUser = User.getMyInstance();
@@ -329,6 +330,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         trace.setLon(currentLon); // 위도
         trace.setPlaceName(placeName); // 장소이름
         trace.setWriteDate(new Date().getTime()); // 업로드    날짜
+
         trace.setUserName(currentUser.getUserName()); // 유조이름
         trace.setUserImageUrl(currentUser.getUserImageURL()); // 유저 이미지 유알엘
         trace.setUserToken(currentUser.getUserToken());

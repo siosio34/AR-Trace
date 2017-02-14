@@ -27,7 +27,7 @@ public class FCMWebServerConnector {
 
     public void sendLikePush(Trace trace) {
         try {
-            webServerUrl = "http://163.180.117.118/test.php";
+            webServerUrl = "http://163.180.117.118/PushServer.php";
             JSONObject obj = new JSONObject();
             obj.put("userToken", trace.getUserToken());
             obj.put("userID", User.getMyInstance().getUserId());
