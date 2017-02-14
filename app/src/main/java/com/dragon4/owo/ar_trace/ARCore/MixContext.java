@@ -97,20 +97,14 @@ public class MixContext extends ContextWrapper {
         this.mixView = (MixView) appCtx;
         this.ctx = appCtx.getApplicationContext();
 
-        // 액티비티의 자체 세팅을 공유할 프레퍼런스
-        SharedPreferences settings = getSharedPreferences(MixView.PREFS_NAME, 0);
-
-        for (DataSource.DATASOURCE source : DataSource.DATASOURCE.values()) {
-            // 선택된 데이터소스의 해쉬맵을 프레퍼런스 세팅값에 따라 설정
-            selectedDataSources.put(source, settings.getBoolean(source.toString(), false));
-            // 쉐어드 프리퍼런스에 해당키에 데이터가있으면 값넣어주고 아니면 false 리턴
-
-        }
-
         // 회전행렬을 일단 단위행렬로 세팅
         rotationM.toIdentity();
 
         int locationHash = 0;    // 위치 해쉬값
+
+        for (DataSource.DATASOURCE datasource : DataSource.DATASOURCE.values()) {
+            selectedDataSources.put(datasource, false);
+        }
 
         try {
             // 메인 컨텍스트의 위치 제공자로부터 위치 관리자 등록
@@ -236,12 +230,12 @@ public class MixContext extends ContextWrapper {
     public void setDataSource(DataSource.DATASOURCE source, Boolean selection) {
         selectedDataSources.put(source, selection);    // 선택된 데이터 소스의 상태를 세팅
 
-        // 변경된 사항을 프레퍼런스에 세팅하고 적용한다
-        SharedPreferences settings = getSharedPreferences(MixView.PREFS_NAME, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        // 선택된거 넣고 이게 트룬지 펄슨지 체크한다.
-        editor.putBoolean(source.toString(), selection);
-        editor.commit();
+      //  // 변경된 사항을 프레퍼런스에 세팅하고 적용한다
+      //  SharedPreferences settings = getSharedPreferences(MixView.PREFS_NAME, 0);
+      //  SharedPreferences.Editor editor = settings.edit();
+      //  // 선택된거 넣고 이게 트룬지 펄슨지 체크한다.
+      //  editor.putBoolean(source.toString(), selection);
+      //  editor.commit();
 
         // setDataSource(source, !selectedDataSources.get(source));
     }

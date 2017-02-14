@@ -383,10 +383,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             killOnError();    // 에러 여부를 체크한다
             requestWindowFeature(Window.FEATURE_NO_TITLE);    // 타이틀 바가 없는 윈도우 형태로
 
-			/*내부 메모리에 저장된 프레퍼런스를 불러온다*/
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-            SharedPreferences.Editor editor = settings.edit();    // 변경사항을 기록할 에디터
-
             // 프레임 레이아웃을 사용한다
             FrameLayout frameLayout = new FrameLayout(this);
 
@@ -414,7 +410,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
             addContentView(topLayoutOnMixView.mainArView, params);
 
-            //이거 맨위에 놔두면 topLayoutOnMixView 객체 없어서 터짐
+            // 이거 맨위에 놔두면 topLayoutOnMixView 객체 없어서 터짐
             handleIntent(getIntent());    // 인텐트 제어
 
             // 초기 세팅된 상태가 아니라면
@@ -431,6 +427,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                 dataView = new DataView(mixContext);
 
                 isInited = true;    // 세팅 플래그 true
+
             }
 
             if (mixContext.isActualLocation() == false) {
@@ -1140,6 +1137,7 @@ class AugmentedView extends View {
             if (!MixView.getDataView().isInited()) {
                 MixView.getDataView().init(MixView.dWindow.getWidth(), MixView.dWindow.getHeight());
             }
+
 
             // 데이터 뷰의 데이터들을 윈도우에 그린다
             MixView.getDataView().draw(MixView.dWindow);
