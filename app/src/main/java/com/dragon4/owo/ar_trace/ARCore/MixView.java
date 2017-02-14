@@ -363,7 +363,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
 
         super.onCreate(savedInstanceState);
 
-
+        DataSource.createIcons(getResources());
 
         try {
             // 전원관리자
