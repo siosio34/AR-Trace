@@ -142,8 +142,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         */
     }
 
-    // 경기도 수원시 영통구 영통동 1078
-
+    /*
     public String parsingPlaceNameJson(String realPlaceNameString) throws JSONException {
         String place = "";
         JSONObject reverseObject = new JSONObject(realPlaceNameString);
@@ -161,7 +160,7 @@ public class WriteReviewActivity extends Activity implements View.OnClickListene
         }
         return locationName;
     }
-
+ */
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ar_mixview_write_review_back:

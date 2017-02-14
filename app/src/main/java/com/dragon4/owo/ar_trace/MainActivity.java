@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.dragon4.owo.ar_trace.ARCore.Activity.GoogleSignActivity;
+import com.dragon4.owo.ar_trace.Configure.ClientInstance;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 
@@ -24,22 +25,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(com.dragon4.owo.ar_trace.R.layout.activity_main);
-        //FCMInstanceIDService getTokenService = new FCMInstanceIDService();
+
+        // client 설정
+        ClientInstance.setInstanceClient("FIREBASE");
 
         Intent SignInIntent = new Intent(MainActivity.this,GoogleSignActivity.class);
         startActivity(SignInIntent);
-
-        /*
-        String token = FirebaseInstanceId.getInstance().getToken();
-        Log.i(TAG,token);
-
-        if (getIntent().getExtras() != null) {
-            for (String key : getIntent().getExtras().keySet()) {
-                Object value = getIntent().getExtras().get(key);
-                Log.d(TAG, "Key: " + key + " Value: " + value);
-            }
-        }
-        */
 
     }
 

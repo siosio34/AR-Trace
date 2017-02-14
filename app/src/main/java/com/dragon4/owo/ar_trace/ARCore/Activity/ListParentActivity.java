@@ -13,11 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dragon4.owo.ar_trace.ARCore.NaverHttpHandler;
 import com.dragon4.owo.ar_trace.ARCore.Marker.NaverSearchMarker;
+import com.dragon4.owo.ar_trace.ARCore.NaverHttpHandler;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
-import com.dragon4.owo.ar_trace.Model.Trace;
-import com.dragon4.owo.ar_trace.Model.User;
 import com.dragon4.owo.ar_trace.Network.ClientSelector;
 import com.dragon4.owo.ar_trace.Network.Firebase.FirebaseClient;
 import com.dragon4.owo.ar_trace.R;
@@ -27,7 +25,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;

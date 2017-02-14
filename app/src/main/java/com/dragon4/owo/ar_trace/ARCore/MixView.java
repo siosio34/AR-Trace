@@ -105,6 +105,7 @@ import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
 import com.dragon4.owo.ar_trace.ARCore.data.DataSource;
 import com.dragon4.owo.ar_trace.ARCore.gui.PaintScreen;
 import com.dragon4.owo.ar_trace.ARCore.render.Matrix;
+import com.dragon4.owo.ar_trace.Configure.ClientInstance;
 import com.dragon4.owo.ar_trace.FCM.FCMMessagingService;
 import com.dragon4.owo.ar_trace.NaverMap.FragmentMapview;
 import com.dragon4.owo.ar_trace.NaverMap.NMapPOIflagType;
@@ -362,8 +363,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
 
         super.onCreate(savedInstanceState);
 
-        // 데이터 소스로부터 아이콘 생성
-        DataSource.createIcons(getResources());
+
 
         try {
             // 전원관리자
@@ -941,8 +941,10 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                 break;
         }
 
-        if(mixContext.isDataSourceSelected(markerList.get(0).getDatasource()))
+        if(mixContext.isDataSourceSelected(markerList.get(0).getDatasource())) {
+            topLayoutOnMixView.naverFragment.removeCategoryMarkers(naverCategory);
             topLayoutOnMixView.naverFragment.drawCategoryMarkers(markerList, naverCategory);
+        }
         else
             topLayoutOnMixView.naverFragment.removeCategoryMarkers(naverCategory);
     }

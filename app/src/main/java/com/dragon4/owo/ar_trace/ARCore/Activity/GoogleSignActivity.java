@@ -29,16 +29,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.dragon4.owo.ar_trace.ARCore.MixView;
+import com.dragon4.owo.ar_trace.Configure.ClientInstance;
 import com.dragon4.owo.ar_trace.Model.User;
 import com.dragon4.owo.ar_trace.Network.ClientSelector;
-import com.dragon4.owo.ar_trace.Network.Firebase.FirebaseClient;
 import com.dragon4.owo.ar_trace.R;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -55,20 +54,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.POST;
 
 
 public class GoogleSignActivity extends DialogActivity implements
@@ -142,7 +129,6 @@ public class GoogleSignActivity extends DialogActivity implements
         loginFilter.addAction("LOGIN_SUCCESS");
         registerReceiver(loginReceiver,loginFilter);
     }
-
 
 
     // [START on_start_add_listener]
@@ -258,7 +244,7 @@ public class GoogleSignActivity extends DialogActivity implements
     }
 
     public void loginUser(final FirebaseUser firebaseUser) {
-        ClientSelector clientSelector = new FirebaseClient();
+        ClientSelector clientSelector = ClientInstance.getInstanceClient();
 
         //새로 등록할 유저
         String uid = firebaseUser.getUid();

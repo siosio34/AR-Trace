@@ -18,4 +18,6 @@ public class FontSetting extends Application {
                 .addItalic(Typekit.createFromAsset(this, "NanumBarunpenB.ttf"))
                 .addBoldItalic(Typekit.createFromAsset(this, "NanumBarunpenB.ttf"));
     }
+
+
 }
