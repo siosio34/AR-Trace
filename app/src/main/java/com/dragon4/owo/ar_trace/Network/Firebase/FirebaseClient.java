@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -60,7 +61,7 @@ public class FirebaseClient implements ClientSelector {
     private Bitmap currentBitmap;
 
     private String makeTraceKey(String id) {
-        return myRef.child("building").child(id).push().getKey();
+        return myRef.child("building").child(id).child("trace").push().getKey();
     }
 
     /*
@@ -108,6 +109,8 @@ public class FirebaseClient implements ClientSelector {
                         if (getUserFromDB == null) {
                             if(User.getMyInstance().getUserToken() != null)
                                 currentUser.setUserToken(User.getMyInstance().getUserToken());
+                            else
+                                currentUser.setUserToken(FirebaseInstanceId.getInstance().getToken());
 
                             myRef.child("users").child(currentUser.getUserId()).setValue(currentUser);
                             User.setMyInstance(currentUser);
@@ -116,6 +119,10 @@ public class FirebaseClient implements ClientSelector {
                         } else { // 존재할경우 -> 불러와야함
                             if(User.getMyInstance().getUserToken() != null)
                                 getUserFromDB.setUserToken(User.getMyInstance().getUserToken());
+                            else
+                                getUserFromDB.setUserToken(FirebaseInstanceId.getInstance().getToken());
+
+                            myRef.child("users").child(getUserFromDB.getUserId()).setValue(getUserFromDB);
                             User.setMyInstance(getUserFromDB);
                             Log.i("기존 유저정보", User.getMyInstance().toString());
                         }
@@ -272,10 +279,8 @@ public class FirebaseClient implements ClientSelector {
         myRef.child("building").child(trace.getLocationID()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, Object> childUpdates = new HashMap<>();
-                childUpdates.put("lat", trace.getLat());
-                childUpdates.put("lon", trace.getLon());
-                dataSnapshot.getRef().setValue(childUpdates);
+                dataSnapshot.child("lat").getRef().setValue(trace.getLat());
+                dataSnapshot.child("lat").getRef().setValue(trace.getLon());
                 dataSnapshot.child("trace").child(trace.getTraceID()).getRef().setValue(trace);
             }
 
