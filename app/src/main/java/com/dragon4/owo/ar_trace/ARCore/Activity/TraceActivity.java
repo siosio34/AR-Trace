@@ -51,6 +51,7 @@ public class TraceActivity extends Activity implements View.OnClickListener {
             textView.setText(reviewTitle + " 리뷰");
         }
         else {
+
             Bundle bundle = getIntent().getExtras();
             buildingID = bundle.getString("buildingID");
             clientSelector.getTraceDataFromServer(buildingID, mAdapter);

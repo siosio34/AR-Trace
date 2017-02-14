@@ -19,6 +19,10 @@ import java.util.List;
 
 public class NaverCategoryDataProcessor implements DataProcessor{
 
+    private String deleteSpecialCharacter(String str) {
+        return str.replace("."," ");
+    }
+
 
     @Override
     public List<ARMarker> load(String rawData, DataSource.DATASOURCE datasource) throws JSONException {
@@ -62,10 +66,13 @@ public class NaverCategoryDataProcessor implements DataProcessor{
     public ARMarker processCategoryJsonObject(JSONObject jo, DataSource.DATASOURCE datasource) throws JSONException {
         ARMarker marker = null;
 
+        String title = jo.getString("name");
+        title = deleteSpecialCharacter(title);
+
         String id = jo.getString("id");
         String naverWebLink = "http://map.naver.com/local/siteview.nhn?code=" + id.substring(1);
 
-        marker = new SocialARMarker(jo.getString("name"),
+        marker = new SocialARMarker(title,
                 jo.getDouble("y"),
                 jo.getDouble("x"),
                 0,
@@ -81,6 +88,9 @@ public class NaverCategoryDataProcessor implements DataProcessor{
     public ARMarker processBusJsonObject(JSONObject jo, DataSource.DATASOURCE datasource) throws JSONException {
         ARMarker marker = null;
 
+        String title = jo.getString("stationDisplayName");
+        title = deleteSpecialCharacter(title);
+
         String link = jo.getString("stationDisplayID");
         String[] sTemp = link.split("-");
         link = "";
@@ -93,7 +103,7 @@ public class NaverCategoryDataProcessor implements DataProcessor{
         webBusLink = "http://lab.khlug.org/manapie/bus_arrival.php?station=" + link;
         Log.i("webBusLink",webBusLink);
 
-        marker = new SocialARMarker(jo.getString("stationDisplayName"),
+        marker = new SocialARMarker(title,
                 jo.getDouble("y"),
                 jo.getDouble("x"),
                 0,
