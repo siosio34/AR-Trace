@@ -219,9 +219,6 @@ public class DataView {
                 // 현재의 위치로부터 위도, 경도, 고도 값을 읽고
                 double lat = curFix.getLatitude(), lon = curFix.getLongitude(), alt = curFix.getAltitude();
 
-                // 각각의 데이터 소스들 모두에 적용
-                // TODO: 2017. 1. 9. 이거 리팩 토링해야됨.
-
                 for (DataSource.DATASOURCE source : DataSource.DATASOURCE.values()) {
                     // 선택된 데이터 소스로 데이터 요청을 한다
                     if (mixContext.isDataSourceSelected(source))  { // 선택된것 ~
@@ -236,7 +233,6 @@ public class DataView {
             // 위의 절차를 거치고도 활성화 된 데이터 소스가 아무것도 없는 경우
             if (state.nextLStatus == MixState.NOT_STARTED)
                 state.nextLStatus = MixState.DONE;    // 다음 상태는 완료 상태로
-
 
 
         } else if (state.nextLStatus == MixState.PROCESSING) {    // 처리중인 상태일 경우
@@ -258,6 +254,7 @@ public class DataView {
 
                     // 데이터 핸들러에 마커를 추가 한다
                     Log.i(MixView.TAG, "Adding Markers");
+
                     dataHandler.addMarkers(dRes.getARMarkers());
                     dataHandler.onLocationChanged(curFix);    // 위치를 재설정
                     mixContext.mixView.drawCategoryMarkers(dRes.getARMarkers());

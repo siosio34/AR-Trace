@@ -57,7 +57,23 @@ public class DataHandler implements Serializable{
 		// 추가 이후 리스트의 사이즈 로그 생성
 		Log.d(MixView.TAG, "ARMarker count: "+markerList.size());
 	}
-	
+
+	public void clearMarkerList() {
+		markerList.clear();
+	}
+
+	public void cleaMarketListUnCheckedDataSource(DataSource.DATASOURCE dataSource) {
+
+		Log.v(MixView.TAG, "ARMarkerDa before: "+markerList.size());
+		for(int i = 0 ; i < markerList.size(); i++) {
+			if(markerList.get(i).getDatasource() == dataSource) {
+				markerList.remove(i);
+				i--;
+			}
+		}
+		Log.d(MixView.TAG, "ARMarkerDa count: "+markerList.size());
+	}
+
 	// 마커 정렬. 기본 소트를 이용
 	public void sortMarkerList() {
 		Collections.sort(markerList); 

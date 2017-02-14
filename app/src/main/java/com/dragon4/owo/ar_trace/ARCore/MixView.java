@@ -287,55 +287,72 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
         //  if (dataView.isFrozen())
         //   dataView.setFrozen(false);
 
-        DataSource.DATASOURCE datasource = null;
+        DataSource.DATASOURCE selectedDatasource = null;
 
         DataConvertor dataConvertor = new DataConvertor();
 
         // TODO: 2016. 12. 9. 다른 카테고리 추가해야된다.
         switch (v.getId()) {
             case R.id.ar_mixview_cafe:
-                datasource = DataSource.DATASOURCE.CAFE;
+                selectedDatasource = DataSource.DATASOURCE.CAFE;
                 break;
 
             case R.id.ar_mixview_bus:
-                datasource = DataSource.DATASOURCE.BUSSTOP;
+                selectedDatasource = DataSource.DATASOURCE.BUSSTOP;
                 break;
 
             case R.id.ar_mixview_convenience_store:
-                datasource = DataSource.DATASOURCE.Convenience;
+                selectedDatasource = DataSource.DATASOURCE.Convenience;
                 break;
 
             case R.id.ar_mixview_restaurant:
-                datasource = DataSource.DATASOURCE.Restaurant;
+                selectedDatasource = DataSource.DATASOURCE.Restaurant;
                 break;
 
             case R.id.ar_mixview_bank:
-                datasource = DataSource.DATASOURCE.BANK;
+                selectedDatasource = DataSource.DATASOURCE.BANK;
                 break;
 
             case R.id.ar_mixview_hospital:
-                datasource = DataSource.DATASOURCE.HOSPITAL;
+                selectedDatasource = DataSource.DATASOURCE.HOSPITAL;
                 break;
 
             case R.id.ar_mixview_lodgment:
-                datasource = DataSource.DATASOURCE.ACCOMMODATION;
+                selectedDatasource = DataSource.DATASOURCE.ACCOMMODATION;
                 break;
 
             default:
-                datasource = null;
+                selectedDatasource = null;
                 break;
         }
 
-        if (datasource == null)
+        if (selectedDatasource == null)
             Toast.makeText(mixContext, "지원하는 데이터소스없음", Toast.LENGTH_SHORT).show();
 
         else {
             Location location = mixContext.getCurrentLocation();
-            Toast.makeText(mixContext, datasource.toString(), Toast.LENGTH_SHORT).show();
-            Log.i("로케이션 경도", String.valueOf(location.getLatitude()));
-            mixContext.setDataSource(datasource,!mixContext.isDataSourceSelected(datasource));
-            dataView.requestData(DataSource.createRequestCategoryURL(datasource, location.getLatitude(), location.getLongitude(),
-                    location.getAltitude(), 20), DataSource.dataFormatFromDataSource(datasource), datasource);
+
+            dataView.getDataHandler().clearMarkerList(); // 마커들 삭제
+            topLayoutOnMixView.naverFragment.clearCategoryMarker(); // 지도에 있는 마커들 삭제
+
+            for (DataSource.DATASOURCE dataSource : DataSource.DATASOURCE.values()) {
+
+                if(dataSource != selectedDatasource)
+                    mixContext.setDataSource(dataSource,false);
+                else
+                    mixContext.setDataSource(selectedDatasource,!mixContext.isDataSourceSelected(selectedDatasource));
+            }
+
+
+
+            //dataView.getDataHandler().cleaMarketListUnCheckedDataSource(selectedDatasource); // 마커 삭제
+            Log.i(selectedDatasource.toString(),"삭제됨");
+            if(mixContext.isDataSourceSelected(selectedDatasource)) {
+                dataView.requestData(DataSource.createRequestCategoryURL(selectedDatasource, location.getLatitude(), location.getLongitude(),
+                        location.getAltitude(), 20), DataSource.dataFormatFromDataSource(selectedDatasource), selectedDatasource);
+            }
+
+
         }
     }
 
@@ -627,9 +644,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                 // gps, 네트워크가 먹통일 때의 기본 위치 설정
                 Location hardFix = new Location("reverseGeocoded");
 
-                //				hardFix.setLatitude(0);
-                //				hardFix.setLongitude(0);
-
                 try {
                     // 위치 관리자로부터 gps, 네트워크의 마지막으로 알려진 장소를 얻어 옮
                     Location gps = locationMgr.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -909,7 +923,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     }
 
     public void drawCategoryMarkers(List<ARMarker> markerList) {
-        //DataSource.DATASOURCE.~~:
+
         int naverCategory = -1;
         switch (markerList.get(0).getDatasource()) {
             case CAFE:
@@ -941,12 +955,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                 break;
         }
 
-        if(mixContext.isDataSourceSelected(markerList.get(0).getDatasource())) {
-            topLayoutOnMixView.naverFragment.removeCategoryMarkers(naverCategory);
-            topLayoutOnMixView.naverFragment.drawCategoryMarkers(markerList, naverCategory);
-        }
-        else
-            topLayoutOnMixView.naverFragment.removeCategoryMarkers(naverCategory);
+        topLayoutOnMixView.naverFragment.drawCategoryMarkers(markerList, naverCategory);
     }
 }
 

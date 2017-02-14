@@ -380,8 +380,9 @@ public class FragmentMapview extends Fragment {
         NMapPOIdata poIdata = new NMapPOIdata(2, mMapViewerResourceProvider);
 
         poIdata.beginPOIdata(markerList.size());
-        for(ARMarker marker : markerList)
+        for(ARMarker marker : markerList) {
             poIdata.addPOIitem(marker.getLongitude(), marker.getLatitude(), "", naverCategory, 0);
+        }
         poIdata.endPOIdata();
 
         //create POI data overlay
