@@ -1,6 +1,7 @@
 package com.dragon4.owo.ar_trace.Model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by joyeongje on 2016. 12. 31..
@@ -13,6 +14,7 @@ public class User {
     private String userEmail;
     private String userImageURL;
     private String userToken;
+    private List<TracePointer> userTraceList;
 
     private static User currentUser = new User();
 
@@ -69,5 +71,13 @@ public class User {
 
     public void setUserToken(String userToken) {
         this.userToken = userToken;
+    }
+
+    public List<TracePointer> getUserTraceList() {
+        return userTraceList;
+    }
+
+    public void setUserTraceList(List<TracePointer> userTraceList) {
+        this.userTraceList = userTraceList;
     }
 }

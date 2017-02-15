@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.dragon4.owo.ar_trace.ARCore.Activity.TraceRecyclerViewAdapter;
 import com.dragon4.owo.ar_trace.FCM.FCMWebServerConnector;
 import com.dragon4.owo.ar_trace.Model.Trace;
+import com.dragon4.owo.ar_trace.Model.TracePointer;
 import com.dragon4.owo.ar_trace.Model.User;
 import com.dragon4.owo.ar_trace.Network.ClientSelector;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -34,6 +35,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -117,11 +119,10 @@ public class FirebaseClient implements ClientSelector {
                             Log.i("신규 유저 정보", User.getMyInstance().toString());
 
                         } else { // 존재할경우 -> 불러와야함
-                            if(User.getMyInstance().getUserToken() != null)
-                                getUserFromDB.setUserToken(User.getMyInstance().getUserToken());
-                            else
-                                getUserFromDB.setUserToken(FirebaseInstanceId.getInstance().getToken());
-
+                            String token = FirebaseInstanceId.getInstance().getToken();
+                            if(getUserFromDB.getUserToken().compareTo(token) != 0)
+                                updateTokenToServer(getUserFromDB.getUserTraceList(), token);
+                            getUserFromDB.setUserToken(token);
                             myRef.child("users").child(getUserFromDB.getUserId()).setValue(getUserFromDB);
                             User.setMyInstance(getUserFromDB);
                             Log.i("기존 유저정보", User.getMyInstance().toString());
@@ -141,6 +142,23 @@ public class FirebaseClient implements ClientSelector {
                 }
         );
 
+    }
+
+    private void updateTokenToServer(final List<TracePointer> infoList, final String token) {
+        myRef.child("building").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Object> childUpdates = new HashMap<>();
+                for(int i=0; i<infoList.size(); i++)
+                    childUpdates.put("/building/" + infoList.get(0).getBuildingID() + "/trace/" + infoList.get(0).getTraceID() + "/userToken", token);
+                myRef.updateChildren(childUpdates);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -276,16 +294,26 @@ public class FirebaseClient implements ClientSelector {
         final String traceKey = makeTraceKey(trace.getLocationID());
         trace.setTraceID(traceKey);
 
-        myRef.child("building").child(trace.getLocationID()).addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.child("users").child(User.getMyInstance().getUserId()).child("userTraceList").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                dataSnapshot.child("lat").getRef().setValue(trace.getLat());
-                dataSnapshot.child("lat").getRef().setValue(trace.getLon());
-                dataSnapshot.child("trace").child(trace.getTraceID()).getRef().setValue(trace);
+                List<TracePointer> pointers = User.getMyInstance().getUserTraceList();
+                if(pointers == null)
+                    pointers = new ArrayList<>();
+                TracePointer pointer = new TracePointer(trace.getLocationID(), trace.getTraceID());
+                pointers.add(pointer);
+
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put("/building/" + trace.getLocationID() + "/lat", trace.getLat());
+                childUpdates.put("/building/" + trace.getLocationID() + "/lon", trace.getLon());
+                childUpdates.put("/building/" + trace.getLocationID() + "/trace/" + trace.getTraceID(), trace);
+                childUpdates.put("/users/" + User.getMyInstance().getUserId() + "/userTraceList", pointers);
+                myRef.updateChildren(childUpdates);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }
