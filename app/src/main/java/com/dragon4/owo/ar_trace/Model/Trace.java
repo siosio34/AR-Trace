@@ -29,7 +29,7 @@ public class Trace {
     private String userId; // 유저아이디
 
     @Exclude
-    private HashMap<String, String> likeUserList;
+    private HashMap<String, Boolean> likeUserList;
 
     public String getLocationID() {
         return locationID;
@@ -127,11 +127,11 @@ public class Trace {
         this.userName = userName;
     }
 
-    public HashMap<String, String> getLikeUserList() {
+    public HashMap<String, Boolean> getLikeUserList() {
         return likeUserList;
     }
 
-    public void setLikeUserList(HashMap<String, String> likeUserList) {
+    public void setLikeUserList(HashMap<String, Boolean> likeUserList) {
         this.likeUserList = likeUserList;
     }
 

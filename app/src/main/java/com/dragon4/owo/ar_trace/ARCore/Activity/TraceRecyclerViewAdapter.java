@@ -90,14 +90,9 @@ public class TraceRecyclerViewAdapter extends RecyclerView.Adapter {
         traceHolder.dateView.setText(MixUtils.getDateString(trace.getWriteDate()));
         traceHolder.likeNumberView.setText(String.valueOf(trace.getLikeNum()));
 
-
-
         // 1. 내가 좋아햇는지 여부에 따라 좋아요에 따라 색깔을 칠한다. clientSelctor.checkLikeTraceUser(String userID,TraceHolder traceholder);
         // 2. 클릭할때마다 색깔만 바꾸는 이벤트 처리
-        // 3. 마지막에 리뷰 홀더 사라질때 체크가 되어있어 있던거 처리
-
-
-
+        // 3. 마지막에 리뷰 홀더 사라질때 체크가 되어있어 있던거
         // 클릭하면 색깔만 바꾸게
         // 리사이클러뷰에서 사라질때 전송을 한다..?
 
@@ -114,11 +109,19 @@ public class TraceRecyclerViewAdapter extends RecyclerView.Adapter {
 
         //void getTraceLikeInformation(String traceID,TraceRecyclerViewAdapter.TraceViewHolder traceAdapter);
         // 좋아요 데이터는 비동기로 가져오자!
-        //clientSelector.getTraceLikeInformation(trace,traceHolder);
+        clientSelector.getTraceLikeInformation(trace, this, traceHolder);
+        traceHolder.likeWrapper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                traceHolder.isLikeClicked = !traceHolder.isLikeClicked;
+                setLike(traceHolder);
+                traceHolder.likeNumberView.setText(String.valueOf(Integer.parseInt(traceHolder.likeNumberView.getText().toString()) + (traceHolder.isLikeClicked ? 1 : -1)));
+                clientSelector.sendTraceLikeToServer(traceHolder.isLikeClicked, trace);
+            }
+        });
     }
 
-    public void setLike(TraceViewHolder traceHolder, int number) {
-
+    public void setLike(TraceViewHolder traceHolder) {
         if(traceHolder.isLikeClicked) {
             traceHolder.likeNumberView.setTextColor(Color.parseColor("#A5009017"));
             traceHolder.likeTextView.setTextColor(Color.parseColor("#A5009017"));
@@ -130,10 +133,6 @@ public class TraceRecyclerViewAdapter extends RecyclerView.Adapter {
             traceHolder.likeIconView.setImageResource(R.drawable.ic_like_cancel);
         }
     }
-
-
-
-
 
     @Override
     public int getItemCount() {

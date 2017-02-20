@@ -1,5 +1,6 @@
 package com.dragon4.owo.ar_trace.FCM;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -80,7 +81,11 @@ public class FCMMessagingService extends FirebaseMessagingService {
         try {
             JSONObject jsonObj = new JSONObject(messageBody);
 
-            Intent intent = new Intent(this, MixView.class);
+            Intent intent;
+            if(isAppOnForeground(getApplicationContext()))
+                intent = new Intent(this, MixView.class);
+            else
+                intent = new Intent(this, GoogleSignActivity.class);
 
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_SINGLE_TOP);
             Bundle bundle = new Bundle();
@@ -127,5 +132,20 @@ public class FCMMessagingService extends FirebaseMessagingService {
 
     public static void clear(String traceID) {
         tracePushHashMap.remove(traceID);
+    }
+
+    private boolean isAppOnForeground(Context context) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+        if (appProcesses == null) {
+            return false;
+        }
+        final String packageName = context.getPackageName();
+        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+            if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && appProcess.processName.equals(packageName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

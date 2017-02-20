@@ -142,6 +142,11 @@ public class PythonClient implements ClientSelector{
         return traceList;
     }
 
+    @Override
+    public void getTraceLikeInformation(Trace trace, TraceRecyclerViewAdapter adapter, TraceRecyclerViewAdapter.TraceViewHolder reviewHolder) {
+
+    }
+
 
     @Override
     public void sendTraceLikeToServer(final boolean isLikeClicked, Trace trace) {
@@ -155,14 +160,14 @@ public class PythonClient implements ClientSelector{
             }
         }
     }
-    
+
     private void sendTraceLikeToPython(final boolean isLikeClicked, final Trace trace) {
 
         final String traceLikeURL = pythonServerUrl;
         // TODO: 2017. 2. 16. python 좋아요 기능 구현
 
     }
-    
+
 
     @Override
     public void getReviewNumberFromServer(String title, TextView reviewNumber) {

@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dragon4.owo.ar_trace.ARCore.Activity.TraceRecyclerViewAdapter;
 import com.dragon4.owo.ar_trace.ARCore.MixUtils;
@@ -59,11 +60,6 @@ public class FirebaseClient implements ClientSelector {
     private int uploadFailCount = 0;
     private int uploadedThumbnailCount = 0;
     private int uploadFailThumbnailCount = 0;
-
-    private boolean isWorking = false;
-    public boolean isWorking() {
-        return isWorking;
-    }
 
     public FirebaseClient() {
 
@@ -325,15 +321,11 @@ public class FirebaseClient implements ClientSelector {
 
     @Override
     public void sendTraceLikeToServer(boolean isLikeClicked, Trace trace) {
-        if(!isWorking) {
-            isWorking = true;
-
-            // trace Server
-            sendTraceLikeToFirebase(isLikeClicked, trace);
-            if (isLikeClicked && trace.getUserId().compareTo(User.getMyInstance().getUserId()) != 0) {
-                FCMWebServerConnector connector = new FCMWebServerConnector();
-                connector.sendLikePush(trace);
-            }
+        // trace Server
+        sendTraceLikeToFirebase(isLikeClicked, trace);
+        if (isLikeClicked && trace.getUserId().compareTo(User.getMyInstance().getUserId()) != 0) {
+            FCMWebServerConnector connector = new FCMWebServerConnector();
+            connector.sendLikePush(trace);
         }
     }
 
@@ -341,41 +333,31 @@ public class FirebaseClient implements ClientSelector {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference("building").child(trace.getLocationID()).child("trace").child(trace.getTraceID());
 
-        myRef.child("likeNum").runTransaction(new Transaction.Handler() {
+        myRef.runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
-                if(isLikeClicked)
-                    mutableData.setValue((long)mutableData.getValue() + 1);
-                else
-                    mutableData.setValue((long)mutableData.getValue() - 1);
+                MutableData likeNumData = mutableData.child("likeNum");
+                MutableData likeUserListData = mutableData.child("likeUserList").child(User.getMyInstance().getUserId());
+                Object likeNum = likeNumData.getValue();
+                if(likeNum == null)
+                    return Transaction.success(mutableData);
+
+                if(isLikeClicked) {
+                    likeNumData.setValue((long) likeNum + 1);
+                    likeUserListData.setValue(true);
+                }
+                else {
+                    likeNumData.setValue((long) likeNum - 1);
+                    likeUserListData.setValue(null);
+                }
 
                 return Transaction.success(mutableData);
             }
 
             @Override
             public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                if(databaseError == null && b == true)
-                    sendTraceLikeClickedUserToFirebase(myRef, isLikeClicked);
-                else
-                    sendTraceLikeToFirebase(isLikeClicked, trace);
-            }
-        });
-    }
-
-    private void sendTraceLikeClickedUserToFirebase(final DatabaseReference myRef, final boolean isLikeClicked) {
-        myRef.child("likeUserList").child(User.getMyInstance().getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (isLikeClicked)
-                    dataSnapshot.getRef().setValue("");
-                else
-                    dataSnapshot.getRef().removeValue();
-                isWorking = false;
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                sendTraceLikeClickedUserToFirebase(myRef, isLikeClicked);
+                if(databaseError != null) {
+                }
             }
         });
     }
@@ -401,53 +383,30 @@ public class FirebaseClient implements ClientSelector {
         });
     }
 
-    //@Override
-    //public void getTraceLikeInformation(String traceID,TraceRecyclerViewAdapter traceRecyclerViewAdapter) {
-//
-    //    // void getTraceLikeInformation(String traceID,TraceRecyclerViewAdapter.ReviewViewHolder traceAdapter)
-    //    // likeNum 과 likeUserList 값 처리
-//
-    //    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    //    DatabaseReference myRef = database.getReference("building").child(trace.getLocationID()).child("trace").child(trace.getTraceID());
-    //    myRef.child("likeNum").addListenerForSingleValueEvent(new ValueEventListener() {
-    //        @Override
-    //        public void onDataChange(DataSnapshot dataSnapshot) {
-    //            reviewHolder.likeNumberView.setText(""+dataSnapshot.getValue());
-    //        }
-//
-    //        @Override
-    //        public void onCancelled(DatabaseError databaseError) {
-//
-    //        }
-    //    });
-//
-    //    myRef.child("likeUserList").child(User.getMyInstance().getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
-    //        @Override
-    //        public void onDataChange(DataSnapshot dataSnapshot) {
-    //            if(dataSnapshot.exists())
-    //                reviewHolder.isLikeClicked = true;
-    //            else
-    //                reviewHolder.isLikeClicked = false;
-//
-    //            setLike(reviewHolder, Integer.parseInt(reviewHolder.likeNumberView.getText().toString()));
-//
-    //            reviewHolder.likeWrapper.setOnClickListener(new View.OnClickListener() {
-    //                @Override
-    //                public void onClick(View view) {
-    //                    if(!((FirebaseClient)clientSelector).isWorking()) {
-    //                        reviewHolder.isLikeClicked = !reviewHolder.isLikeClicked;
-    //                        setLike(reviewHolder, Integer.parseInt(reviewHolder.likeNumberView.getText().toString()) + (reviewHolder.isLikeClicked ? 1 : -1));
-    //                        sendTraceLikeToServer(reviewHolder.isLikeClicked, trace);
-    //                    }
-    //                }
-    //            });
-    //        }
-//
-    //        @Override
-    //        public void onCancelled(DatabaseError databaseError) {
-//
-    //        }
-    //    });
-    //}
+    @Override
+    public void getTraceLikeInformation(final Trace trace, final TraceRecyclerViewAdapter adapter, final TraceRecyclerViewAdapter.TraceViewHolder traceHolder) {
 
+        // void getTraceLikeInformation(String traceID,TraceRecyclerViewAdapter.ReviewViewHolder traceAdapter)
+        // likeNum 과 likeUserList 값 처리
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("building").child(trace.getLocationID()).child("trace").child(trace.getTraceID());
+
+        myRef.child("likeUserList").child(User.getMyInstance().getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists())
+                    traceHolder.isLikeClicked = true;
+                else
+                    traceHolder.isLikeClicked = false;
+
+                adapter.setLike(traceHolder);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.dragon4.owo.ar_trace.ARCore.MixView;
 import com.dragon4.owo.ar_trace.Configure.ClientInstance;
+import com.dragon4.owo.ar_trace.FCM.FCMMessagingService;
 import com.dragon4.owo.ar_trace.Model.User;
 import com.dragon4.owo.ar_trace.Network.ClientSelector;
 import com.dragon4.owo.ar_trace.R;
@@ -132,7 +133,6 @@ public class GoogleSignActivity extends DialogActivity implements
         registerReceiver(loginReceiver,loginFilter);
     }
 
-
     // [START on_start_add_listener]
     @Override
     public void onStart() {
@@ -166,7 +166,7 @@ public class GoogleSignActivity extends DialogActivity implements
                 firebaseAuthWithGoogle(account);
 
             } else {
-                
+
                 // Google Sign In failed, update UI appropriately
                 // [START_EXCLUDE]
                 //  updateUI(null);// [END_EXCLUDE]
@@ -277,5 +277,4 @@ public class GoogleSignActivity extends DialogActivity implements
         startActivity(intent);
         finish();
     }
-
 }
