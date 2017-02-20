@@ -1003,7 +1003,6 @@ class CameraSurface extends SurfaceView implements SurfaceHolder.Callback {
             }
 
             camera = Camera.open();    // 카메라 오픈
-            camera.setDisplayOrientation(90);
             camera.setPreviewDisplay(holder);    // 서페이스 홀더에 영상을 출력할 곳 지정
         } catch (Exception ex) {
             try {    // 예외 발생시 카메라 정지 및 해제
@@ -1230,7 +1229,6 @@ class TopLayoutOnMixView {
             public void onClick(View view) {
 
                 // TODO: 2017. 2. 12. wrieReviewActivity
-                // SearchActivity 로 먼저가야됨
 
                 NGeoPoint nGeoPoint = naverFragment.getCurrentLocation();
                 if(nGeoPoint == null)

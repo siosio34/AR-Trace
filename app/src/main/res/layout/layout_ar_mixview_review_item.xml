@@ -6,6 +6,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+
         android:layout_margin="7dp">
         <ImageView
             android:id="@+id/ar_mixview_review_user_profile"
@@ -15,6 +16,8 @@
             android:id="@+id/ar_mixview_review_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_gravity="center_vertical"
             android:text="김영수"
             android:textSize="14sp"
             android:textColor="#FFFFFFFF"/>

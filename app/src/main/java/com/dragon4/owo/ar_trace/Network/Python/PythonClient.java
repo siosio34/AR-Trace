@@ -10,8 +10,16 @@ import com.dragon4.owo.ar_trace.FCM.FCMWebServerConnector;
 import com.dragon4.owo.ar_trace.Model.Trace;
 import com.dragon4.owo.ar_trace.Model.User;
 import com.dragon4.owo.ar_trace.Network.ClientSelector;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,21 +35,29 @@ public class PythonClient implements ClientSelector{
     private Gson gson;
     private String pythonServerUrl;
 
+    private boolean isWorking = false;
+    public boolean isWorking() {
+        return isWorking;
+    }
+
     public PythonClient() {
         gson =  new GsonBuilder().create();
-        pythonServerUrl = "http://192.168.1.14:3331/";
+        pythonServerUrl = "http://192.168.1.207:3033";
     }
 
 
     @Override
     public void uploadUserDataToServer(User currentUser, Context googleSignInContext){
 
-        final String uploadTraceURL = pythonServerUrl + "upload";
-
-        pythonServerUrl = "";
+        final String uploadTraceURL = pythonServerUrl + "/users/login";
 
         try {
-            String response = new PythonHTTPHandler().execute(pythonServerUrl,"POST",gson.toJson(currentUser)).get();
+            if(User.getMyInstance().getUserToken() != null)
+                currentUser.setUserToken(User.getMyInstance().getUserToken());
+            else
+                currentUser.setUserToken(FirebaseInstanceId.getInstance().getToken());
+
+            String response = new PythonHTTPHandler().execute(uploadTraceURL,"POST",gson.toJson(currentUser)).get();
             Log.i("uploadTraceInstance",response);
 
         } catch (InterruptedException | ExecutionException e) {
@@ -56,7 +72,9 @@ public class PythonClient implements ClientSelector{
     @Override
     public void uploadImageToServer(Trace trace, final File file) {
 
-        final String uploadTraceURL = pythonServerUrl + "upload";
+        String pythonImageServerURL = "http://192.168.1.207:3030";
+
+        final String uploadTraceURL = pythonServerUrl + "/upload";
         final String encodeFormat = "UTF-8";
 
         new Thread(new Runnable() {
@@ -92,7 +110,7 @@ public class PythonClient implements ClientSelector{
     @Override
     public void uploadTraceToServer(Trace trace) {
 
-        String uploadTraceURL = pythonServerUrl + "review";
+        String uploadTraceURL = pythonServerUrl + "/reviews";
 
         try {
             String response = new PythonHTTPHandler().execute(uploadTraceURL,"POST",gson.toJson(trace)).get();
@@ -114,33 +132,44 @@ public class PythonClient implements ClientSelector{
         try {
 
             String response = new PythonHTTPHandler().execute(pythonServerUrl, "GET").get();
-
-            if(response.length() > 0) { }
-
-            else
-                return null;
+            JSONObject traceObj = new JSONObject(response);
 
             // TODO: 2017. 2. 6. 제이썬으로 바꾼뒤 배열에 추가하는 과정을 리턴해야된다
 
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException | ExecutionException |JSONException e) {
             e.printStackTrace();
         }
-
-
         return traceList;
     }
 
+
     @Override
     public void sendTraceLikeToServer(final boolean isLikeClicked, Trace trace) {
-        //TODO: 2017-02-11 sendLikeToServer 파이썬 버전
-        if(isLikeClicked && trace.getUserId().compareTo(User.getMyInstance().getUserId()) != 0) {
-            FCMWebServerConnector connector = new FCMWebServerConnector();
-            connector.sendLikePush(trace);
+        if(!isWorking) {
+            isWorking = true;
+            sendTraceLikeToPython(isLikeClicked,trace);
+
+            if (isLikeClicked && trace.getUserId().compareTo(User.getMyInstance().getUserId()) != 0) {
+                FCMWebServerConnector connector = new FCMWebServerConnector();
+                connector.sendLikePush(trace);
+            }
         }
     }
+    
+    private void sendTraceLikeToPython(final boolean isLikeClicked, final Trace trace) {
+
+        final String traceLikeURL = pythonServerUrl;
+        // TODO: 2017. 2. 16. python 좋아요 기능 구현
+
+    }
+    
 
     @Override
     public void getReviewNumberFromServer(String title, TextView reviewNumber) {
+
+
         //TODO: 2017-02-12 getReviewNumberFromServer 파이썬 버전
     }
+
+
 }

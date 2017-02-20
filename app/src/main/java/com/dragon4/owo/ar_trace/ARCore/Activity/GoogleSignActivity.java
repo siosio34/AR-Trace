@@ -118,6 +118,8 @@ public class GoogleSignActivity extends DialogActivity implements
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 if (user != null) {
+                    Log.d(TAG, user.getUid());
+                    Log.d(TAG, user.getEmail());
                     loginUser(user);
                 } else {
                     Log.d(TAG, "onAuthStateChanged:signed_out");

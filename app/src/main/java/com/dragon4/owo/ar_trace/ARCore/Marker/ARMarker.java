@@ -266,20 +266,8 @@ abstract public class ARMarker implements Comparable<ARMarker>, Serializable {
 		float maxHeight = Math.round(dw.getHeight() / 10f) + 1;
 		float maxWidth = Math.round(dw.getWidth() / 10f) + 1;
 
-		String textStr = "";    // 출력될 텍스트
-		double d = distance;    // 거리. 미터 단위
-		DecimalFormat df = new DecimalFormat("@#");    // 숫자 포맷은 @숫자
-
-		// 위치에 따른 자신과의 거리 출력. 1000m 이상은 km로 대체한다
-		if (d < 1000.0) {
-			textStr = title + " \n" + df.format(d) + "m";
-		} else {
-			d = d / 1000.0;
-			textStr = title + " \n" + df.format(d) + "km";
-		}
-
 		// 텍스트 블록(텍스트 오브젝트) 생성
-		textBlock = new TextObj(textStr, Math.round(maxHeight / 3f) + 1,
+		textBlock = new TextObj(title, Math.round(maxHeight / 3f) + 1,
 				250, dw, underline);
 
 		// 출력되는 상황일 경우
@@ -288,7 +276,7 @@ abstract public class ARMarker implements Comparable<ARMarker>, Serializable {
 			dw.setColor(DataSource.getColor(datasource));
 
 			// 현재 각을 얻어온다
-			float currentAngle = MixUtils.getAngle(cMarker.y, cMarker.x, signMarker.y, signMarker.x);
+			float currentAngle = MixUtils.getAngle(cMarker.x, cMarker.y, signMarker.x, signMarker.y);
 
 			// 세팅된 텍스트 블록으로 텍스트 라벨을 준비
 			txtLab.prepare(textBlock);
@@ -298,8 +286,8 @@ abstract public class ARMarker implements Comparable<ARMarker>, Serializable {
 			dw.setFill(true);
 
 			// 준비된 값으로 객체를 스크린에 그린다
-			dw.paintObj(txtLab, signMarker.y - txtLab.getHeight()
-					/ 2, signMarker.x + maxWidth, currentAngle + 90, 1);
+			dw.paintObj(txtLab, signMarker.x - txtLab.getWidth()
+					/ 2, signMarker.y + maxHeight, currentAngle + 90, 1);
 		}
 
 	}

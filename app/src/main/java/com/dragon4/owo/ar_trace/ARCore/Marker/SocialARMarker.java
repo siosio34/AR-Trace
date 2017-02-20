@@ -60,7 +60,7 @@ public class SocialARMarker extends ARMarker implements Serializable {
 		//minAltitude = sin(0.35)
 		//maxAltitude = sin(0.85)
 		double altitude = curGPSFix.getAltitude()+Math.sin(0.35)*distance+Math.sin(0.4)*(distance/(MixView.getDataView().getRadius()*1000f/distance));
-		mGeoLoc.setAltitude(altitude - 0.2);
+		mGeoLoc.setAltitude(altitude);
 		super.update(curGPSFix);
 
 	}
@@ -80,7 +80,7 @@ public class SocialARMarker extends ARMarker implements Serializable {
 			
 			// 비트맵 파일이 읽혔다면 적절한 위치에 출력
 			if(bitmap!=null) {
-				dw.paintBitmap(bitmap, cMarker.y - maxHeight/1.5f, cMarker.x - maxHeight/1.5f);
+				dw.paintBitmap(bitmap, cMarker.x - maxHeight/1.5f, cMarker.y - maxHeight/1.5f);
 			}
 			else {	// 비트맵 파일을 갖지 않는 마커의 경우
 				dw.setStrokeWidth(maxHeight / 10f);

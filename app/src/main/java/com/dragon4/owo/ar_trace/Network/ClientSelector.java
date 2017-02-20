@@ -22,4 +22,5 @@ public interface ClientSelector {
     void sendTraceLikeToServer(final boolean isLikeClicked, Trace trace); //
     void getReviewNumberFromServer(String buildingID, TextView reviewNumber);
     ArrayList<Trace> getTraceDataFromServer(String traceKey, TraceRecyclerViewAdapter mAdapter); // 서버 데이터들
+  //  void getTraceLikeInformation(Trace trace, TraceRecyclerViewAdapter.TraceViewHolder reviewHolder);
 }

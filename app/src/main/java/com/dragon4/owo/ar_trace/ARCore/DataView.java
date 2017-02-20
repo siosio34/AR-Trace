@@ -19,6 +19,7 @@
 package com.dragon4.owo.ar_trace.ARCore;
 
 import android.location.Location;
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.dragon4.owo.ar_trace.ARCore.Marker.ARMarker;
@@ -72,7 +73,7 @@ public class DataView {
 
     private Location curFix;    // 수정된 현재 위치
     private DataHandler dataHandler = new DataHandler();    // 데이터 핸들러
-    private float radius = 20;    // 검색 반경
+    private float radius = 10;    // 검색 반경
 
     /**
      * MixView 클래스의 메뉴 항목과 메뉴 옵션들에 사용될 스트링의 상수값
@@ -197,7 +198,6 @@ public class DataView {
 
     // 실제로 스크린에 그려주는 메소드
     public void draw(PaintScreen dw) {
-        float addyTemp = 0;
         // 카메라 객체의 회전행렬에 컨텍스트의 회전행렬을 할당
         mixContext.getRM(cam.transform);
         // 수정된 현재 위치에 컨텍스트의 현재위치를 할당
@@ -258,8 +258,7 @@ public class DataView {
                     dataHandler.addMarkers(dRes.getARMarkers());
                     dataHandler.onLocationChanged(curFix);    // 위치를 재설정
                     mixContext.mixView.drawCategoryMarkers(dRes.getARMarkers());
-                    // 특정 데이터 소스로부터 다운로드 받았음을 알림
-                    // Toast.makeText(mixContext, mixContext.getResources().getString(R.string.download_received) + " " + dRes.source, Toast.LENGTH_SHORT).show();
+
                 }
             }
             if (dm.isDone()) {    // 다운로드 관리자의 작업이 끝난 경우
@@ -271,8 +270,10 @@ public class DataView {
 		/* 마커 업데이트 */
         dataHandler.updateActivationStatus(mixContext);    // 활성화 상태를 갱신
 
+
         // 각각의 마커에 적용
         //Log.i("마커들 갯수",Integer.toString(dataHandler.getMarkerCount()));
+
         for (int i = dataHandler.getMarkerCount() - 1; i >= 0; i--) {
             ARMarker ma = dataHandler.getMarker(i);
 
@@ -281,14 +282,15 @@ public class DataView {
 
                     //addX, addY는 화면에 찍히는 좌표, 더오른쪽으로 할거면 x를 더하고 더 높이 띄울거면 y를 더한다
                     if (!frozen) {
-                        ma.calcPaint(cam, addX, addY);
+                        ma.calcPaint(cam, addX, addY-100);
                     }
+
                     ma.draw(dw);
                 }
         }
 
-        // 조금 늦게그리기
-        // SystemClock.sleep(1000);
+
+
 
 		/* 다음 UI 이벤트를 받는다 */
         UIEvent evt = null;

@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+
 /**
  * Created by Mansu on 2017-01-25.
  */
@@ -41,7 +43,7 @@ public class TraceRecyclerViewAdapter extends RecyclerView.Adapter {
         this.clientSelector = clientSelector;
     }
 
-    public class ReviewViewHolder extends RecyclerView.ViewHolder {
+    public class TraceViewHolder extends RecyclerView.ViewHolder {
         public ImageView userProfileView;
         public TextView userNameView;
         public ImageView imgView;
@@ -53,7 +55,7 @@ public class TraceRecyclerViewAdapter extends RecyclerView.Adapter {
         public LinearLayout likeWrapper;
         public boolean isLikeClicked = false;
 
-        public ReviewViewHolder(View itemView) {
+        public TraceViewHolder(View itemView) {
             super(itemView);
             userProfileView = (ImageView)itemView.findViewById(R.id.ar_mixview_review_user_profile);
             userNameView = (TextView)itemView.findViewById(R.id.ar_mixview_review_user_name);
@@ -71,76 +73,67 @@ public class TraceRecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_ar_mixview_review_item, parent, false);
-        ReviewViewHolder vh = new ReviewViewHolder(v);
+        TraceViewHolder vh = new TraceViewHolder(v);
         return vh;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final Trace trace = traceList.get(position);
-        final ReviewViewHolder reviewHolder = (ReviewViewHolder)holder;
-        //TODO: 2017.01.25 user profile and user name
-        //Picasso.with(reviewHolder.userProfileView()).load(trace.getUserProfileURL()).into(reviewHolder.userProfileView);
-        reviewHolder.userNameView.setText(trace.getUserName());
-        Picasso.with(reviewHolder.imgView.getContext()).load(trace.getImageURL()).into(reviewHolder.imgView);
-        reviewHolder.contentView.setText(trace.getContent());
-        reviewHolder.dateView.setText(MixUtils.getDateString(trace.getWriteDate()));
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("building").child(trace.getLocationID()).child("trace").child(trace.getTraceID());
-        myRef.child("likeNum").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                reviewHolder.likeNumberView.setText(""+dataSnapshot.getValue());
-            }
+        final TraceViewHolder traceHolder = (TraceViewHolder)holder;
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        // 리뷰정보 표시
+        Picasso.with(traceHolder.userProfileView.getContext()).load(trace.getUserImageUrl()).transform(new CropCircleTransformation()).into(traceHolder.userProfileView);
+        traceHolder.userNameView.setText(trace.getUserName());
+        Picasso.with(traceHolder.imgView.getContext()).load(trace.getImageURL()).into(traceHolder.imgView);
+        traceHolder.contentView.setText(trace.getContent());
+        traceHolder.dateView.setText(MixUtils.getDateString(trace.getWriteDate()));
+        traceHolder.likeNumberView.setText(String.valueOf(trace.getLikeNum()));
 
-            }
-        });
 
-        myRef.child("likeUserList").child(User.getMyInstance().getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists())
-                    reviewHolder.isLikeClicked = true;
-                else
-                    reviewHolder.isLikeClicked = false;
-                setLike(reviewHolder, Integer.parseInt(reviewHolder.likeNumberView.getText().toString()));
 
-                reviewHolder.likeWrapper.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(!((FirebaseClient)clientSelector).isWorking()) {
-                            reviewHolder.isLikeClicked = !reviewHolder.isLikeClicked;
-                            setLike(reviewHolder, Integer.parseInt(reviewHolder.likeNumberView.getText().toString()) + (reviewHolder.isLikeClicked ? 1 : -1));
-                            clientSelector.sendTraceLikeToServer(reviewHolder.isLikeClicked, trace);
-                        }
-                    }
-                });
-            }
+        // 1. 내가 좋아햇는지 여부에 따라 좋아요에 따라 색깔을 칠한다. clientSelctor.checkLikeTraceUser(String userID,TraceHolder traceholder);
+        // 2. 클릭할때마다 색깔만 바꾸는 이벤트 처리
+        // 3. 마지막에 리뷰 홀더 사라질때 체크가 되어있어 있던거 처리
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
 
+        // 클릭하면 색깔만 바꾸게
+        // 리사이클러뷰에서 사라질때 전송을 한다..?
+
+        // TODO: 2017. 2. 20. 좋아요 버튼 누를때마다 처리는 여기서 !
+
+        // 좋아요했는지 여부 가져와서 좋아요 색깔 체크, 좋아요버튼
+        //setLike(); // 내가 좋아요 했는지 이력 가져온다음에 좋아요 색깔체크
+        // 좋아요 클릭 이벤트.
+        // TODO: 2017. 2. 20. 내가 좋아요 한거 인거 아니냐에 따라 표시 해야됨
+
+        // 리뷰정보 좋아요 표시 및 이벤트 ...
+        // 네이버 에서 데이터 정보를 가져오고 그에따른 후기 데이터가 자체로 구성되어있기 때문에 이과정이필요
+        // 네이버에서 데이터가져오는경우가 아니고 자체데이터 활용시는 필요없는 부분
+
+        //void getTraceLikeInformation(String traceID,TraceRecyclerViewAdapter.TraceViewHolder traceAdapter);
+        // 좋아요 데이터는 비동기로 가져오자!
+        //clientSelector.getTraceLikeInformation(trace,traceHolder);
     }
 
-    public void setLike(ReviewViewHolder reviewHolder, int number) {
-        reviewHolder.likeNumberView.setText("" + number);
-        if(reviewHolder.isLikeClicked) {
-            reviewHolder.likeNumberView.setTextColor(Color.parseColor("#A5009017"));
-            reviewHolder.likeTextView.setTextColor(Color.parseColor("#A5009017"));
-            reviewHolder.likeIconView.setImageResource(R.drawable.ic_like);
+    public void setLike(TraceViewHolder traceHolder, int number) {
+
+        if(traceHolder.isLikeClicked) {
+            traceHolder.likeNumberView.setTextColor(Color.parseColor("#A5009017"));
+            traceHolder.likeTextView.setTextColor(Color.parseColor("#A5009017"));
+            traceHolder.likeIconView.setImageResource(R.drawable.ic_like);
         }
         else {
-            reviewHolder.likeNumberView.setTextColor(Color.parseColor("#5A000000"));
-            reviewHolder.likeTextView.setTextColor(Color.parseColor("#5A000000"));
-            reviewHolder.likeIconView.setImageResource(R.drawable.ic_like_cancel);
+            traceHolder.likeNumberView.setTextColor(Color.parseColor("#5A000000"));
+            traceHolder.likeTextView.setTextColor(Color.parseColor("#5A000000"));
+            traceHolder.likeIconView.setImageResource(R.drawable.ic_like_cancel);
         }
     }
+
+
+
+
 
     @Override
     public int getItemCount() {

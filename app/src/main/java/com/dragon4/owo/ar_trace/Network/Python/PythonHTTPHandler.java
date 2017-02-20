@@ -2,6 +2,7 @@ package com.dragon4.owo.ar_trace.Network.Python;
 
 import android.os.AsyncTask;
 import android.text.Html;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,10 +10,13 @@ import org.json.JSONObject;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -33,14 +37,16 @@ public class PythonHTTPHandler extends AsyncTask<String, Void, String> {
         HttpURLConnection connection= null;
 
         String responseStr = "";
+        Log.i("URL 테스트", urlStr);
 
         try {
 
             URL url = new URL(urlStr);
+
             connection = (HttpURLConnection) url.openConnection();
             connection.setReadTimeout(10000);
             connection.setConnectTimeout(10000);
-            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
             connection.setRequestProperty("Accept", "application/json");
             connection.setDoInput(true);
 
@@ -52,20 +58,28 @@ public class PythonHTTPHandler extends AsyncTask<String, Void, String> {
                 connection.setDoOutput(true);
                 connection.setRequestMethod("POST");
 
-
                 // 데이터 전송
                 JSONObject traceObject = new JSONObject(requestString);
-                OutputStream outputStream = new BufferedOutputStream(connection.getOutputStream());
-                outputStream.write(traceObject.toString().getBytes());
-                outputStream.flush();outputStream.close();
+                OutputStream outputStream = connection.getOutputStream();
+
+                Writer writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(),"UTF-8"));
+                Log.i("requestString",requestString);
+                writer.write(requestString);
+                writer.close();
+
+                //outputStream.write(traceObject.toString().getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
 
             }
 
             int ResponseCode = connection.getResponseCode();
+            Log.i("ResponseCode",String.valueOf(ResponseCode));
             if(ResponseCode == HttpURLConnection.HTTP_OK) {
                 // 정상 처리 되었을때..
                 InputStream in = new BufferedInputStream(connection.getInputStream());
                 responseStr = convertStreamToString(in);
+                Log.i("responseStr",responseStr);
                 in.close();
             }
 

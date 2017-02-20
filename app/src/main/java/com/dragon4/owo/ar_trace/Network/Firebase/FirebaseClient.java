@@ -4,17 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.dragon4.owo.ar_trace.ARCore.Activity.TraceRecyclerViewAdapter;
+import com.dragon4.owo.ar_trace.ARCore.MixUtils;
 import com.dragon4.owo.ar_trace.FCM.FCMWebServerConnector;
 import com.dragon4.owo.ar_trace.Model.Trace;
 import com.dragon4.owo.ar_trace.Model.TracePointer;
 import com.dragon4.owo.ar_trace.Model.User;
 import com.dragon4.owo.ar_trace.Network.ClientSelector;
+import com.dragon4.owo.ar_trace.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +32,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -37,6 +42,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 /**
  * Created by joyeongje on 2017. 1. 20..
@@ -48,13 +55,15 @@ public class FirebaseClient implements ClientSelector {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference();
 
-    // TODO: 2017. 2. 6. 유저것도 할수 잇게...!
-
-
     private int uploadedCount = 0;
     private int uploadFailCount = 0;
     private int uploadedThumbnailCount = 0;
     private int uploadFailThumbnailCount = 0;
+
+    private boolean isWorking = false;
+    public boolean isWorking() {
+        return isWorking;
+    }
 
     public FirebaseClient() {
 
@@ -65,38 +74,6 @@ public class FirebaseClient implements ClientSelector {
     private String makeTraceKey(String id) {
         return myRef.child("building").child(id).child("trace").push().getKey();
     }
-
-    /*
-    @Override
-    public boolean getUserInformation(String userId) {
-
-        myRef.child("users").child(userId).addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        User user = dataSnapshot.getValue(User.class);
-
-                        if (user == null) {
-
-
-
-                        } else {
-
-                        }
-
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                }
-        );
-
-    }
-    */
 
     @Override
     public void uploadUserDataToServer(final User currentUser, final Context googleSignInContext) {
@@ -145,6 +122,7 @@ public class FirebaseClient implements ClientSelector {
     }
 
     private void updateTokenToServer(final List<TracePointer> infoList, final String token) {
+
         myRef.child("building").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -287,7 +265,6 @@ public class FirebaseClient implements ClientSelector {
         }).start();
     }
 
-    // Toast.makeText(getApplicationContext(), "업로드에 성공하였습니다.", Toast.LENGTH_SHORT).show();
 
     @Override
     public void uploadTraceToServer(final Trace trace) {
@@ -346,15 +323,12 @@ public class FirebaseClient implements ClientSelector {
         return traceList;
     }
 
-    private boolean isWorking = false;
-    public boolean isWorking() {
-        return isWorking;
-    }
-
     @Override
     public void sendTraceLikeToServer(boolean isLikeClicked, Trace trace) {
         if(!isWorking) {
             isWorking = true;
+
+            // trace Server
             sendTraceLikeToFirebase(isLikeClicked, trace);
             if (isLikeClicked && trace.getUserId().compareTo(User.getMyInstance().getUserId()) != 0) {
                 FCMWebServerConnector connector = new FCMWebServerConnector();
@@ -426,4 +400,54 @@ public class FirebaseClient implements ClientSelector {
             }
         });
     }
+
+    //@Override
+    //public void getTraceLikeInformation(String traceID,TraceRecyclerViewAdapter traceRecyclerViewAdapter) {
+//
+    //    // void getTraceLikeInformation(String traceID,TraceRecyclerViewAdapter.ReviewViewHolder traceAdapter)
+    //    // likeNum 과 likeUserList 값 처리
+//
+    //    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    //    DatabaseReference myRef = database.getReference("building").child(trace.getLocationID()).child("trace").child(trace.getTraceID());
+    //    myRef.child("likeNum").addListenerForSingleValueEvent(new ValueEventListener() {
+    //        @Override
+    //        public void onDataChange(DataSnapshot dataSnapshot) {
+    //            reviewHolder.likeNumberView.setText(""+dataSnapshot.getValue());
+    //        }
+//
+    //        @Override
+    //        public void onCancelled(DatabaseError databaseError) {
+//
+    //        }
+    //    });
+//
+    //    myRef.child("likeUserList").child(User.getMyInstance().getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+    //        @Override
+    //        public void onDataChange(DataSnapshot dataSnapshot) {
+    //            if(dataSnapshot.exists())
+    //                reviewHolder.isLikeClicked = true;
+    //            else
+    //                reviewHolder.isLikeClicked = false;
+//
+    //            setLike(reviewHolder, Integer.parseInt(reviewHolder.likeNumberView.getText().toString()));
+//
+    //            reviewHolder.likeWrapper.setOnClickListener(new View.OnClickListener() {
+    //                @Override
+    //                public void onClick(View view) {
+    //                    if(!((FirebaseClient)clientSelector).isWorking()) {
+    //                        reviewHolder.isLikeClicked = !reviewHolder.isLikeClicked;
+    //                        setLike(reviewHolder, Integer.parseInt(reviewHolder.likeNumberView.getText().toString()) + (reviewHolder.isLikeClicked ? 1 : -1));
+    //                        sendTraceLikeToServer(reviewHolder.isLikeClicked, trace);
+    //                    }
+    //                }
+    //            });
+    //        }
+//
+    //        @Override
+    //        public void onCancelled(DatabaseError databaseError) {
+//
+    //        }
+    //    });
+    //}
+
 }

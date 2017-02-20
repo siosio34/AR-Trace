@@ -33,6 +33,7 @@ public class PaintScreen {
 
 	// 생성자. 기본 텍스트크기 16, 안티 알리아싱, 색상은 블루, 페인트 스타일은 외각선.
 	public PaintScreen() {
+
 		paint.setTextSize(16);
 		paint.setAntiAlias(true);
 		paint.setColor(Color.BLUE);
