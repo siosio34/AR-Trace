@@ -714,8 +714,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
             searchNotificationTxt = new TextView(this);
             searchNotificationTxt.setWidth(dWindow.getWidth());
             searchNotificationTxt.setPadding(10, 2, 0, 0);
-            searchNotificationTxt.setText(getString(DataView.SEARCH_ACTIVE_1) + " " + mixContext.getDataSourcesStringList() + getString(DataView.SEARCH_ACTIVE_2));
-            ;
             searchNotificationTxt.setBackgroundColor(Color.DKGRAY);
             searchNotificationTxt.setTextColor(Color.WHITE);
 

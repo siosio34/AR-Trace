@@ -21,18 +21,20 @@ import java.util.concurrent.ExecutionException;
 
 public class FCMWebServerConnector {
     private Gson gson;
-    private String webServerUrl;
+    private static String pushServerURL;
 
     public FCMWebServerConnector() {
-        //String webServerIP = "http://163.180.117.118/";
-        webServerUrl = Resources.getSystem().getString(R.string.PUSH_SERVER_IP) + "PushServer.php";
         gson = new GsonBuilder().create();
+    }
 
+    public static void setPushServerURL(String pushServerURL) {
+        FCMWebServerConnector.pushServerURL = pushServerURL;
     }
 
     public void sendLikePush(Trace trace) {
         try {
-            //webServerUrl = "http://163.180.117.118/PushServer.php";
+
+            Log.i("pushServerURL",FCMWebServerConnector.pushServerURL);
             JSONObject obj = new JSONObject();
             obj.put("userToken", trace.getUserToken());
             obj.put("userID", User.getMyInstance().getUserId());
@@ -41,7 +43,7 @@ public class FCMWebServerConnector {
             obj.put("traceID", trace.getTraceID());
             obj.put("title", trace.getPlaceName());
 
-            String response = new FCMHttpHandler().execute(webServerUrl,"POST",gson.toJson(obj)).get();
+            String response = new FCMHttpHandler().execute(FCMWebServerConnector.pushServerURL,"POST",gson.toJson(obj)).get();
             Log.i("sendLikePush", response);
 
         } catch (InterruptedException e) {

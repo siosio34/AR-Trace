@@ -89,10 +89,6 @@ public class DataView {
     public static final int CONNECTION_GPS_DIALOG_BUTTON2 = R.string.connection_GPS_dialog_button2;
 
     public static final int SEARCH_FAILED_NOTIFICATION = R.string.search_failed_notification;
-    public static final int SOURCE_OPENSTREETMAP = R.string.source_openstreetmap;
-    public static final int SEARCH_ACTIVE_1 = R.string.search_active_1;
-    public static final int SEARCH_ACTIVE_2 = R.string.search_active_2;
-
     private boolean isLauncherStarted;    // 런쳐 시작 여부
 
     // UI에서 일어날 이벤트들의 리스트
