@@ -344,8 +344,11 @@ public class FragmentMapview extends Fragment {
             Log.d("myLog", "myLocation  lat " + myLocation.getLatitude());
             Log.d("myLog", "myLocation  lng " + myLocation.getLongitude());
 
-            mMapContext.findPlacemarkAtLocation(myLocation.getLongitude(), myLocation.getLatitude());
-            currentLocation = myLocation;
+            // TODO: 2017. 2. 21. 풀리퀘
+            if(mMapContext != null) {
+                mMapContext.findPlacemarkAtLocation(myLocation.getLongitude(), myLocation.getLatitude());
+                currentLocation = myLocation;
+            }
 
             return true;
         }
