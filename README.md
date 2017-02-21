@@ -13,8 +13,16 @@
     Android App Client
 
     1) Install Android-Studio : https://developer.android.com/studio/index.html?hl=ko
-  
+
     2) File -> Import Existing Project -> PATH_CLONE_AR-Trace/AR-Trace
+
+    3) Firebase Setting - Download goole-services.json in your Project
+
+    - Create FireBase Project - https://console.firebase.google.com/
+
+    - FireBase Android Setting - https://firebase.google.com/docs/android/setup
+
+    - Download google-services.json in your Project
     
 # Qucik Start - Server    
   
