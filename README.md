@@ -44,14 +44,23 @@
         
 # Qucik Start - Server(Push)
 
-    - Google Cloud Messaging Will be deprecated so we use Firebase Cloud Messaging(FCM) for app Notify
-
-    - Firebase Cloud Messging Only Support Downstram message and you want to develop fully develop FCM
-    you must have to App Server
+    -> In Ubuntu Setting...! 
     
-    - if you want push function run httpd Server push app server code with php 
-    (In path - PATH_CLONE_AR-Trace/AR-Trace/PushServer/PushServer.php)
-       
+    1. sudo apt-get install httpd
+    2. sudo apt-get install php
+    3. mv PATH_CLONE_AR-Trace/AR-Trace/PushServer/PushServer.php /var/www/html/PushServer.php
+    
+    -> In Client Setting...!
+    
+    1. PATH_CLONE_AR-Trace/AR-Trace/app/src/main/res/values/strings.xml file change to your IP
+      
+    <!-- Push server IP -->
+    <string name="PUSH_SERVER_IP">YOUR_PUSH SERVER_IP</string>
+    
+
+- Google Cloud Messaging Will be deprecated so we use Firebase Cloud Messaging(FCM) for app Notify
+- Firebase Cloud Messging Only Support Downstram message and you want to develop all function of Push you must have to App Server Setting
+
 # Client & Firebase Server Structure
 
 ![](https://ww1.sinaimg.cn/large/006tKfTcgy1fcmvrstxewj31a40uw76r.jpg)
