@@ -41,33 +41,15 @@ public class ListParentActivity extends Activity {
         super.onCreate(savedInstanceState);
     }
 
-    private void runNavi(String address) {
-        String encodedQueryString = null;
-        try {
-            encodedQueryString = URLEncoder.encode(address, "UTF-8");
-            String requestURL = DataSource.createNaverGeoAPIRequestURL(encodedQueryString);
-            String rawData = new NaverHttpHandler().execute(requestURL).get();
-            Log.i("rawData", rawData);
+    private void runNavi(Double lat, Double lon) {
+        Intent naviIntent = new Intent();
+        naviIntent.putExtra("lat", lon);
+        naviIntent.putExtra("lon", lat);
+        setResult(RESULT_OK, naviIntent);
+        finish();
 
-            JSONObject root = new JSONObject(rawData);
-            JSONArray dataArray = root.getJSONObject("result").getJSONArray("items");
-            JSONObject dataObject = dataArray.getJSONObject(0).getJSONObject("point");
+       // Toast.makeText(getApplicationContext(), "해당 지역의 좌표를 받아올 수 없습니다", Toast.LENGTH_LONG).show();
 
-            if(dataObject != null) {
-
-                Intent naviIntent = new Intent();
-                naviIntent.putExtra("lat", dataObject.getString("y"));
-                naviIntent.putExtra("lon", dataObject.getString("x"));
-                setResult(RESULT_OK, naviIntent);
-                finish();
-
-            } else {
-                Toast.makeText(getApplicationContext(), "해당 지역의 좌표를 받아올 수 없습니다", Toast.LENGTH_LONG).show();
-            }
-            // JSONArray locationData = dataArray.getJSONArray(0);
-        } catch (UnsupportedEncodingException | InterruptedException | ExecutionException | JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     protected class SearchListViewAdapter extends BaseAdapter {
@@ -110,7 +92,7 @@ public class ListParentActivity extends Activity {
             navi.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    runNavi(currentData.getAddress());
+                    runNavi(currentData.getLatitude(),currentData.getLongitude());
                 }
             });
             navi.setTag(currentData.getAddress());

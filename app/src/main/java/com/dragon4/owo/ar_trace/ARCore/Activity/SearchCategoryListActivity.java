@@ -36,6 +36,8 @@ public class SearchCategoryListActivity extends ListParentActivity {
             dataList.add(naverSearchMarker);
         }
 
+
+
         SearchListViewAdapter adapter = new SearchListViewAdapter(getLayoutInflater());
         adapter.setDataList(dataList);
         listView.setAdapter(adapter);

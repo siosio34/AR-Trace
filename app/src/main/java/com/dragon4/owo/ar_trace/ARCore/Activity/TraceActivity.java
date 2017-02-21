@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.dragon4.owo.ar_trace.Configure.ClientInstance;
 import com.dragon4.owo.ar_trace.Network.ClientSelector;
 import com.dragon4.owo.ar_trace.Network.Firebase.FirebaseClient;
 import com.dragon4.owo.ar_trace.R;
@@ -29,7 +30,7 @@ public class TraceActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.ar_mixview_review_back).setOnClickListener(this);
         findViewById(R.id.ar_mixview_review_add).setOnClickListener(this);
 
-        clientSelector = new FirebaseClient();
+        clientSelector = ClientInstance.getInstanceClient();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.ar_mixview_review_recyclerview);
         // use a linear layout manager
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);

@@ -343,8 +343,6 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                     mixContext.setDataSource(selectedDatasource,!mixContext.isDataSourceSelected(selectedDatasource));
             }
 
-
-
             //dataView.getDataHandler().cleaMarketListUnCheckedDataSource(selectedDatasource); // 마커 삭제
             Log.i(selectedDatasource.toString(),"삭제됨");
             if(mixContext.isDataSourceSelected(selectedDatasource)) {
@@ -899,12 +897,14 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         topLayoutOnMixView.mainArView.setVisibility(View.VISIBLE);
+
         if(requestCode == TopLayoutOnMixView.WRITE_REVIEW) {
 
         }
+
         else if(resultCode == RESULT_OK && requestCode == TopLayoutOnMixView.SEARCH_LIST) {
-            double lat = Double.valueOf(data.getExtras().getString("lat")).doubleValue();
-            double lon = Double.valueOf(data.getExtras().getString("lon")).doubleValue();
+            double lat = data.getExtras().getDouble("lat");
+            double lon = data.getExtras().getDouble("lon");
 
             //검색리스트에서 길찾기를 눌렀을 경우 네비안내
             if(navigator != null)
@@ -913,6 +913,7 @@ public class MixView extends FragmentActivity implements SensorEventListener, Lo
                 Toast.makeText(this, "네비게이션 기능을 실행할 수 없습니다.", Toast.LENGTH_LONG).show();
         }
         else if(resultCode == RESULT_OK && requestCode == MixView.SHOW_TRACE) {
+
         }
     }
 

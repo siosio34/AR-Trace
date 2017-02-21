@@ -344,7 +344,6 @@ public class FragmentMapview extends Fragment {
             Log.d("myLog", "myLocation  lat " + myLocation.getLatitude());
             Log.d("myLog", "myLocation  lng " + myLocation.getLongitude());
 
-            // TODO: 2017. 2. 21. 풀리퀘
             if(mMapContext != null) {
                 mMapContext.findPlacemarkAtLocation(myLocation.getLongitude(), myLocation.getLatitude());
                 currentLocation = myLocation;
@@ -388,6 +387,7 @@ public class FragmentMapview extends Fragment {
         }
         poIdata.endPOIdata();
 
+
         //create POI data overlay
         NMapPOIdataOverlay poidataOverlay = mOverlayManager.createPOIdataOverlay(poIdata, null);
         poidataOverlay.showAllPOIdata(0);
@@ -399,17 +399,16 @@ public class FragmentMapview extends Fragment {
     }
 
     public void findAndDrawRoot(final String naviJson) {
+
             //find location
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (currentLocation != null) {
-                        double lat = currentLocation.getLatitude();
-                        double lon = currentLocation.getLongitude();
-
                         try {
-                            JSONObject test = new JSONObject(naviJson);
-                            JSONObject result = test.getJSONObject("result");
+                            mOverlayManager.clearOverlays();
+
+                            JSONObject root = new JSONObject(naviJson);
+                            JSONObject result = root.getJSONObject("result");
                             JSONArray route = result.getJSONArray("route");
                             JSONObject start = route.getJSONObject(0).getJSONArray("point").getJSONObject(0);
                             JSONObject end = route.getJSONObject(route.length() - 1).getJSONArray("point").getJSONObject(0);
@@ -420,7 +419,6 @@ public class FragmentMapview extends Fragment {
                             poIdata.beginPOIdata(2);
                             poIdata.addPOIitem(start.getInt("x"), start.getInt("y"), "출발지", NMapPOIflagType.FROM, 0);
                             poIdata.addPOIitem(end.getInt("x"), end.getInt("y"), "도착지", NMapPOIflagType.TO, 0);
-
                             poIdata.endPOIdata();
 
                             NMapPOIdataOverlay poIdataOverlay = mOverlayManager.createPOIdataOverlay(poIdata, null);
@@ -434,22 +432,17 @@ public class FragmentMapview extends Fragment {
                             }
                             pathData.addPathPoint(end.getInt("x"), end.getInt("y"), NMapPathLineStyle.TYPE_DASH);
                             pathData.endPathData();
-                            NMapPathDataOverlay pathDataOverlay = mOverlayManager.createPathDataOverlay(pathData);
 
+                            NMapPathDataOverlay pathDataOverlay = mOverlayManager.createPathDataOverlay(pathData);
                             pathDataOverlay.showAllPathData(0);
+
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-                    else
-                        Toast.makeText(getContext(), "현재 위치를 알 수 없습니다.", Toast.LENGTH_SHORT).show();
-                }
             });
 
-    }
-
-    public void cancelNavi() {
-        mOverlayManager.clearOverlays();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.dragon4.owo.ar_trace.ARCore;
 
 import android.content.Intent;
+import android.util.Log;
 
 import com.dragon4.owo.ar_trace.ARCore.Marker.ARMarker;
 import com.dragon4.owo.ar_trace.ARCore.data.DataProcessor.DataConvertor;
@@ -33,6 +34,7 @@ public class Navigator {
     }
 
     public Navigator(MixContext mixContext, FragmentMapview naverFragment) {
+
         if(navigator == null)
             navigator = this;
 
@@ -42,6 +44,8 @@ public class Navigator {
 
     public void run(final double lat, final double lon) {
 
+        //naverFragment.clearCategoryMarker(); // 마커 삭제 !
+
         loopThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -49,18 +53,18 @@ public class Navigator {
                     try {
                         NGeoPoint point = naverFragment.getCurrentLocation();
                         String url = DataSource.createNaverMapRequestURL(point.getLongitude(), point.getLatitude(), lon, lat);
-                        // TODO: 2017. 2. 6.  최적화 후에 필요
+                        Log.i("Navi URL",url);
                         String result = new NaverHttpHandler().execute(url).get();
-                        updateNaviStatus(result);
-                        updateNavimap(result);
+
+                        // TODO: 2017. 2. 21. 최적화필요.
+                        updateNaviStatus(result); // 네비게이션 가이드.
+                        naverFragment.findAndDrawRoot(result); // 네이버 지도 갱신.
+
+                        //updateNavimap(result);
 
                         Thread.sleep(5000);
 
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
+                    } catch (ExecutionException | JSONException | InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
@@ -71,22 +75,18 @@ public class Navigator {
         loopThread.start();
     }
 
-    private void updateNavimap(String result) {
-        FragmentMapview.naverMapView.findAndDrawRoot(result);
-    }
-
     private void updateNaviStatus(String result) throws JSONException {
 
-        List<ARMarker> naviList = null;
-        final DataConvertor dataConvertor = new DataConvertor();
-        naviList =  dataConvertor.load(result, DataSource.DATASOURCE.NAVI, DataSource.DATAFORMAT.NAVI);
+        //List<ARMarker> naviList = null;
+        //final DataConvertor dataConvertor = new DataConvertor();
+        //naviList =  dataConvertor.load(result, DataSource.DATASOURCE.NAVI, DataSource.DATAFORMAT.NAVI);
 
         final Intent naviBroadReceiver = new Intent();
         naviBroadReceiver.setAction("NAVI");
 
         String guide = parsingNaverNaviJson(result);
 
-        if(guide.equals("end")) {
+        if(guide.equals("END")) {
             loopThread.interrupt();
         }
         
@@ -104,7 +104,7 @@ public class Navigator {
         JSONObject firstRoute = jArray.getJSONObject(1);
 
         if(distance < 40 || firstRoute == null) { //  거리가 얼마 안남았을때
-            guide = "end";
+            guide = "END";
         }
 
         else {

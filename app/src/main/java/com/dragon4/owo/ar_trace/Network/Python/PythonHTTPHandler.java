@@ -27,7 +27,6 @@ import java.net.URL;
 
 public class PythonHTTPHandler extends AsyncTask<String, Void, String> {
 
-
     @Override
     protected String doInBackground(String... params) {
 

@@ -13,6 +13,7 @@ import java.util.List;
 public class Trace {
 
     private String locationID; // 장소 id 부모노드가 될예정
+    private String placeName; // 주소를 경도 위도로
     private String traceID; // 흔적 id 이미지 아이디 가 될예정
     private String content; // 글 내용
     private String imageURL;
@@ -20,7 +21,6 @@ public class Trace {
     private int likeNum; // 좋아요 갯수
     private double lat;
     private double lon;
-    private String placeName; // 주소를 경도 위도로
     private long writeDate; // 글쓴시간
 
     private String userImageUrl; // user Image URL

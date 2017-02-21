@@ -90,27 +90,8 @@ public class TraceRecyclerViewAdapter extends RecyclerView.Adapter {
         traceHolder.dateView.setText(MixUtils.getDateString(trace.getWriteDate()));
         traceHolder.likeNumberView.setText(String.valueOf(trace.getLikeNum()));
 
-        // 1. 내가 좋아햇는지 여부에 따라 좋아요에 따라 색깔을 칠한다. clientSelctor.checkLikeTraceUser(String userID,TraceHolder traceholder);
-        // 2. 클릭할때마다 색깔만 바꾸는 이벤트 처리
-        // 3. 마지막에 리뷰 홀더 사라질때 체크가 되어있어 있던거
-        // 클릭하면 색깔만 바꾸게
-        // 리사이클러뷰에서 사라질때 전송을 한다..?
-
-        // TODO: 2017. 2. 20. 좋아요 버튼 누를때마다 처리는 여기서 !
-
-        // 좋아요했는지 여부 가져와서 좋아요 색깔 체크, 좋아요버튼
-        //setLike(); // 내가 좋아요 했는지 이력 가져온다음에 좋아요 색깔체크
-        // 좋아요 클릭 이벤트.
-        // TODO: 2017. 2. 20. 내가 좋아요 한거 인거 아니냐에 따라 표시 해야됨
-
-        // 리뷰정보 좋아요 표시 및 이벤트 ...
-        // 네이버 에서 데이터 정보를 가져오고 그에따른 후기 데이터가 자체로 구성되어있기 때문에 이과정이필요
-        // 네이버에서 데이터가져오는경우가 아니고 자체데이터 활용시는 필요없는 부분
-
-        //void getTraceLikeInformation(String traceID,TraceRecyclerViewAdapter.TraceViewHolder traceAdapter);
-        // 좋아요 데이터는 비동기로 가져오자!
-        clientSelector.getTraceLikeInformation(trace, this, traceHolder);
-        traceHolder.likeWrapper.setOnClickListener(new View.OnClickListener() {
+        clientSelector.getTraceLikeInformation(trace, this, traceHolder); // 처음 좋아요 정보 가져오기
+        traceHolder.likeWrapper.setOnClickListener(new View.OnClickListener() { // 좋아요 버튼 클릭시 처리되는 함수
             @Override
             public void onClick(View view) {
                 traceHolder.isLikeClicked = !traceHolder.isLikeClicked;

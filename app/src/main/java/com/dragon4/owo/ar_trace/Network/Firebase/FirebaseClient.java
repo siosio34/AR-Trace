@@ -363,9 +363,9 @@ public class FirebaseClient implements ClientSelector {
     }
 
     @Override
-    public void getReviewNumberFromServer(String buildingID, final TextView reviewNumber) {
+    public void getReviewNumberFromServer(String placeName, final TextView reviewNumber) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("building").child(buildingID).child("trace");
+        DatabaseReference myRef = database.getReference("building").child(placeName).child("trace");
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
