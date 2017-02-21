@@ -58,17 +58,16 @@
 [![IMAGE ALT youtube](http://img.youtube.com/vi/V0eGnEXL0VQ/0.jpg)](http://www.youtube.com/watch?v=V0eGnEXL0VQ)
 
 # References 
-
-    - mixare - <http://www.mixare.org/>
-    - naver API - <https://developers.naver.com/>
-    - typekit - <https://github.com/tsengvn/typekit>
-    - Firebase RealTime database - <https://firebase.google.com/docs/database/>
-    - Firebase RealTime storage - <https://firebase.google.com/docs/storage/>
-    - Firebase auth - <https://firebase.google.com/docs/auth/>
-    - Firebase cloud messging - <https://firebase.google.com/docs/cloud-messaging/>
-    - Picasso - <https://github.com/square/picasso>
-    - Picasso-trasform - <https://github.com/wasabeef/picasso-transformations>
-    - gson - <https://github.com/google/gson>
+- mixare - <http://www.mixare.org/>
+- naver API - <https://developers.naver.com/>
+- typekit - <https://github.com/tsengvn/typekit>
+- Firebase RealTime database - <https://firebase.google.com/docs/database/>
+- Firebase RealTime storage - <https://firebase.google.com/docs/storage/>
+- Firebase auth - <https://firebase.google.com/docs/auth/>
+- Firebase cloud messging - <https://firebase.google.com/docs/cloud-messaging/>
+- Picasso - <https://github.com/square/picasso>
+- Picasso-trasform - <https://github.com/wasabeef/picasso-transformations>
+- gson - <https://github.com/google/gson>
 
 # Copyright
 ![alt AR-Trace](https://github.com/siosio34/AR-Trace/blob/master/docs/ar_trace_profile.png)
