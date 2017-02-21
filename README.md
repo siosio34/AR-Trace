@@ -1,12 +1,12 @@
 # AR-Trace
+
     This Project AR Search Place, Facilities And Navigating where you want to go by using Naver API.
+
     Also you leave Trace and see other people's trace in for Places(In a word Place Based SNS)
-    
-    Now is We use Firebase Server But also we make service level python server for want to do Service
-    In not Firebase Setting. 
-    
-    In future client select Server environmet Firebase and Python also we want to this Project 
-    will be good reference to someone for develop service and Production level server and client Project  
+
+    Client select Server environmet Firebase and Python Server.
+
+    we want this Project will be good reference to someone for develop Production level service or server-client Project. 
     
 # Qucik Start - Client
 
