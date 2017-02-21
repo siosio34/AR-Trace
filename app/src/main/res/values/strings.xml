@@ -1,10 +1,13 @@
 <resources>
     <string name="app_name">AR-Trace</string>
 
+    <!-- Push server IP -->
+    <string name="PUSH_SERVER_IP">YOUR_PUSHSERVER_IP</string>
+
+    <!-- Naver key -->
+
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
-
-
 
     <string name="empty_list">근처 정보가 없습니다. 다른 분류를 선택해보시거나 다른 곳으로 이동해보세요.</string>
     <string name="option_not_available">앗, 준비 중인 기능입니다!</string>
@@ -61,6 +64,5 @@
 
     <string name="str_done">완료</string>
     <string name="loading">로딩중입니다</string>
-
 
 </resources>
