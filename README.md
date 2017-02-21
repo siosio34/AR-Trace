@@ -76,6 +76,23 @@
 - Picasso - <https://github.com/square/picasso>
 - Picasso-trasform - <https://github.com/wasabeef/picasso-transformations>
 - gson - <https://github.com/google/gson>
+- Flask - <http://flask-docs-kr.readthedocs.io/>
+- celery - <http://www.celeryproject.org/>
+- celery-flower - <http://flower.readthedocs.io/>
+- rabbitmq - <https://www.rabbitmq.com/>
+- eventlet - <http://eventlet.net/>
+- nginx - <https://www.nginx.com/>
+- uwsgi : https://uwsgi-docs.readthedocs.io/
+- redis-py : https://redis-py.readthedocs.io/
+- haproxy : http://www.haproxy.org/
+- logstash : https://www.elastic.co/kr/products/logstash
+- elasticsearch : https://www.elastic.co/kr/
+- kibana : https://www.elastic.co/kr/products/kibana
+- sqlalchemy : http://www.sqlalchemy.org/
+- MySQL-Python : http://mysql-python.sourceforge.net/
+- Virtualenv : https://virtualenv.pypa.io
+- Redis : https://redis.io/
+
 
 # Copyright
 ![alt AR-Trace](https://github.com/siosio34/AR-Trace/blob/master/docs/ar_trace_profile.png)
