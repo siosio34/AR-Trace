@@ -1,20 +1,28 @@
 # AR-Trace
+
     This Project AR Search Place, Facilities And Navigating where you want to go by using Naver API.
+
     Also you leave Trace and see other people's trace in for Places(In a word Place Based SNS)
-    
-    Now is We use Firebase Server But also we make service level python server for want to do Service
-    In not Firebase Setting. 
-    
-    In future client select Server environmet Firebase and Python also we want to this Project 
-    will be good reference to someone for develop service and Production level server and client Project  
+
+    Client select Server environmet Firebase and Python Server.
+
+    we want this Project will be good reference to someone for develop Production level service or server-client Project. 
     
 # Qucik Start - Client
 
     Android App Client
 
     1) Install Android-Studio : https://developer.android.com/studio/index.html?hl=ko
-  
+
     2) File -> Import Existing Project -> PATH_CLONE_AR-Trace/AR-Trace
+
+    3) Firebase Setting - Download goole-services.json in your Project
+
+    - Create FireBase Project - https://console.firebase.google.com/
+
+    - FireBase Android Setting - https://firebase.google.com/docs/android/setup
+
+    - Download google-services.json in your Project
     
 # Qucik Start - Server    
   
@@ -58,16 +66,16 @@
 [![IMAGE ALT youtube](http://img.youtube.com/vi/V0eGnEXL0VQ/0.jpg)](http://www.youtube.com/watch?v=V0eGnEXL0VQ)
 
 # References 
-
-    - mixare - http://www.mixare.org/
-    - naver API - https://developers.naver.com/
-    - typekit - https://github.com/tsengvn/typekit
-    - Firebase RealTime database - https://firebase.google.com/docs/database/
-    - Firebase RealTime storage - https://firebase.google.com/docs/storage/
-    - Firebase auth - https://firebase.google.com/docs/auth/
-    - Firebase cloud messging - https://firebase.google.com/docs/cloud-messaging/
-    - Picasso - https://github.com/square/picasso
-    - gson - https://github.com/google/gson
+- mixare - <http://www.mixare.org/>
+- naver API - <https://developers.naver.com/>
+- typekit - <https://github.com/tsengvn/typekit>
+- Firebase RealTime database - <https://firebase.google.com/docs/database/>
+- Firebase RealTime storage - <https://firebase.google.com/docs/storage/>
+- Firebase auth - <https://firebase.google.com/docs/auth/>
+- Firebase cloud messging - <https://firebase.google.com/docs/cloud-messaging/>
+- Picasso - <https://github.com/square/picasso>
+- Picasso-trasform - <https://github.com/wasabeef/picasso-transformations>
+- gson - <https://github.com/google/gson>
 
 # Copyright
 ![alt AR-Trace](https://github.com/siosio34/AR-Trace/blob/master/docs/ar_trace_profile.png)
