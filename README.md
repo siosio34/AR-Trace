@@ -217,7 +217,7 @@ PATH_CLONE_AR-Trace (write your log redis ip and port in logstash_redis.conf fil
 	2016 Naver d2 Open fest final entry
 
 # Presentation
-	
+	https://github.com/siosio34/AR-Trace/tree/master/docs
 
 
 
