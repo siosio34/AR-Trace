@@ -1,0 +1,8 @@
+# -*- coding: utf-8 -*-
+CELERY_TASK_RESULT_EXPIRES = 18000
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TIMEZONE = 'Asia/Seoul'
+CELERY_ENABLE_UTC = True
+CELERY_IMPORTS = ('image_celery_tasks')
