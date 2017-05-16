@@ -197,8 +197,7 @@ PATH_CLONE_AR-Trace (write your log redis ip and port in logstash_redis.conf fil
 
 # Lisence
     GPL v3 Copyright (C) {2017} {@siosio34, @akakakakakaa, @KIMgsu}
-
-​    
+    
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or 
@@ -213,8 +212,12 @@ PATH_CLONE_AR-Trace (write your log redis ip and port in logstash_redis.conf fil
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>
 
-​    
+# Awards
+	2017 Smilegate Server develop best desgine award
+	2016 Naver d2 Open fest final entry
 
+# Presentation
+	
 
 
 
