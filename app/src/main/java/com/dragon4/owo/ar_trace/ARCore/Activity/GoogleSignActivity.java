@@ -110,18 +110,26 @@ public class GoogleSignActivity extends DialogActivity implements
 
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        // [END initialize_auth]
+        if(user != null) {
+            loginUser(user);
+            Log.d(TAG, "이미 인증정보가 있음!!");
+        } else {
+            Log.d(TAG, "현재 인증정보가 없음");
+        }
         // [END initialize_auth]
 
         // [START auth_state_listener]
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                if (user != null) {
-                    Log.d(TAG, user.getUid());
-                    Log.d(TAG, user.getEmail());
-                    loginUser(user);
+                mAuth = firebaseAuth;
+                if (mAuth.getCurrentUser() != null) { // 인증정보가 없는 상태에서 로그인한 경우
+                    Log.d(TAG, mAuth.getCurrentUser().getUid());
+                    Log.d(TAG, mAuth.getCurrentUser().getEmail());
+                    loginUser(mAuth.getCurrentUser());
                 } else {
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
